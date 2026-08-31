@@ -17,14 +17,15 @@ const emptySong = {
 }
 
 function App() {
-  const [songs,setSongs] = useState<Song[]>([])
-  const [parts,setParts] = useState<Part[]>([])
-  const [selected,setSelected] = useState<Song|null>(null)
-  const [search,setSearch] = useState('')
-  const [editing,setEditing] = useState(false)
-  const [form,setForm] = useState(emptySong)
-  const [viewTab,setViewTab] = useState<'partitions'|'grille'|'structure'|'paroles'>('partitions')
-  const [editTab,setEditTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'>('metadata')
+  const [songs, setSongs] = useState<Song[]>([])
+  const [parts, setParts] = useState<Part[]>([])
+  const [selected, setSelected] = useState<Song|null>(null)
+  const [search, setSearch] = useState('')
+  const [editing, setEditing] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [form, setForm] = useState(emptySong)
+  const [viewTab, setViewTab] = useState<'partitions'|'grille'|'structure'|'paroles'>('partitions')
+  const [editTab, setEditTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'>('metadata')
 
   async function loadSongs(){ setSongs(await (await fetch('/api/songs')).json()) }
   async function loadParts(){ setParts(await (await fetch('/api/parts')).json()) }
@@ -38,7 +39,7 @@ function App() {
   async function openSong(id:number,tab=viewTab){
     setSelected(await fetchSong(id)); setEditing(false); setViewTab(tab)
   }
-  function startNew(){setSelected(null);setForm(emptySong);setEditing(true);setEditTab('metadata')}
+  function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
   function startEdit(song:Song){
     setForm({
       title:song.title,artist:song.artist,composer:song.composer,arranger:song.arranger,
@@ -52,7 +53,7 @@ function App() {
       method:selected?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(form)
     })
     if(!r.ok)return alert(await r.text())
-    const result=await r.json(); await loadSongs(); setSelected(await fetchSong(result.id)); setEditing(false)
+    const result=await r.json(); await loadSongs(); setSelected(await fetchSong(result.id)); setEditing(false); if(creating){setCreating(false); setEditing(true)};
   }
   async function deleteSong(){
     if(!selected||!confirm(`Supprimer « ${selected.title} » ?`))return
@@ -126,7 +127,7 @@ function App() {
 
   return <div className="app">
     <header className="topbar">
-      <div><h1>Orchestre DB</h1><span>Répertoire · V3</span></div>
+      <div><h1>Oizos Tansmission</h1><span>V0.3</span></div>
       <button className="primary" onClick={startNew}>+ Nouveau morceau</button>
     </header>
     <main className="layout">
@@ -138,7 +139,9 @@ function App() {
         </button>)}
       </aside>
       <section className="content">
-        {!selected&&!editing&&<div className="welcome"><div className="big-icon">🎼</div><h2>Le répertoire de l'orchestre</h2><p>Sélectionne un morceau ou crée le premier.</p><button className="primary" onClick={startNew}>Créer un morceau</button></div>}
+        {!selected&&!editing&&!creating&&<div className="welcome"><div className="big-icon">🎼</div><h2>Le répertoire de l'orchestre</h2><p>Sélectionne un morceau ou crée le premier.</p><button className="primary" onClick={startNew}>Créer un morceau</button></div>}
+
+        {creating&&<Creator form={form} setForm={setForm} onSave={saveSong} onCancel={()=>setCreating(false)}/>}
 
         {editing&&<Editor song={selected} form={form} setForm={setForm} tab={editTab} setTab={setEditTab} onSave={saveSong} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore} addBlock={addBlock} updateBlock={updateBlock} deleteBlock={deleteBlock} addMeasure={addMeasure} updateMeasure={updateMeasure} deleteMeasure={deleteMeasure} addStructureItem={addStructureItem} updateStructureItem={updateStructureItem} deleteStructureItem={deleteStructureItem}/>}
 
@@ -148,10 +151,20 @@ function App() {
   </div>
 }
 
+function Creator({form, setForm, onCancel, onSave}:any){
+  return <div className="creator-shell">
+    <div className="page-head">
+      <div><span className="eyebrow">CRÉATION</span><h2>Nouveau morceau</h2></div>
+      <div className="actions"><button type="button" onClick={onCancel}>Annuler</button><button className="actions" onClick={onSave}>Enregistrer</button></div>
+    </div>
+    <MetadataEditor form={form} setForm={setForm}/>
+  </div>
+}
+
 function Editor({song,form,setForm,tab,setTab,onSave,onCancel,parts,onUpload,addBlock,updateBlock,deleteBlock,addMeasure,updateMeasure,deleteMeasure,addStructureItem,updateStructureItem,deleteStructureItem}:any){
   return <div className="editor-shell">
     <div className="page-head">
-      <div><span className="eyebrow">ÉDITION</span><h2>{song?song.title:'Nouveau morceau'}</h2><p className="subtitle">Tous les contenus sont modifiables ici.</p></div>
+      <div><span className="eyebrow">ÉDITION</span><h2>{song.title}</h2></div>
       <div className="actions"><button type="button" onClick={onCancel}>Annuler</button><button className="actions" onClick={onSave}>Enregistrer</button></div>
     </div>
     <nav className="tabs">

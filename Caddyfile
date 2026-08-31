@@ -1,0 +1,25 @@
+{
+    auto_https off
+}
+
+:80 {
+
+    encode gzip
+
+    # API Express
+    handle /api/* {
+        reverse_proxy app:3001
+    }
+
+    # Partitions PDF
+    handle /uploads/* {
+        reverse_proxy app:3001
+    }
+
+    # Frontend React
+    handle {
+        root * /app/client/dist
+        try_files {path} /index.html
+        file_server
+    }
+}

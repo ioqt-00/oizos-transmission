@@ -1,0 +1,37 @@
+services:
+
+  orchestre:
+    build: .
+
+    container_name: orchestre
+
+    expose:
+      - "3001"
+
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+
+    volumes:
+      - orchestre-data:/app/server/data
+      - orchestre-uploads:/app/server/uploads
+
+    networks:
+      - proxy
+      - internal
+
+    restart: unless-stopped
+
+
+volumes:
+
+  orchestre-data:
+  orchestre-uploads:
+
+
+networks:
+
+  proxy:
+    external: true
+
+  internal:

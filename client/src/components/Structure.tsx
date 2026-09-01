@@ -2,18 +2,53 @@ type GridBlock = { id:number; name:string; position:number; notes:string }
 type Measure = { id:number; block_id:number; position:number; chord:string; beats:number; notes:string }
 type StructureItem = { id:number; block_id:number; position:number; repeat_count:number; notes:string }
 
-export function StructureEditor({song,add,update,deleteItem}:any){
+export function StructureEditor({blocks, measures, structure, setStructure}:any){
+  function updateStructureItem(structure_item:StructureItem, patch:Partial<StructureItem>){
+    setStructure(current =>
+      current.map(item =>
+        item.id === structure_item.id
+          ? { ...item, ...patch }
+          : item
+      )
+    )
+  }
+
+  function addStructureItem(){
+    setStructure(current => [
+    ...current,
+    {
+      id: -Date.now(),
+      song_id: -1,
+      block_id: 1,
+      position: current.length,
+      repeat_count: 1,
+      notes: ''
+    }
+    ])
+  }
+
+  function deleteStructureItem(structure_item: StructureItem){
+    setStructure(current =>
+          current.filter(item =>
+            item.id !== structure_item.id
+          )
+        )
+  }
+
   return <section className="card">
-    <div className="section-head"><div><h3>🧭 Structure</h3><p className="muted">Arrange les blocs de grille. Le même bloc peut être utilisé plusieurs fois.</p></div><button className="primary" onClick={add}>+ Occurrence</button></div>
-    {!song.structure.length&&<p className="empty">Aucune structure. Ajoute une occurrence d'un bloc.</p>}
-    <div className="structure-list">{song.structure.map((item:StructureItem,i:number)=>{
-      const block=song.blocks.find((b:GridBlock)=>b.id===item.block_id)
-      return <div className="structure-row" key={item.id}><span className="structure-number">{i+1}</span>
-        <select value={item.block_id} onChange={e=>update(item,{block_id:Number(e.target.value)})}>{song.blocks.map((b:GridBlock)=><option key={b.id} value={b.id}>{b.name}</option>)}</select>
-        <div className="repeat"><span>×</span><input type="number" min="1" value={item.repeat_count} onChange={e=>update(item,{repeat_count:Number(e.target.value)||1})}/></div>
-        <span className="structure-summary">{block?`${block.name} · ${song.measures.filter((m:Measure)=>m.block_id===block.id).length} mesure(s)`:''}</span>
-        <input className="structure-note" placeholder="Note..." value={item.notes} onChange={e=>update(item,{notes:e.target.value})}/>
-        <button className="danger ghost" onClick={()=>deleteItem(item)}>×</button>
+    <div className="section-head"><div><h3>🧭 Structure</h3><p className="muted">Arrange les blocs de grille. Le même bloc peut être utilisé plusieurs fois.</p></div><button className="primary" onClick={addStructureItem}>+ Occurrence</button></div>
+    {!structure.length&&<p className="empty">Aucune structure. Ajoute une occurrence d'un bloc.</p>}
+    <div className="structure-list">{structure.map((struct_item:StructureItem,i:number)=>{
+      const block=blocks.find((b:GridBlock)=>b.id===struct_item.block_id)
+      return <div className="structure-row" key={struct_item.id}><span className="structure-number">{i+1}</span>
+        <select value={struct_item.block_id} onChange={e=>updateStructureItem(struct_item,{block_id:Number(e.target.value)})}>{blocks.map((b:GridBlock)=><option key={b.id} value={b.id}>{b.name}</option>)}</select>
+        <div className="repeat">
+          <span>×</span>
+          <input type="number" min="1" value={struct_item.repeat_count} onChange={e=>updateStructureItem(struct_item,{repeat_count:Number(e.target.value)||1})}/>
+        </div>
+        <span className="structure-summary">{block?`${block.name} · ${measures.filter((m:Measure)=>m.block_id===block.id).length} mesure(s)`:''}</span>
+        <input className="structure-note" placeholder="Note..." value={struct_item.notes} onChange={e=>updateStructureItem(struct_item,{notes:e.target.value})}/>
+        <button className="danger ghost" onClick={()=>deleteStructureItem(struct_item)}>×</button>
       </div>
     })}</div>
   </section>

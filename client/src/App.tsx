@@ -43,8 +43,8 @@ function App() {
   function startEdit(song:Song){
     setForm({
       title:song.title,artist:song.artist,composer:song.composer,arranger:song.arranger,
-      duration:song.duration,tempo:song.tempo,key_signature:song.key_signature,style:song.style,
-      notes:song.notes,lyrics:song.lyrics
+      duration:song.duration,tempo:song.tempo,key_signature:song.key_signature,
+      notes:song.notes,lyrics:song.lyrics,url_drive:song.url_drive
     }); setEditing(true); setEditTab('metadata')
   }
   async function saveSong(e:React.FormEvent){
@@ -180,7 +180,7 @@ function Editor({song,form,setForm,tab,setTab,onSave,onCancel,parts,onUpload,add
 
 function MetadataEditor({form,setForm}:any){
   return <div className="editor card">
-    <div className="form-grid">{[['title','Titre'],['artist','Artiste / groupe'],['composer','Compositeur'],['arranger','Arrangeur'],['duration','Durée'],['tempo','Tempo'],['key_signature','Tonalité'],['style','Style']].map(([k,l])=><label key={k}>{l}<input value={form[k]} onChange={e=>setForm({...form,[k]:e.target.value})}/></label>)}</div>
+    <div className="form-grid">{[['title','Titre'],['artist','Artiste / groupe'],['composer','Compositeur'],['arranger','Arrangeur'],['duration','Durée'],['tempo','Tempo'],['key_signature','Tonalité'],['url_drive','URL Drive']].map(([k,l])=><label key={k}>{l}<input value={form[k]} onChange={e=>setForm({...form,[k]:e.target.value})}/></label>)}</div>
     <label>Notes<textarea rows={5} value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/></label>
   </div>
 }
@@ -233,8 +233,14 @@ function StructureEditor({song,add,update,deleteItem}:any){
 
 function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
   return <div className="song-page">
-    <div className="page-head"><div><span className="eyebrow">MORCEAU</span><h2>{song.title}</h2><p className="subtitle">{song.artist||song.composer||'—'}</p></div>
-      <div className="actions"><button onClick={onEdit}>Modifier</button><button className="danger" onClick={onDelete}>Supprimer</button></div></div>
+    <div className="page-head">
+      <div>
+        <span className="eyebrow">MORCEAU</span><h2>{song.title}</h2>
+        <p className="subtitle">{song.composer||''}</p>
+        {song.url_drive && (<a href={song.url_drive} target="_blank" rel="noopener noreferrer">🔗 Drive</a>)}
+      </div>
+      <div className="actions"><button onClick={onEdit}>Modifier</button><button className="danger" onClick={onDelete}>Supprimer</button></div>
+    </div>
     <div className="meta-grid"><Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/><Meta label="Style" value={song.style}/></div>
     <nav className="tabs">{([['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}</nav>
     {tab==='partitions' && 

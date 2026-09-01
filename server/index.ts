@@ -12,7 +12,7 @@ const db=new Database(path.join(dataDir,'orchestra.db'));db.pragma('foreign_keys
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS parts(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL UNIQUE,position INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS songs(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT NOT NULL UNIQUE,artist TEXT DEFAULT '',composer TEXT DEFAULT '',arranger TEXT DEFAULT '',duration TEXT DEFAULT '',tempo TEXT DEFAULT '',key_signature TEXT DEFAULT '',style TEXT DEFAULT '',notes TEXT DEFAULT '',lyrics TEXT DEFAULT '',created_at TEXT DEFAULT CURRENT_TIMESTAMP,updated_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS songs(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT NOT NULL UNIQUE,artist TEXT DEFAULT '',composer TEXT DEFAULT '',arranger TEXT DEFAULT '',duration TEXT DEFAULT '',tempo TEXT DEFAULT '',key_signature TEXT DEFAULT '',notes TEXT DEFAULT '',lyrics TEXT DEFAULT '',url_drive TEXT DEFAULT '',created_at TEXT DEFAULT CURRENT_TIMESTAMP,updated_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS scores(id INTEGER PRIMARY KEY AUTOINCREMENT,song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,part_id INTEGER NOT NULL REFERENCES parts(id) ON DELETE CASCADE,file_name TEXT NOT NULL,file_path TEXT NOT NULL,UNIQUE(song_id,part_id));
 CREATE TABLE IF NOT EXISTS grid_blocks(id INTEGER PRIMARY KEY AUTOINCREMENT,song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,name TEXT NOT NULL,position INTEGER NOT NULL,notes TEXT DEFAULT '');
 CREATE TABLE IF NOT EXISTS measures(id INTEGER PRIMARY KEY AUTOINCREMENT,block_id INTEGER NOT NULL REFERENCES grid_blocks(id) ON DELETE CASCADE,position INTEGER NOT NULL,chord TEXT DEFAULT '',beats INTEGER NOT NULL DEFAULT 4,notes TEXT DEFAULT '');
@@ -45,11 +45,11 @@ app.get('/api/songs',(_r,res)=>res.json(db.prepare('SELECT * FROM songs ORDER BY
 app.get('/api/songs/:id',(req,res)=>{const x=songWithData(Number(req.params.id));if(!x)return res.status(404).send('Morceau introuvable');res.json(x)})
 app.post('/api/songs',(req,res)=>{
  try{const {title,...f}=req.body;if(!title?.trim())return res.status(400).send('Le titre est obligatoire.')
- const r=db.prepare(`INSERT INTO songs(title,artist,composer,arranger,duration,tempo,key_signature,style,notes,lyrics) VALUES(@title,@artist,@composer,@arranger,@duration,@tempo,@key_signature,@style,@notes,@lyrics)`).run({title:title.trim(),artist:f.artist||'',composer:f.composer||'',arranger:f.arranger||'',duration:f.duration||'',tempo:f.tempo||'',key_signature:f.key_signature||'',style:f.style||'',notes:f.notes||'',lyrics:f.lyrics||''})
+ const r=db.prepare(`INSERT INTO songs(title,artist,composer,arranger,duration,tempo,key_signature,notes,lyrics,url_drive) VALUES(@title,@artist,@composer,@arranger,@duration,@tempo,@key_signature,@notes,@lyrics,@url_drive)`).run({title:title.trim(),artist:f.artist||'',composer:f.composer||'',arranger:f.arranger||'',duration:f.duration||'',tempo:f.tempo||'',key_signature:f.key_signature||'',notes:f.notes||'',lyrics:f.lyrics||'',url_drive:f.url_drive||''})
  res.json({id:Number(r.lastInsertRowid)})}catch{res.status(400).send('Un morceau portant ce titre existe déjà.')}
 })
 app.put('/api/songs/:id',(req,res)=>{
- try{db.prepare(`UPDATE songs SET title=@title,artist=@artist,composer=@composer,arranger=@arranger,duration=@duration,tempo=@tempo,key_signature=@key_signature,style=@style,notes=@notes,lyrics=@lyrics,updated_at=CURRENT_TIMESTAMP WHERE id=@id`).run({id:Number(req.params.id),...req.body});res.json({id:Number(req.params.id)})}catch{res.status(400).send('Impossible de modifier ce morceau.')}
+ try{db.prepare(`UPDATE songs SET title=@title,artist=@artist,composer=@composer,arranger=@arranger,duration=@duration,tempo=@tempo,key_signature=@key_signature,notes=@notes,lyrics=@lyrics,url_drive=@url_drive,updated_at=CURRENT_TIMESTAMP WHERE id=@id`).run({id:Number(req.params.id),...req.body});res.json({id:Number(req.params.id)})}catch{res.status(400).send('Impossible de modifier ce morceau.')}
 })
 app.delete('/api/songs/:id',(req,res)=>{db.prepare('DELETE FROM songs WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
 app.post('/api/songs/:id/scores',upload.single('file'),(req,res)=>{

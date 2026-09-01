@@ -4,11 +4,14 @@ import multer from 'multer'
 import Database from 'better-sqlite3'
 import path from 'node:path'
 import fs from 'node:fs'
+import { createSaveSong } from './saveSong'
 
 const app=express(),PORT=3001,ROOT=process.cwd()
 const dataDir=path.join(ROOT,'server','data'),uploadDir=path.join(ROOT,'server','uploads')
 fs.mkdirSync(dataDir,{recursive:true});fs.mkdirSync(uploadDir,{recursive:true})
 const db=new Database(path.join(dataDir,'orchestra.db'));db.pragma('foreign_keys = ON')
+
+const saveSong = createSaveSong(db)
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS parts(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL UNIQUE,position INTEGER NOT NULL);
@@ -16,7 +19,13 @@ CREATE TABLE IF NOT EXISTS songs(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT
 CREATE TABLE IF NOT EXISTS scores(id INTEGER PRIMARY KEY AUTOINCREMENT,song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,part_id INTEGER NOT NULL REFERENCES parts(id) ON DELETE CASCADE,file_name TEXT NOT NULL,file_path TEXT NOT NULL,UNIQUE(song_id,part_id));
 CREATE TABLE IF NOT EXISTS grid_blocks(id INTEGER PRIMARY KEY AUTOINCREMENT,song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,name TEXT NOT NULL,position INTEGER NOT NULL,notes TEXT DEFAULT '');
 CREATE TABLE IF NOT EXISTS measures(id INTEGER PRIMARY KEY AUTOINCREMENT,block_id INTEGER NOT NULL REFERENCES grid_blocks(id) ON DELETE CASCADE,position INTEGER NOT NULL,chord TEXT DEFAULT '',beats INTEGER NOT NULL DEFAULT 4,notes TEXT DEFAULT '');
-CREATE TABLE IF NOT EXISTS structure_items(id INTEGER PRIMARY KEY AUTOINCREMENT,song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,block_id INTEGER NOT NULL REFERENCES grid_blocks(id) ON DELETE CASCADE,position INTEGER NOT NULL,repeat_count INTEGER NOT NULL DEFAULT 1,notes TEXT DEFAULT '');
+CREATE TABLE IF NOT EXISTS structure_items(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  block_id INTEGER NOT NULL REFERENCES grid_blocks(id) ON DELETE CASCADE,
+  position INTEGER NOT NULL,
+  repeat_count INTEGER NOT NULL DEFAULT 1,
+  notes TEXT DEFAULT '');
 `)
 
 const defaultParts = ['Accordéon', 'Basse', 'Clarinette', 'Cordes Frottées', 'Flûte', 'Médium', 'Percus', 'Saxophone Alto', 'Trompette', 'Chant', 'Chant 2', 'Chant 3']
@@ -48,8 +57,21 @@ app.post('/api/songs',(req,res)=>{
  const r=db.prepare(`INSERT INTO songs(title,artist,composer,arranger,duration,tempo,key_signature,notes,lyrics,url_drive) VALUES(@title,@artist,@composer,@arranger,@duration,@tempo,@key_signature,@notes,@lyrics,@url_drive)`).run({title:title.trim(),artist:f.artist||'',composer:f.composer||'',arranger:f.arranger||'',duration:f.duration||'',tempo:f.tempo||'',key_signature:f.key_signature||'',notes:f.notes||'',lyrics:f.lyrics||'',url_drive:f.url_drive||''})
  res.json({id:Number(r.lastInsertRowid)})}catch{res.status(400).send('Un morceau portant ce titre existe déjà.')}
 })
-app.put('/api/songs/:id',(req,res)=>{
- try{db.prepare(`UPDATE songs SET title=@title,artist=@artist,composer=@composer,arranger=@arranger,duration=@duration,tempo=@tempo,key_signature=@key_signature,notes=@notes,lyrics=@lyrics,url_drive=@url_drive,updated_at=CURRENT_TIMESTAMP WHERE id=@id`).run({id:Number(req.params.id),...req.body});res.json({id:Number(req.params.id)})}catch{res.status(400).send('Impossible de modifier ce morceau.')}
+app.put('/api/songs/:id', (req, res) => {
+  try {
+    saveSong(
+      Number(req.params.id),
+      req.body
+    )
+    res.json({
+      ok: true
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(400).send(
+      'Impossible d’enregistrer le morceau.'
+    )
+  }
 })
 app.delete('/api/songs/:id',(req,res)=>{db.prepare('DELETE FROM songs WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
 app.post('/api/songs/:id/scores',upload.single('file'),(req,res)=>{

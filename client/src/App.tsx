@@ -127,7 +127,7 @@ function App() {
 
   return <div className="app">
     <header className="topbar">
-      <div><h1>Oizos Tansmission</h1><span>V0.3</span></div>
+      <div><h1>Oizos Transmission</h1><span>V0.3</span></div>
       <a
         href="https://github.com/ioqt-00/oizos-transmission/issues/new"
         target="_blank"

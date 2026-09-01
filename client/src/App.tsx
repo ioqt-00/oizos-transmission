@@ -64,25 +64,6 @@ function App() {
     setSelected(await fetchSong(selected.id))
   }
 
-  async function addStructureItem(){
-    if(!selected)return
-    if(!selected.blocks.length)return alert('Crée d’abord un bloc dans Grille.')
-    await fetch(`/api/songs/${selected.id}/structure`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({block_id:selected.blocks[0].id,repeat_count:1,notes:''})
-    })
-    setSelected(await fetchSong(selected.id))
-  }
-  async function updateStructureItem(item:StructureItem,patch:Partial<StructureItem>){
-    if(!selected)return
-    await fetch(`/api/structure/${item.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)})
-    setSelected(await fetchSong(selected.id))
-  }
-  async function deleteStructureItem(item:StructureItem){
-    if(!selected)return
-    await fetch(`/api/structure/${item.id}`,{method:'DELETE'});setSelected(await fetchSong(selected.id))
-  }
-
   async function handleSongSaved(song_id:number){
     await loadSongs();
     setSelected(await fetchSong(song_id));

@@ -72,9 +72,9 @@ const transaction = db.transaction(() => {
       duration,
       tempo,
       key_signature,
-      style,
       notes,
       lyrics,
+      url_drive,
       created_at,
       updated_at
     )
@@ -87,9 +87,9 @@ const transaction = db.transaction(() => {
       @duration,
       @tempo,
       @key_signature,
-      @style,
       @notes,
       @lyrics,
+      @url_drive,
       @created_at,
       @updated_at
     )

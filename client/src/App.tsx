@@ -128,6 +128,14 @@ function App() {
   return <div className="app">
     <header className="topbar">
       <div><h1>Oizos Tansmission</h1><span>V0.3</span></div>
+      <a
+        href="https://github.com/ioqt-00/oizos-transmission/issues/new"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bug-suggestion-button"
+      >
+        🐛 Bug & suggestion
+      </a>
       <button className="primary" onClick={startNew}>+ Nouveau morceau</button>
     </header>
     <main className="layout">

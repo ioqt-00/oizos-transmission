@@ -249,7 +249,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
       </div>
       <div className="actions"><button onClick={onEdit}>Modifier</button><button className="danger" onClick={onDelete}>Supprimer</button></div>
     </div>
-    <div className="meta-grid"><Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/><Meta label="Style" value={song.style}/></div>
+    <div className="meta-grid"><Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/></div>
     <nav className="tabs">{([['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}</nav>
     {tab==='partitions' && 
       <section className="card"><h3>🎼 Partitions</h3>

@@ -7,13 +7,13 @@ type Measure = { id:number; block_id:number; position:number; chord:string; beat
 type StructureItem = { id:number; block_id:number; position:number; repeat_count:number; notes:string }
 type Song = {
   id:number; title:string; artist:string; composer:string; arranger:string
-  duration:string; tempo:string; key_signature:string; style:string; notes:string; lyrics:string
+  duration:string; tempo:string; key_signature:string; notes:string; lyrics:string; url_drive:string
   scores:Score[]; blocks:GridBlock[]; measures:Measure[]; structure:StructureItem[]
 }
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',
-  key_signature:'', style:'', notes:'', lyrics:''
+  key_signature:'', notes:'', lyrics:'', url_drive:''
 }
 
 function App() {

@@ -28,6 +28,7 @@ function App() {
   const [form, setForm] = useState(emptySong)
   const [viewTab, setViewTab] = useState<'partitions'|'grille'|'structure'|'paroles'>('partitions')
   const [editTab, setEditTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'>('metadata')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   async function loadSongs(){ setSongs(await (await fetch('/api/songs')).json()) }
   async function loadParts(){ setParts(await (await fetch('/api/parts')).json()) }
@@ -39,7 +40,10 @@ function App() {
     return await r.json() as Song
   }
   async function openSong(id:number,tab=viewTab){
-    setSelected(await fetchSong(id)); setEditing(false); setViewTab(tab)
+    setSelected(await fetchSong(id));
+    setEditing(false);
+    setViewTab(tab);
+    setSidebarOpen(false);
   }
   function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
   function startEdit(song:Song){
@@ -75,25 +79,31 @@ function App() {
 
   return <div className="app">
     <header className="topbar">
-      <div><h1>Oizos Transmission</h1><span>V0.3</span></div>
+      <div className='topbar-title'><h1>Oizos Transmission</h1><span>V0.3</span></div>
       <a
         href="https://github.com/ioqt-00/oizos-transmission/issues/new"
         target="_blank"
         rel="noopener noreferrer"
-        className="bug-suggestion-button"
+        className="topbar-bug-button"
       >
-        🐛 Bug & suggestion
+        <span className='topbar-desktop'>🐛 Bug & suggestion</span>
+        <span className='topbar-mobile'>🐛 Bug</span>
       </a>
-      <button className="primary" onClick={startNew}>+ Nouveau morceau</button>
+      <button className="primary topbar-new-button" onClick={startNew}>+ Nouveau morceau</button>
     </header>
     <main className="layout">
-      <aside className="sidebar">
-        <input className="search" placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)}/>
-        <div className="song-count">{filtered.length} morceau{filtered.length>1?'x':''}</div>
-        {filtered.map(song=><button className={`song-item ${selected?.id===song.id?'active':''}`} key={song.id} onClick={()=>openSong(song.id)}>
-          <strong>{song.title}</strong><small>{song.artist||song.composer||'Informations à compléter'}</small>
-        </button>)}
-      </aside>
+      <div className='sidebar-container'>
+        <button className='mobile-sidebar-button' onClick={() => setSidebarOpen(v => !v)}>
+          {selected?.title || 'Morceaux'} {sidebarOpen ? '▲' : '▼'}
+        </button>
+        <aside className={`sidebar ${sidebarOpen ? 'mobile-open' : ''}`}>
+          <input className="search" placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)}/>
+          <div className="song-count">{filtered.length} morceau{filtered.length>1?'x':''}</div>
+          {filtered.map(song=><button className={`song-item ${selected?.id===song.id?'active':''}`} key={song.id} onClick={()=>openSong(song.id)}>
+            <strong>{song.title}</strong><small>{song.artist||song.composer||'Informations à compléter'}</small>
+          </button>)}
+        </aside>
+      </div>
       <section className="content">
         {!selected&&!editing&&!creating&&<div className="welcome"><div className="big-icon">🎼</div><h2>Le répertoire de l'orchestre</h2><p>Sélectionne un morceau ou crée le premier.</p><button className="primary" onClick={startNew}>Créer un morceau</button></div>}
 

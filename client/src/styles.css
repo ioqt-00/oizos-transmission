@@ -15,7 +15,7 @@ button{cursor:pointer;border:0}
 .topbar span,.eyebrow,.meta-grid span,.song-count{color:#747b85;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 .layout{min-height:calc(100vh - 76px)}
 .sidebar{
-  background:#fff;border-right:1px solid #ddd;padding:18px
+  background:#fff;border-right:1px solid #ddd;padding:18px; height:100%;
 }
 .mobile-sidebar-button{
   display: none;
@@ -32,9 +32,10 @@ h2{font-size:30px}.welcome p{color:#777}
 .meta-grid div{background:#fff;padding:15px;border:1px solid #ddd;border-radius:8px}
 .meta-grid span,.meta-grid strong{display:block}.meta-grid strong{margin-top:6px}
 
-.tabs{display:flex;gap:4px;background:#e7e9ed;padding:4px;border-radius:9px;margin-bottom:20px;overflow:auto}
-.tabs button{padding:11px 17px;background:transparent;border-radius:7px;color:#5d636c;white-space:nowrap}
-.tabs button.active{background:#fff;color:#20242a;box-shadow:0 1px 3px #0001}
+.mobile-song-nav{display: none;}
+.desktop-song-nav{display:flex;gap:4px;background:#e7e9ed;padding:4px;border-radius:9px;margin-bottom:20px;overflow:auto}
+.desktop-song-nav button{padding:11px 17px;background:transparent;border-radius:7px;color:#5d636c;white-space:nowrap}
+.desktop-song-nav button.active{background:#fff;color:#20242a;box-shadow:0 1px 3px #0001}
 .card,.editor{background:#fff;border:1px solid #ddd;border-radius:10px;padding:22px;margin-bottom:20px}
 
 .card h3{margin-top:0}
@@ -48,7 +49,7 @@ h2{font-size:30px}.welcome p{color:#777}
 .lyrics{white-space:pre-wrap;font:inherit;line-height:1.65;margin:0}.muted{color:#858b94}.empty{color:#858b94;font-style:italic}
 
 .editor-shell{background:transparent}
-.editor-shell>.tabs{margin-bottom:18px}
+.editor-shell>.desktop-song-nav{margin-bottom:18px}
 .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:18px}
 label{display:flex;flex-direction:column;gap:7px;font-weight:600;margin-bottom:18px}
 label input,label textarea,label select{border:1px solid #d6d9de;border-radius:7px;padding:10px 12px;font-weight:400}
@@ -133,10 +134,30 @@ label input,label textarea,label select{border:1px solid #d6d9de;border-radius:7
     border: 0;
   }
   .sidebar{
-    display:none
+    display: none;
   }
   .sidebar.mobile-open{
-    display:block
+    display: block;
+  }
+  .mobile-song-nav{
+    display: block;
+    background:#e7e9ed;
+    border-radius:9px;
+    margin-bottom:20px;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+  .mobile-song-nav select{
+    background:#e7e9ed;
+    border-radius:9px;
+    margin-bottom:20px;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+  .desktop-song-nav{
+    display: none;
   }
 }
 .meta-grid,.parts-grid,.form-grid{grid-template-columns:1fr}.page-head{flex-direction:column}.block-head{grid-template-columns:1fr}.measure{width:calc(50% - 4px)}

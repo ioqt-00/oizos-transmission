@@ -28,6 +28,7 @@ function App() {
   const [form, setForm] = useState(emptySong)
   const [viewTab, setViewTab] = useState<'partitions'|'grille'|'structure'|'paroles'>('partitions')
   const [editTab, setEditTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'>('metadata')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   async function loadSongs(){ setSongs(await (await fetch('/api/songs')).json()) }
   async function loadParts(){ setParts(await (await fetch('/api/parts')).json()) }
@@ -39,7 +40,11 @@ function App() {
     return await r.json() as Song
   }
   async function openSong(id:number,tab=viewTab){
-    setSelected(await fetchSong(id)); setEditing(false); setViewTab(tab)
+    setSelected(await fetchSong(id));
+    setEditing(false);
+    setCreating(false);
+    setViewTab(tab);
+    setSidebarOpen(false);
   }
   function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
   function startEdit(song:Song){
@@ -71,29 +76,39 @@ function App() {
     if(creating){setCreating(false); setEditing(true)}
   }
 
+  function toggleSidebar() {
+    setSidebarOpen(prev => !prev)
+  }
+
   const filtered=useMemo(()=>songs.filter(s=>`${s.title} ${s.artist} ${s.composer}`.toLowerCase().includes(search.toLowerCase())),[songs,search])
 
   return <div className="app">
     <header className="topbar">
-      <div><h1>Oizos Transmission</h1><span>V0.3</span></div>
+      <div className='topbar-title'><h1>Oizos Transmission</h1><span>V0.4</span></div>
       <a
         href="https://github.com/ioqt-00/oizos-transmission/issues/new"
         target="_blank"
         rel="noopener noreferrer"
-        className="bug-suggestion-button"
+        className="topbar-bug-button"
       >
-        🐛 Bug & suggestion
+        <span className='topbar-desktop'>🐛 Bug & suggestion</span>
+        <span className='topbar-mobile'>🐛 Bug</span>
       </a>
-      <button className="primary" onClick={startNew}>+ Nouveau morceau</button>
+      <button className="primary topbar-new-button" onClick={startNew}>+ Nouveau morceau</button>
     </header>
     <main className="layout">
-      <aside className="sidebar">
-        <input className="search" placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)}/>
-        <div className="song-count">{filtered.length} morceau{filtered.length>1?'x':''}</div>
-        {filtered.map(song=><button className={`song-item ${selected?.id===song.id?'active':''}`} key={song.id} onClick={()=>openSong(song.id)}>
-          <strong>{song.title}</strong><small>{song.artist||song.composer||'Informations à compléter'}</small>
-        </button>)}
-      </aside>
+      <div className='sidebar-container'>
+        <button className='mobile-sidebar-button' onClick={toggleSidebar}>
+          🎵 {selected?.title || 'Morceaux'} {sidebarOpen ? '▲' : '▼'}
+        </button>
+        <aside className={`sidebar ${sidebarOpen ? 'mobile-open' : ''}`}>
+          <input className="search" placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)}/>
+          <div className="song-count">{filtered.length} morceau{filtered.length>1?'x':''}</div>
+          {filtered.map(song=><button className={`song-item ${selected?.id===song.id?'active':''}`} key={song.id} onClick={()=>openSong(song.id)}>
+            <strong>{song.title}</strong><small>{song.artist||song.composer||'Informations à compléter'}</small>
+          </button>)}
+        </aside>
+      </div>
       <section className="content">
         {!selected&&!editing&&!creating&&<div className="welcome"><div className="big-icon">🎼</div><h2>Le répertoire de l'orchestre</h2><p>Sélectionne un morceau ou crée le premier.</p><button className="primary" onClick={startNew}>Créer un morceau</button></div>}
 
@@ -146,7 +161,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
       <div><span className="eyebrow">ÉDITION</span><h2>{song.title}</h2></div>
       <div className="actions"><button type="button" onClick={onCancel}>Annuler</button><button className="actions" onClick={saveSong}>Enregistrer</button></div>
     </div>
-    <nav className="tabs">
+    <nav className="desktop-song-nav">
       {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
     </nav>
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
@@ -178,14 +193,27 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
   return <div className="song-page">
     <div className="page-head">
       <div>
-        <span className="eyebrow">MORCEAU</span><h2>{song.title}</h2>
+        <span className="eyebrow">LECTURE</span><h2>{song.title}</h2>
         <p className="subtitle">{song.composer||''}</p>
         {song.url_drive && (<a href={song.url_drive} target="_blank" rel="noopener noreferrer">🔗 Drive</a>)}
       </div>
       <div className="actions"><button onClick={onEdit}>Modifier</button><button className="danger" onClick={onDelete}>Supprimer</button></div>
     </div>
-    <div className="meta-grid"><Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/></div>
-    <nav className="tabs">{([['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}</nav>
+    <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
+      <option value="metadata">⚙️ Metadata</option>
+      <option value="partitions">🎼 Partitions</option>
+      <option value="grille">🎹 Grille</option>
+      <option value="structure">🧭 Structure</option>
+      <option value="paroles">📝 Paroles</option>
+    </select> 
+    <nav className="desktop-song-nav">
+      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+    </nav>
+    {tab==='metadata' && 
+      <div className="meta-grid">
+        <Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/>
+      </div>
+    }
     {tab==='partitions' && 
       <section className="card"><h3>🎼 Partitions</h3>
         <div className="parts-grid">

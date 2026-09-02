@@ -161,6 +161,13 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
       <div><span className="eyebrow">ÉDITION</span><h2>{song.title}</h2></div>
       <div className="actions"><button type="button" onClick={onCancel}>Annuler</button><button className="actions" onClick={saveSong}>Enregistrer</button></div>
     </div>
+    <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
+      <option value="metadata">⚙️ Metadata</option>
+      <option value="partitions">🎼 Partitions</option>
+      <option value="grille">🎹 Grille</option>
+      <option value="structure">🧭 Structure</option>
+      <option value="paroles">📝 Paroles</option>
+    </select> 
     <nav className="desktop-song-nav">
       {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
     </nav>

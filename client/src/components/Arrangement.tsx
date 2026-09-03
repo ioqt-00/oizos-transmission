@@ -59,7 +59,7 @@ type Props = {
   parts: Part[]
 }
 
-const PX_PER_HALFBEAT = 10
+const PX_PER_HALFBEAT = 2
 
 function getBlock(song: Song, structureItem: StructureItem) {
   return song.blocks.find(

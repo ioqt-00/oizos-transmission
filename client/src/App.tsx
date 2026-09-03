@@ -176,7 +176,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
       <option value="arrangement">Arrangement</option>
     </select> 
     <nav className="desktop-song-nav">
-      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','🧩 Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
     </nav>
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}

@@ -59,7 +59,7 @@ type Props = {
   parts: Part[]
 }
 
-const PX_PER_HALFBEAT = 5
+const PX_PER_HALFBEAT = 10
 
 function getBlock(song: Song, structureItem: StructureItem) {
   return song.blocks.find(
@@ -137,7 +137,7 @@ export function ArrangementTab({
   return (
     <section className="card arrangement-card">
       <div className="arrangement-title">
-        <div><h3>🎼 Arrangement</h3><p>Vue d'ensemble des pupitres</p></div>
+        <div><h3>🧩 Arrangement</h3><p>Vue d'ensemble des pupitres</p></div>
       </div>
       {!song.structure.length ? (
         <p className="muted">Structure non renseignée.</p>
@@ -365,13 +365,15 @@ export function ArrangementEditor({
   }
 
   function handleResizeMove(
-    event: React.PointerEvent
+    event: React.PointerEvent,
+    item: ArrangementItem
   ) {
     if (!resizing)
       return
     const delta = event.clientX - resizing.initialX
     const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
     const duration = Math.max(1, resizing.initialDuration + deltaHalfbeats)
+    updateItem(item, {duration_halfbeats: duration})
   }
 
   async function finishResize() {
@@ -493,15 +495,9 @@ export function ArrangementEditor({
 
                   return (
                     <div
-                      key={
-                        entry.structureItem.id
-                      }
+                      key={entry.structureItem.id}
                       className="arrangement-structure-cell editor-cell"
-                      style={{
-                        width:
-                          entry.duration *
-                          PX_PER_HALFBEAT
-                      }}
+                      style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
                       onClick={event =>
                         handleTrackClick(
                           event,
@@ -551,24 +547,20 @@ export function ArrangementEditor({
 
                           <input
                             value={item.label}
-                            placeholder="Joue"
-                            onChange={e => {
-                              const next = updateItem(item,{label:e.target.value})
-                            }}
+                            placeholder="Note"
+                            onChange={e => {updateItem(item,{label:e.target.value})}}
                           />
 
                           <button
                             type="button"
                             className="arrangement-delete"
                             onClick={() => deleteItem(item)}
-                          >
-                            ×
-                          </button>
+                          >×</button>
 
                           <div
                             className="arrangement-resize"
                             onPointerDown={e => startResize(e, item)}
-                            onPointerMove={handleResizeMove}
+                            onPointerMove={e => handleResizeMove(e, item)}
                             onPointerUp={finishResize}
                           />
 

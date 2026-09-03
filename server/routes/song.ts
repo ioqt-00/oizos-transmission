@@ -21,18 +21,18 @@ function songWithData(id:number){
 
 const saveSong = createSaveSong(db)
 
-songRouter.get('/api/songs',(_r,res)=>res.json(db.prepare('SELECT * FROM songs ORDER BY title COLLATE NOCASE').all()))
-songRouter.get('/api/songs/:id',(req,res)=>{
+songRouter.get('/',(_r,res)=>res.json(db.prepare('SELECT * FROM songs ORDER BY title COLLATE NOCASE').all()))
+songRouter.get('/:id',(req,res)=>{
   const x=songWithData(Number(req.params.id));
   if(!x)return res.status(404).send('Morceau introuvable');
   res.json(x)
 })
-songRouter.post('/api/songs',(req,res)=>{
+songRouter.post('/',(req,res)=>{
  try{const {title,...f}=req.body;if(!title?.trim())return res.status(400).send('Le titre est obligatoire.')
  const r=db.prepare(`INSERT INTO songs(title,artist,composer,arranger,duration,tempo,key_signature,notes,lyrics,url_drive) VALUES(@title,@artist,@composer,@arranger,@duration,@tempo,@key_signature,@notes,@lyrics,@url_drive)`).run({title:title.trim(),artist:f.artist||'',composer:f.composer||'',arranger:f.arranger||'',duration:f.duration||'',tempo:f.tempo||'',key_signature:f.key_signature||'',notes:f.notes||'',lyrics:f.lyrics||'',url_drive:f.url_drive||''})
  res.json({id:Number(r.lastInsertRowid)})}catch{res.status(400).send('Un morceau portant ce titre existe déjà.')}
 })
-songRouter.put('/api/songs/:id', (req, res) => {
+songRouter.put('/:id', (req, res) => {
   try {
     saveSong(
       Number(req.params.id),
@@ -48,8 +48,8 @@ songRouter.put('/api/songs/:id', (req, res) => {
     )
   }
 })
-songRouter.delete('/api/songs/:id',(req,res)=>{db.prepare('DELETE FROM songs WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
-songRouter.post('/api/songs/:id/scores',(req,res)=>{ // upload.single('file')
+songRouter.delete('/:id',(req,res)=>{db.prepare('DELETE FROM songs WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
+songRouter.post('/:id/scores',(req,res)=>{ // upload.single('file')
   return res.status(400).send("Pour des raisons de sécurité, le upload est désactivé pour le moment")
   if(!req.file)
     return res.status(400).send('Veuillez sélectionner un PDF.')
@@ -68,20 +68,20 @@ songRouter.post('/api/songs/:id/scores',(req,res)=>{ // upload.single('file')
  res.json({ok:true})
 })
 
-songRouter.post('/api/songs/:id/blocks',(req,res)=>{
+songRouter.post('/:id/blocks',(req,res)=>{
  const songId=Number(req.params.id),max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM grid_blocks WHERE song_id=?').get(songId) as any
  const r=db.prepare('INSERT INTO grid_blocks(song_id,name,position,notes) VALUES(?,?,?,?)').run(songId,req.body.name||'Bloc',max.p+1,req.body.notes||'')
  res.json({id:Number(r.lastInsertRowid)})
 })
 
-songRouter.post('/api/songs/:id/structure',(req,res)=>{
+songRouter.post('/:id/structure',(req,res)=>{
  const songId=Number(req.params.id),block=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),songId) as any
  if(!block)return res.status(400).send('Bloc invalide.')
  const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM structure_items WHERE song_id=?').get(songId) as any
  const r=db.prepare('INSERT INTO structure_items(song_id,block_id,position,repeat_count,notes) VALUES(?,?,?,?,?)').run(songId,block.id,max.p+1,Number(req.body.repeat_count)||1,req.body.notes||'');res.json({id:Number(r.lastInsertRowid)})
 })
 
-songRouter.post('/api/songs/:id/arrangement', (req,res)=>{
+songRouter.post('/:id/arrangement', (req,res)=>{
   try {
     const songId = Number(req.params.id)
     const song = db

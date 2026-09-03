@@ -98,6 +98,7 @@ app.delete('/api/arrangement/:id',(req,res)=>{
   res.sendStatus(204)
 })
 
+app.use('/api/songs', songRouter)
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {
   const clientPath = path.join(ROOT, 'client', 'dist')
@@ -108,7 +109,5 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(clientPath, 'index.html'))
   })
 }
-
-app.use('/api/songs', songRouter)
 
 app.listen(PORT,()=>console.log(`API: http://localhost:${PORT}`))

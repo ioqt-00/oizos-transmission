@@ -61,6 +61,7 @@ type Props = {
 }
 
 const PX_PER_HALFBEAT = 2
+const ITEM_MINIMUM_SIZE = 20
 
 function getBlock(song: Song, structureItem: StructureItem) {
   return song.blocks.find(
@@ -125,7 +126,7 @@ export function ArrangementTab({
   song,
   parts
 }: Props) {
-  const items = song.arrangement
+  const arrangementItems = song.arrangement
   const timeline = useMemo(
     () => buildTimeline(song),
     [song]
@@ -185,78 +186,57 @@ export function ArrangementTab({
                 )
               })}
             </div>
-            {parts.map(part => (
-              <div className="arrangement-part-row" key={part.id}>
-                <div className="arrangement-part-name">{part.name}</div>
-                <div className="arrangement-track">
-                  {timeline.map(entry => {
-                    const block =
-                      getBlock(
-                        song,
-                        entry.structureItem
-                      )
-                    const measures =
-                      block
-                        ? getMeasures(
-                            song,
-                            block.id
-                          )
-                        : []
-                    const partItems =
-                      items.filter(
-                        item =>
-                          item.part_id ===
-                            part.id
-                      )
-                    let measureCursor = 0
-                    return (
-                      <div
-                        key={
-                          entry.structureItem.id
-                        }
-                        className="arrangement-structure-cell"
-                        style={{
-                          width:
-                            entry.duration *
-                            PX_PER_HALFBEAT
-                        }}
-                      >
-                        {measures.map(measure => {
+            {parts.map(part => {
+              const partArrangementItems = arrangementItems.filter(item => item.part_id === part.id)
+              return (
+                <div className="arrangement-part-row" key={part.id}>
+                  <div className="arrangement-part-name">{part.name}</div>
+                  <div className="arrangement-track">
+                    {timeline.map(entry => {
+                      const block = getBlock(song, entry.structureItem)
+                      const measures = block ? getMeasures(song, block.id) : []
+                      let measureCursor = 0
+                      return (
+                        <div
+                          key={entry.structureItem.id}
+                          className="arrangement-structure-cell"
+                          style={{
+                            width:
+                              entry.duration *
+                              PX_PER_HALFBEAT
+                          }}
+                        >
+                          {measures.map(measure => {
 
-                          const width = measure.beats * 2 * PX_PER_HALFBEAT
-                          const left = measureCursor
-                          measureCursor += width
-                          return (
-                            <div
-                              key={measure.id}
-                              className="arrangement-measure"
-                              style={{
-                                left,
-                                width
-                              }}
-                            >
-                              <span>{measure.position + 1}</span>
-                            </div>
-                          )
-                        })}
-                        {partItems.map(item => (
-                          <div
-                            key={item.id}
-                            className="arrangement-item"
-                            style={{
-                              left: item.start_halfbeat * PX_PER_HALFBEAT,
-                              width: (item.end_halfbeat - item.start_halfbeat) * PX_PER_HALFBEAT
-                            }}
-                          >
-                            {item.label}
-                          </div>
-                        ))}
-                      </div>
-                    )
-                  })}
+                            const width = measure.beats * 2 * PX_PER_HALFBEAT
+                            const left = measureCursor
+                            measureCursor += width
+                            return (
+                              <div
+                                key={measure.id}
+                                className="arrangement-measure"
+                                style={{
+                                  left,
+                                  width
+                                }}
+                              >
+                                <span>{measure.position + 1}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )
+                    })}
+                    {partArrangementItems.map(item => (
+                      <div
+                        key={item.id} className="arrangement-item editor-item"
+                        style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
+                      >{item.label}</div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
@@ -314,7 +294,7 @@ export function ArrangementEditor({
     partId: number,
     startHalfbeat: number
   ) {
-    const endHalfbeat = startHalfbeat + 10
+    const endHalfbeat = startHalfbeat + ITEM_MINIMUM_SIZE
 
     const item: ArrangementItem = {
       id: -Date.now(),
@@ -354,10 +334,8 @@ export function ArrangementEditor({
     setResizing({
       id: item.id,
       initialX: event.clientX,
-      initialStart:
-        item.start_halfbeat,
-      initialEnd:
-        item.end_halfbeat
+      initialStart: item.start_halfbeat,
+      initialEnd: item.end_halfbeat
     })
     ;(
       event.currentTarget as HTMLElement
@@ -369,20 +347,16 @@ export function ArrangementEditor({
     item: ArrangementItem,
     type: string
   ) {
-    if (!resizing)
-      return
+    if (!resizing) return
     const delta = event.clientX - resizing.initialX
     const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
-    
-    const start = type==='left' ? Math.max(0, resizing.initialStart + deltaHalfbeats) : resizing.initialStart
-    const end = type==='left' ? resizing.initialEnd : Math.max(0, resizing.initialEnd + deltaHalfbeats)
-
+    const start = type==='left' ? Math.max(0, Math.min(resizing.initialStart+deltaHalfbeats, resizing.initialEnd-ITEM_MINIMUM_SIZE)) : resizing.initialStart
+    const end = type==='left' ? resizing.initialEnd : Math.max(resizing.initialStart+ITEM_MINIMUM_SIZE, resizing.initialEnd + deltaHalfbeats)
     updateItem(item, {end_halfbeat: end, start_halfbeat: start})
   }
 
   async function finishResize() {
-    if (!resizing)
-      return
+    if (!resizing) return
     setResizing(null)
   }
 
@@ -390,13 +364,7 @@ export function ArrangementEditor({
     <section className="card arrangement-card">
 
       <div className="arrangement-title">
-        <div>
-          <h3>🎼 Arrangement</h3>
-          <p>
-            Cliquez dans une ligne pour
-            créer un événement.
-          </p>
-        </div>
+        <div><h3>🎼 Arrangement</h3><p>Cliquez dans une ligne pour créer un événement.</p></div>
       </div>
 
       <div className="arrangement-scroll">
@@ -417,53 +385,52 @@ export function ArrangementEditor({
             )}
           </div>
 
-          {parts.map(part => (
-            <div className="arrangement-part-row" key={part.id}>
-              <div className="arrangement-part-name">{part.name}</div>
-              <div className="arrangement-track">
-                {timeline.map(entry => {
-                  const block = getBlock(song, entry.structureItem)
-                  const measures = block? getMeasures(song, block.id) : []
-                  const partItems =
-                    arrangement.filter(item => item.part_id === part.id)
-                  let measureCursor = 0
+          {parts.map(part => {
+            const partItems = arrangement.filter(item => item.part_id === part.id)
 
-                  return (
-                    <div
-                      key={entry.structureItem.id}
-                      className="arrangement-structure-cell editor-cell"
-                      style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
-                      onClick={event => handleTrackClick(event, part.id, entry.structureItem)}
-                    >
-                      {measures.map(measure => {
-                        const width = measure.beats * 2 * PX_PER_HALFBEAT
-                        const left = measureCursor
-                        measureCursor += width
-                        return (
-                          <div key={measure.id} className="arrangement-measure" style={{left, width}}>
-                            <span>{measure.position + 1}</span>
+            return (
+              <div className="arrangement-part-row" key={part.id}>
+                <div className="arrangement-part-name">{part.name}</div>
+                <div className="arrangement-track">
+                  {timeline.map(entry => {
+                    const block = getBlock(song, entry.structureItem)
+                    const measures = block? getMeasures(song, block.id) : []
+                    let measureCursor = 0
+
+                    return (
+                      <div key={entry.structureItem.id} className="arrangement-structure-cell editor-cell"
+                        style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
+                        onClick={event => handleTrackClick(event, part.id, entry.structureItem)}
+                      >
+                        {measures.map(measure => {
+                          const width = measure.beats * 2 * PX_PER_HALFBEAT
+                          const left = measureCursor
+                          measureCursor += width
+                          return (
+                            <div key={measure.id} className="arrangement-measure" style={{left, width}}>
+                              <span>{measure.position + 1}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })}
+                  {partItems.map(item => (
+                          <div
+                            key={item.id} className="arrangement-item editor-item"
+                            style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
+                            <input value={item.label} placeholder="Note" onChange={e => {updateItem(item,{label:e.target.value})}}/>
+                            <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
+                            <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
                           </div>
-                        )
-                      })}
-
-                      {partItems.map(item => (
-                        <div
-                          key={item.id} className="arrangement-item editor-item"
-                          style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
-                          <input value={item.label} placeholder="Note" onChange={e => {updateItem(item,{label:e.target.value})}}/>
-                          <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
-                          <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
-                        </div>
-                      ))}
-                    </div>
-                  )
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

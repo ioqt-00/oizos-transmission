@@ -11,8 +11,7 @@ Fix songlist for 650px->850px widths
 
 Empecher collision arrangement
 Formulaire pour ajouter des events 
-Resize à gauche 
 
 Clean up nav editor vs viewer
-Refacto arrangement item, start & end in DB ? do not depend on structure, only song & part, retrieve bloc & measure after
 
+TYPING IN ANOTHER FILE ????

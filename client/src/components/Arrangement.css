@@ -114,6 +114,7 @@
   display: flex;
   min-height: 54px;
   border-bottom: 1px solid #ddd;
+  position: relative;
 }
 
 .arrangement-structure-cell {

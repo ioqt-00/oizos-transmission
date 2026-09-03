@@ -213,14 +213,13 @@ export function createSaveSong(db: Database.Database) {
     const insertArrangement = db.prepare(`
       INSERT INTO arrangement_items(
         song_id,
-        structure_item_id,
         part_id,
         start_halfbeat,
-        duration_halfbeats,
+        end_halfbeat,
         label,
         notes
       )
-      VALUES(?,?,?,?,?,?,?)
+      VALUES(?,?,?,?,?,?)
     `)
 
     for (
@@ -228,28 +227,18 @@ export function createSaveSong(db: Database.Database) {
       of (data.arrangement ?? [])
     ) {
 
-      const newStructureId =
-        structureIdMap.get(
-          Number(item.structure_item_id)
-        )
-
-      if (newStructureId === undefined) {
-        throw new Error(
-          `Occurrence de structure introuvable : ${item.structure_item_id}`
-        )
-      }
+      const start_halfbeat = Number(item.start_halfbeat) || 0
 
       insertArrangement.run(
         songId,
-        newStructureId,
         Number(item.part_id),
         Math.max(
           0,
-          Number(item.start_halfbeat) || 0
+          start_halfbeat
         ),
         Math.max(
           1,
-          Number(item.duration_halfbeats) || 1
+          Number(item.end_halfbeat) || start_halfbeat+1
         ),
         item.label ?? '',
         item.notes ?? ''

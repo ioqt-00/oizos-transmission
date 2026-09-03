@@ -30,10 +30,9 @@ CREATE TABLE IF NOT EXISTS structure_items(
 CREATE TABLE IF NOT EXISTS arrangement_items (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
-  structure_item_id INTEGER NOT NULL REFERENCES structure_items(id) ON DELETE CASCADE,
   part_id INTEGER NOT NULL REFERENCES parts(id) ON DELETE CASCADE,
   start_halfbeat INTEGER NOT NULL,
-  duration_halfbeats INTEGER NOT NULL,
+  end_halfbeat INTEGER NOT NULL,
   label TEXT DEFAULT '',
   notes TEXT DEFAULT ''
   );
@@ -176,27 +175,25 @@ app.post('/api/songs/:id/arrangement', (req,res)=>{
       0,
       Number(req.body.start_halfbeat) || 0
     )
-    const durationHalfbeats = Math.max(
+    const endHalfbeats = Math.max(
       1,
-      Number(req.body.duration_halfbeats) || 1
+      Number(req.body.end_halfbeat) || startHalfbeat+1
     )
     const r = db.prepare(`
       INSERT INTO arrangement_items(
         song_id,
-        structure_item_id,
         part_id,
         start_halfbeat,
-        duration_halfbeats,
+        end_halfbeat,
         label,
         notes
       )
       VALUES(?,?,?,?,?,?,?)
     `).run(
       songId,
-      Number(req.body.structure_item_id),
       Number(req.body.part_id),
       startHalfbeat,
-      durationHalfbeats,
+      endHalfbeats,
       req.body.label || '',
       req.body.notes || ''
     )
@@ -221,7 +218,7 @@ app.put('/api/arrangement/:id', (req,res)=>{
       UPDATE arrangement_items
       SET
         start_halfbeat=?,
-        duration_halfbeats=?,
+        end_halfbeat=?,
         label=?,
         notes=?
       WHERE id=?
@@ -233,8 +230,8 @@ app.put('/api/arrangement/:id', (req,res)=>{
       Math.max(
         1,
         Number(
-          req.body.duration_halfbeats ??
-          old.duration_halfbeats
+          req.body.end_halfbeat ??
+          old.end_halfbeat
         )
       ),
       req.body.label ?? old.label,

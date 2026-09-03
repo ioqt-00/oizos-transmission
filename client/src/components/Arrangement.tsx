@@ -37,10 +37,9 @@ type StructureItem = {
 export type ArrangementItem = {
   id: number
   song_id: number
-  structure_item_id: number
   part_id: number
   start_halfbeat: number
-  duration_halfbeats: number
+  end_halfbeat: number
   label: string
   notes: string
 }
@@ -57,6 +56,8 @@ type Song = {
 type Props = {
   song: Song
   parts: Part[]
+  arrangement: ArrangementItem[]
+  setArrangement: React.Dispatch<React.SetStateAction<ArrangementItem[]>>
 }
 
 const PX_PER_HALFBEAT = 2
@@ -205,9 +206,7 @@ export function ArrangementTab({
                       items.filter(
                         item =>
                           item.part_id ===
-                            part.id &&
-                          item.structure_item_id ===
-                            entry.structureItem.id
+                            part.id
                       )
                     let measureCursor = 0
                     return (
@@ -246,7 +245,7 @@ export function ArrangementTab({
                             className="arrangement-item"
                             style={{
                               left: item.start_halfbeat * PX_PER_HALFBEAT,
-                              width: item.duration_halfbeats * PX_PER_HALFBEAT
+                              width: (item.end_halfbeat - item.start_halfbeat) * PX_PER_HALFBEAT
                             }}
                           >
                             {item.label}
@@ -278,8 +277,8 @@ export function ArrangementEditor({
   const [resizing, setResizing] = useState<{
       id: number
       initialX: number
-      initialDuration: number
       initialStart: number
+      initialEnd: number
     } | null>(null)
 
   const timeline = useMemo(
@@ -313,18 +312,16 @@ export function ArrangementEditor({
 
   async function createItem(
     partId: number,
-    structureItemId: number,
     startHalfbeat: number
   ) {
-    const durationHalfbeats = 10
+    const endHalfbeat = startHalfbeat + 10
 
     const item: ArrangementItem = {
       id: -Date.now(),
       song_id: song.id,
-      structure_item_id: structureItemId,
       part_id: partId,
       start_halfbeat: startHalfbeat,
-      duration_halfbeats: durationHalfbeats,
+      end_halfbeat: endHalfbeat,
       label: '',
       notes: ''
     }
@@ -346,7 +343,7 @@ export function ArrangementEditor({
     const rect=event.currentTarget.getBoundingClientRect()
     const x = event.clientX - rect.left
     const startHalfbeat = roundToHalfbeat(x)
-    createItem(partId, structureItem.id, startHalfbeat)
+    createItem(partId, startHalfbeat)
   }
 
   function startResize(
@@ -357,10 +354,10 @@ export function ArrangementEditor({
     setResizing({
       id: item.id,
       initialX: event.clientX,
-      initialDuration:
-        item.duration_halfbeats,
       initialStart:
-        item.start_halfbeat
+        item.start_halfbeat,
+      initialEnd:
+        item.end_halfbeat
     })
     ;(
       event.currentTarget as HTMLElement
@@ -375,10 +372,12 @@ export function ArrangementEditor({
     if (!resizing)
       return
     const delta = event.clientX - resizing.initialX
-    const deltaHalfbeats = type==='left' ? -Math.round(delta / PX_PER_HALFBEAT) : Math.round(delta / PX_PER_HALFBEAT)
-    const start = type==='left' ? Math.max(0, resizing.initialStart - deltaHalfbeats) : resizing.initialStart
-    const duration = Math.max(1, resizing.initialDuration + deltaHalfbeats)
-    updateItem(item, {duration_halfbeats: duration, start_halfbeat: start})
+    const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
+    
+    const start = type==='left' ? Math.max(0, resizing.initialStart + deltaHalfbeats) : resizing.initialStart
+    const end = type==='left' ? resizing.initialEnd : Math.max(0, resizing.initialEnd + deltaHalfbeats)
+
+    updateItem(item, {end_halfbeat: end, start_halfbeat: start})
   }
 
   async function finishResize() {
@@ -426,11 +425,7 @@ export function ArrangementEditor({
                   const block = getBlock(song, entry.structureItem)
                   const measures = block? getMeasures(song, block.id) : []
                   const partItems =
-                    arrangement.filter(
-                      item =>
-                        item.part_id === part.id &&
-                        item.structure_item_id === entry.structureItem.id
-                    )
+                    arrangement.filter(item => item.part_id === part.id)
                   let measureCursor = 0
 
                   return (
@@ -438,9 +433,7 @@ export function ArrangementEditor({
                       key={entry.structureItem.id}
                       className="arrangement-structure-cell editor-cell"
                       style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
-                      onClick={event =>
-                        handleTrackClick(event, part.id, entry.structureItem)
-                      }
+                      onClick={event => handleTrackClick(event, part.id, entry.structureItem)}
                     >
                       {measures.map(measure => {
                         const width = measure.beats * 2 * PX_PER_HALFBEAT
@@ -456,7 +449,7 @@ export function ArrangementEditor({
                       {partItems.map(item => (
                         <div
                           key={item.id} className="arrangement-item editor-item"
-                          style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:item.duration_halfbeats*PX_PER_HALFBEAT}}
+                          style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
                           onClick={e => e.stopPropagation()}
                         >
                           <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>

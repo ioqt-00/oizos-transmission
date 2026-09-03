@@ -191,20 +191,18 @@ const transaction = db.transaction(() => {
     INSERT INTO arrangement_items (
       id,
       song_id,
-      structure_item_id,
       part_id,
       start_halfbeat,
-      duration_halfbeats,
+      end_halfbeat,
       label,
       notes
     )
     VALUES (
       @id,
       @song_id,
-      @structure_item_id,
       @part_id,
       @start_halfbeat,
-      @duration_halfbeats,
+      @end_halfbeat,
       @label,
       @notes
     )

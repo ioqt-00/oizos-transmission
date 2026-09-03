@@ -151,11 +151,12 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
   const [blocks, setBlocks] = useState<GridBlock[]>(song.blocks)
   const [measures, setMeasures] = useState<Measure[]>(song.measures)
   const [structure, setStructure] = useState<StructureItem[]>(song.structure)
-  
+  const [arrangement, setArrangement] = useState<ArrangementItem[]>(song.arrangement)
+
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
     const r=await fetch(`/api/songs/${song.id}`,{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure})
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement})
     })
     if(!r.ok)return alert(await r.text())
     await onSaved(song.id)
@@ -180,9 +181,9 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
-    {tab==='structure'&&<StructureEditor song={song} blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
+    {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
-    {tab==='arrangement'&&<ArrangementEditor song={song} parts={parts}/>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
   </div>
 }
 

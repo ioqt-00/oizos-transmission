@@ -57,11 +57,9 @@ type Song = {
 type Props = {
   song: Song
   parts: Part[]
-  items?: ArrangementItem[]
-  onChange?: (items: ArrangementItem[]) => void
 }
 
-const PX_PER_HALFBEAT = 28
+const PX_PER_HALFBEAT = 5
 
 function getBlock(song: Song, structureItem: StructureItem) {
   return song.blocks.find(
@@ -118,18 +116,6 @@ function roundToHalfbeat(value: number) {
   )
 }
 
-function updateItem(
-  items: ArrangementItem[],
-  id: number,
-  patch: Partial<ArrangementItem>
-) {
-  return items.map(item =>
-    item.id === id
-      ? { ...item, ...patch }
-      : item
-  )
-}
-
 /* ============================================================
    RENDU
    ============================================================ */
@@ -138,7 +124,7 @@ export function ArrangementTab({
   song,
   parts
 }: Props) {
-  const [items, setItems] = useState<ArrangementItem[]>(song.arrangement)
+  const items = song.arrangement
   const timeline = useMemo(
     () => buildTimeline(song),
     [song]
@@ -259,12 +245,8 @@ export function ArrangementTab({
                             key={item.id}
                             className="arrangement-item"
                             style={{
-                              left:
-                                item.start_halfbeat *
-                                PX_PER_HALFBEAT,
-                              width:
-                                item.duration_halfbeats *
-                                PX_PER_HALFBEAT
+                              left: item.start_halfbeat * PX_PER_HALFBEAT,
+                              width: item.duration_halfbeats * PX_PER_HALFBEAT
                             }}
                           >
                             {item.label}
@@ -289,14 +271,11 @@ export function ArrangementTab({
 
 export function ArrangementEditor({
   song,
+  arrangement,
+  setArrangement,
   parts
 }: Props) {
-
-  const [items, setItems] =
-    useState<ArrangementItem[]>(song.arrangement)
-
-  const [resizing, setResizing] =
-    useState<{
+  const [resizing, setResizing] = useState<{
       id: number
       initialX: number
       initialDuration: number
@@ -307,9 +286,28 @@ export function ArrangementEditor({
     [song]
   )
 
-  function emit(next: ArrangementItem[]) {
-    setItems(next)
-    song.arrangement = items
+  function addItem(arr: ArrangementItem){
+    setArrangement(current => [
+        ...current, arr
+      ])
+    }
+
+  function deleteItem(arr: ArrangementItem){
+    setArrangement(current =>
+          current.filter(item =>
+            item.id !== arr.id
+          )
+        )
+  }
+
+  function updateItem(arr: ArrangementItem, patch:Partial<ArrangementItem>){
+    setArrangement(current =>
+      current.map(item =>
+        item.id === arr.id
+          ? { ...item, ...patch }
+          : item
+      )
+    )
   }
 
   async function createItem(
@@ -317,9 +315,10 @@ export function ArrangementEditor({
     structureItemId: number,
     startHalfbeat: number
   ) {
-    const durationHalfbeats = 2
+    const durationHalfbeats = 10
 
     const item: ArrangementItem = {
+      id: -Date.now(),
       song_id: song.id,
       structure_item_id: structureItemId,
       part_id: partId,
@@ -329,25 +328,7 @@ export function ArrangementEditor({
       notes: ''
     }
 
-    emit([...items, item])
-  }
-
-  async function deleteItem(
-    item: ArrangementItem
-  ) {
-
-    await fetch(
-      `/api/arrangement/${item.id}`,
-      {
-        method: 'DELETE'
-      }
-    )
-
-    emit(
-      items.filter(
-        x => x.id !== item.id
-      )
-    )
+    addItem(item)
   }
 
   function handleTrackClick(
@@ -386,53 +367,18 @@ export function ArrangementEditor({
   function handleResizeMove(
     event: React.PointerEvent
   ) {
-
     if (!resizing)
       return
-
-    const delta =
-      event.clientX -
-      resizing.initialX
-
-    const deltaHalfbeats =
-      Math.round(
-        delta /
-        PX_PER_HALFBEAT
-      )
-
-    const duration =
-      Math.max(
-        1,
-        resizing.initialDuration +
-          deltaHalfbeats
-      )
-
-    emit(
-      updateItem(
-        items,
-        resizing.id,
-        {
-          duration_halfbeats:
-            duration
-        }
-      )
-    )
+    const delta = event.clientX - resizing.initialX
+    const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
+    const duration = Math.max(1, resizing.initialDuration + deltaHalfbeats)
   }
 
   async function finishResize() {
-
     if (!resizing)
       return
-
-    const item =
-      items.find(
-        x => x.id === resizing.id
-      )
-
+    const item = arrangement.find(x => x.id === resizing.id)
     setResizing(null)
-
-    if (item)
-      await saveItem(item)
   }
 
   return (
@@ -535,7 +481,7 @@ export function ArrangementEditor({
                       : []
 
                   const partItems =
-                    items.filter(
+                    arrangement.filter(
                       item =>
                         item.part_id ===
                           part.id &&
@@ -567,16 +513,9 @@ export function ArrangementEditor({
 
                       {measures.map(measure => {
 
-                        const width =
-                          measure.beats *
-                          2 *
-                          PX_PER_HALFBEAT
-
-                        const left =
-                          measureCursor
-
+                        const width = measure.beats * 2 * PX_PER_HALFBEAT
+                        const left = measureCursor
                         measureCursor += width
-
                         return (
                           <div
                             key={measure.id}
@@ -594,7 +533,6 @@ export function ArrangementEditor({
                       })}
 
                       {partItems.map(item => (
-
                         <div
                           key={item.id}
                           className="arrangement-item editor-item"
@@ -615,30 +553,14 @@ export function ArrangementEditor({
                             value={item.label}
                             placeholder="Joue"
                             onChange={e => {
-
-                              const next =
-                                updateItem(
-                                  items,
-                                  item.id,
-                                  {
-                                    label:
-                                      e.target.value
-                                  }
-                                )
-
-                              emit(next)
+                              const next = updateItem(item,{label:e.target.value})
                             }}
-                            onBlur={() =>
-                              saveItem(item)
-                            }
                           />
 
                           <button
                             type="button"
                             className="arrangement-delete"
-                            onClick={() =>
-                              deleteItem(item)
-                            }
+                            onClick={() => deleteItem(item)}
                           >
                             ×
                           </button>

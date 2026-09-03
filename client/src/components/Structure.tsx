@@ -1,6 +1,4 @@
-type GridBlock = { id:number; name:string; position:number; notes:string }
-type Measure = { id:number; block_id:number; position:number; chord:string; beats:number; notes:string }
-type StructureItem = { id:number; block_id:number; position:number; repeat_count:number; notes:string }
+import type {GridBlock, Measure, StructureItem} from '../types/song'
 
 export function StructureEditor({blocks, measures, structure, setStructure}:any){
   function updateStructureItem(structure_item:StructureItem, patch:Partial<StructureItem>){

@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-
-type GridBlock = { id:number; name:string; position:number; notes:string }
-type Measure = { id:number; block_id:number; position:number; chord:string; beats:number; notes:string }
+import type { GridBlock, Measure } from '../types/song';
 
 type GridEditorProps = {
   blocks: GridBlock[]

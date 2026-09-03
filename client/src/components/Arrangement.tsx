@@ -1,62 +1,17 @@
 import { useMemo, useState } from 'react'
 import './Arrangement.css'
+import type { Part, StructureItem, ArrangementItem, Song } from '../types/song'
 
-type Part = {
-  id: number
-  name: string
-  position: number
-}
-
-type GridBlock = {
-  id: number
-  song_id: number
-  name: string
-  position: number
-  notes: string
-}
-
-type Measure = {
-  id: number
-  block_id: number
-  position: number
-  chord: string
-  beats: number
-  notes: string
-}
-
-type StructureItem = {
-  id: number
-  song_id: number
-  block_id: number
-  position: number
-  repeat_count: number
-  notes: string
-}
-
-export type ArrangementItem = {
-  id: number
-  song_id: number
-  part_id: number
-  start_halfbeat: number
-  end_halfbeat: number
-  label: string
-  notes: string
-}
-
-type Song = {
-  id: number
-  title: string
-  blocks: GridBlock[]
-  measures: Measure[]
-  structure: StructureItem[]
-  arrangement: ArrangementItem[]
-}
-
-type Props = {
+type EditorProps = {
   song: Song
   parts: Part[]
   arrangement: ArrangementItem[]
   setArrangement: React.Dispatch<React.SetStateAction<ArrangementItem[]>>
+}
+
+type ViewerProps = {
+  song: Song
+  parts: Part[]
 }
 
 const PX_PER_HALFBEAT = 2
@@ -124,7 +79,7 @@ function roundToHalfbeat(value: number) {
 export function ArrangementTab({
   song,
   parts
-}: Props) {
+}: ViewerProps) {
   const arrangementItems = song.arrangement
   const timeline = useMemo(
     () => buildTimeline(song),
@@ -249,7 +204,7 @@ export function ArrangementEditor({
   arrangement,
   setArrangement,
   parts
-}: Props) {
+}: EditorProps) {
   const [resizing, setResizing] = useState<{
       id: number
       initialX: number

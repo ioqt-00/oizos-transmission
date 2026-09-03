@@ -37,7 +37,8 @@ function App() {
   async function fetchSong(id:number){
     const r=await fetch(`/api/songs/${id}`)
     if(!r.ok) throw new Error(await r.text())
-    return await r.json() as Song
+    const song = await r.json() as Song
+    return song
   }
   async function openSong(id:number,tab=viewTab){
     setSelected(await fetchSong(id));

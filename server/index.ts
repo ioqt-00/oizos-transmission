@@ -51,7 +51,11 @@ app.get('/api/parts',(_r,res)=>res.json(db.prepare('SELECT * FROM parts ORDER BY
 
 // SONGS
 app.get('/api/songs',(_r,res)=>res.json(db.prepare('SELECT * FROM songs ORDER BY title COLLATE NOCASE').all()))
-app.get('/api/songs/:id',(req,res)=>{const x=songWithData(Number(req.params.id));if(!x)return res.status(404).send('Morceau introuvable');res.json(x)})
+app.get('/api/songs/:id',(req,res)=>{
+  const x=songWithData(Number(req.params.id));
+  if(!x)return res.status(404).send('Morceau introuvable');
+  res.json(x)
+})
 app.post('/api/songs',(req,res)=>{
  try{const {title,...f}=req.body;if(!title?.trim())return res.status(400).send('Le titre est obligatoire.')
  const r=db.prepare(`INSERT INTO songs(title,artist,composer,arranger,duration,tempo,key_signature,notes,lyrics,url_drive) VALUES(@title,@artist,@composer,@arranger,@duration,@tempo,@key_signature,@notes,@lyrics,@url_drive)`).run({title:title.trim(),artist:f.artist||'',composer:f.composer||'',arranger:f.arranger||'',duration:f.duration||'',tempo:f.tempo||'',key_signature:f.key_signature||'',notes:f.notes||'',lyrics:f.lyrics||'',url_drive:f.url_drive||''})

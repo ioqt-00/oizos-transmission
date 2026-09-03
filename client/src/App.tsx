@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
+import { ArrangementTab, ArrangementEditor, ArrangementItem } from './components/Arrangement';
 
 type Part = { id:number; name:string; position:number }
 type Score = { id:number; part_id:number; file_name:string; file_path:string }
@@ -10,7 +11,7 @@ type StructureItem = { id:number; block_id:number; position:number; repeat_count
 type Song = {
   id:number; title:string; artist:string; composer:string; arranger:string
   duration:string; tempo:string; key_signature:string; notes:string; lyrics:string; url_drive:string
-  scores:Score[]; blocks:GridBlock[]; measures:Measure[]; structure:StructureItem[]
+  scores:Score[]; blocks:GridBlock[]; measures:Measure[]; structure:StructureItem[]; arrangement:ArrangementItem[]
 }
 
 const emptySong = {
@@ -47,7 +48,9 @@ function App() {
     setTab(t);
     setSidebarOpen(false);
   }
+
   function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
+
   function startEdit(song:Song){
     setForm({
       title:song.title,artist:song.artist,composer:song.composer,arranger:song.arranger,
@@ -169,15 +172,17 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
       <option value="grille">🎹 Grille</option>
       <option value="structure">🧭 Structure</option>
       <option value="paroles">📝 Paroles</option>
+      <option value="arrangement">Arrangement</option>
     </select> 
     <nav className="desktop-song-nav">
-      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
     </nav>
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
     {tab==='structure'&&<StructureEditor song={song} blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} parts={parts}/>}
   </div>
 }
 
@@ -214,9 +219,10 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
       <option value="grille">🎹 Grille</option>
       <option value="structure">🧭 Structure</option>
       <option value="paroles">📝 Paroles</option>
+      <option value="arrangement"> Arrangement</option>
     </select> 
     <nav className="desktop-song-nav">
-      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
     </nav>
     {tab==='metadata' && 
       <div className="meta-grid">
@@ -238,6 +244,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='grille'&& <GridRender song={song}/>}
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
+    {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
   </div>
 }
 

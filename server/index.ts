@@ -25,12 +25,26 @@ CREATE TABLE IF NOT EXISTS structure_items(
   block_id INTEGER NOT NULL REFERENCES grid_blocks(id) ON DELETE CASCADE,
   position INTEGER NOT NULL,
   repeat_count INTEGER NOT NULL DEFAULT 1,
-  notes TEXT DEFAULT '');
+  notes TEXT DEFAULT ''
+  );
+CREATE TABLE IF NOT EXISTS arrangement_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  structure_item_id INTEGER NOT NULL REFERENCES structure_items(id) ON DELETE CASCADE,
+  part_id INTEGER NOT NULL REFERENCES parts(id) ON DELETE CASCADE,
+  start_halfbeat INTEGER NOT NULL,
+  duration_halfbeats INTEGER NOT NULL,
+  label TEXT DEFAULT '',
+  notes TEXT DEFAULT ''
+  );
 `)
 
 const defaultParts = ['Accordéon', 'Basse', 'Clarinette', 'Cordes Frottées', 'Flûte', 'Médium', 'Percus', 'Saxophone Alto', 'Trompette', 'Chant', 'Chant 2', 'Chant 3']
-const ins=db.prepare('INSERT OR IGNORE INTO parts(name,position) VALUES(?,?)');defaultParts.forEach((x,i)=>ins.run(x,i))
-app.use(cors());app.use(express.json());app.use('/uploads',express.static(uploadDir))
+const ins=db.prepare('INSERT OR IGNORE INTO parts(name,position) VALUES(?,?)');
+defaultParts.forEach((x,i)=>ins.run(x,i))
+app.use(cors());
+app.use(express.json());
+app.use('/uploads',express.static(uploadDir))
 
 const storage=multer.diskStorage({destination:(_r,_f,cb)=>cb(null,uploadDir),filename:(req,file,cb)=>cb(null,`${Date.now()}-${req.params.id}-${file.originalname.replace(/[^a-zA-Z0-9._-]/g,'_')}`)})
 const upload=multer({storage,fileFilter:(_r,file,cb)=>cb(null,file.mimetype==='application/pdf')})
@@ -42,7 +56,8 @@ function songWithData(id:number){
   scores:db.prepare('SELECT * FROM scores WHERE song_id=? ORDER BY part_id').all(id),
   blocks:db.prepare('SELECT * FROM grid_blocks WHERE song_id=? ORDER BY position,id').all(id),
   measures:db.prepare(`SELECT m.* FROM measures m JOIN grid_blocks b ON b.id=m.block_id WHERE b.song_id=? ORDER BY b.position,m.position,m.id`).all(id),
-  structure:db.prepare('SELECT * FROM structure_items WHERE song_id=? ORDER BY position,id').all(id)
+  structure:db.prepare('SELECT * FROM structure_items WHERE song_id=? ORDER BY position,id').all(id),
+  arrangement:db.prepare('SELECT * FROM arrangement_items WHERE song_id=? ORDER BY part_id').all(id)
  }
 }
 
@@ -85,19 +100,13 @@ app.post('/api/songs/:id/scores',upload.single('file'),(req,res)=>{
  else db.prepare('INSERT INTO scores(song_id,part_id,file_name,file_path) VALUES(?,?,?,?)').run(songId,partId,req.file.originalname,req.file.filename)
  res.json({ok:true})
 })
+
+// BLOCKS
 app.post('/api/songs/:id/blocks',(req,res)=>{
  const songId=Number(req.params.id),max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM grid_blocks WHERE song_id=?').get(songId) as any
  const r=db.prepare('INSERT INTO grid_blocks(song_id,name,position,notes) VALUES(?,?,?,?)').run(songId,req.body.name||'Bloc',max.p+1,req.body.notes||'')
  res.json({id:Number(r.lastInsertRowid)})
 })
-app.post('/api/songs/:id/structure',(req,res)=>{
- const songId=Number(req.params.id),block=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),songId) as any
- if(!block)return res.status(400).send('Bloc invalide.')
- const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM structure_items WHERE song_id=?').get(songId) as any
- const r=db.prepare('INSERT INTO structure_items(song_id,block_id,position,repeat_count,notes) VALUES(?,?,?,?,?)').run(songId,block.id,max.p+1,Number(req.body.repeat_count)||1,req.body.notes||'');res.json({id:Number(r.lastInsertRowid)})
-})
-
-// BLOCKS
 app.put('/api/blocks/:id',(req,res)=>{
  const id=Number(req.params.id),old=db.prepare('SELECT * FROM grid_blocks WHERE id=?').get(id) as any;if(!old)return res.status(404).send('Bloc introuvable')
  db.prepare('UPDATE grid_blocks SET name=?,notes=? WHERE id=?').run(req.body.name??old.name,req.body.notes??old.notes,id);res.json({ok:true})
@@ -116,12 +125,133 @@ app.put('/api/measures/:id',(req,res)=>{
 app.delete('/api/measures/:id',(req,res)=>{db.prepare('DELETE FROM measures WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
 
 // STRUCTURE
+app.post('/api/songs/:id/structure',(req,res)=>{
+ const songId=Number(req.params.id),block=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),songId) as any
+ if(!block)return res.status(400).send('Bloc invalide.')
+ const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM structure_items WHERE song_id=?').get(songId) as any
+ const r=db.prepare('INSERT INTO structure_items(song_id,block_id,position,repeat_count,notes) VALUES(?,?,?,?,?)').run(songId,block.id,max.p+1,Number(req.body.repeat_count)||1,req.body.notes||'');res.json({id:Number(r.lastInsertRowid)})
+})
 app.put('/api/structure/:id',(req,res)=>{
- const id=Number(req.params.id),old=db.prepare('SELECT * FROM structure_items WHERE id=?').get(id) as any;if(!old)return res.status(404).send('Occurrence introuvable')
- if(req.body.block_id!==undefined){const ok=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),old.song_id);if(!ok)return res.status(400).send('Bloc invalide.')}
- db.prepare('UPDATE structure_items SET block_id=?,repeat_count=?,notes=? WHERE id=?').run(Number(req.body.block_id)||old.block_id,Number(req.body.repeat_count)||1,req.body.notes??old.notes,id);res.json({ok:true})
+ const id=Number(req.params.id),old=db.prepare('SELECT * FROM structure_items WHERE id=?').get(id) as any;
+ if(!old)return res.status(404).send('Occurrence introuvable')
+ if(req.body.block_id!==undefined){
+  const ok=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),old.song_id);
+  if(!ok)return res.status(400).send('Bloc invalide.')
+  }
+ db.prepare('UPDATE structure_items SET block_id=?,repeat_count=?,notes=? WHERE id=?').run(Number(req.body.block_id)||old.block_id,Number(req.body.repeat_count)||1,req.body.notes??old.notes,id);
+ res.json({ok:true})
 })
 app.delete('/api/structure/:id',(req,res)=>{db.prepare('DELETE FROM structure_items WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
+
+// ARRANGEMENT
+app.post('/api/songs/:id/arrangement', (req,res)=>{
+  try {
+    const songId = Number(req.params.id)
+    const song = db
+      .prepare('SELECT id FROM songs WHERE id=?')
+      .get(songId)
+    if (!song) {
+      return res.status(404).send('Morceau introuvable.')
+    }
+    const structureItem = db
+      .prepare(`
+        SELECT id
+        FROM structure_items
+        WHERE id=? AND song_id=?
+      `)
+      .get(
+        Number(req.body.structure_item_id),
+        songId
+      )
+    if (!structureItem) {
+      return res.status(400).send('Occurrence de structure invalide.')
+    }
+    const part = db
+      .prepare('SELECT id FROM parts WHERE id=?')
+      .get(Number(req.body.part_id))
+    if (!part) {
+      return res.status(400).send('Pupitre invalide.')
+    }
+    const startHalfbeat = Math.max(
+      0,
+      Number(req.body.start_halfbeat) || 0
+    )
+    const durationHalfbeats = Math.max(
+      1,
+      Number(req.body.duration_halfbeats) || 1
+    )
+    const r = db.prepare(`
+      INSERT INTO arrangement_items(
+        song_id,
+        structure_item_id,
+        part_id,
+        start_halfbeat,
+        duration_halfbeats,
+        label,
+        notes
+      )
+      VALUES(?,?,?,?,?,?,?)
+    `).run(
+      songId,
+      Number(req.body.structure_item_id),
+      Number(req.body.part_id),
+      startHalfbeat,
+      durationHalfbeats,
+      req.body.label || '',
+      req.body.notes || ''
+    )
+    res.json({
+      id: Number(r.lastInsertRowid)
+    })
+  } catch {
+    res.status(400).send("Impossible de créer l'élément d'arrangement.")
+  }
+})
+app.put('/api/arrangement/:id', (req,res)=>{
+  try {
+    const id = Number(req.params.id)
+    const old = db
+      .prepare('SELECT * FROM arrangement_items WHERE id=?')
+      .get(id) as any
+
+    if (!old) {
+      return res.status(404).send('Élément introuvable.')
+    }
+    db.prepare(`
+      UPDATE arrangement_items
+      SET
+        start_halfbeat=?,
+        duration_halfbeats=?,
+        label=?,
+        notes=?
+      WHERE id=?
+    `).run(
+      Math.max(
+        0,
+        Number(req.body.start_halfbeat ?? old.start_halfbeat)
+      ),
+      Math.max(
+        1,
+        Number(
+          req.body.duration_halfbeats ??
+          old.duration_halfbeats
+        )
+      ),
+      req.body.label ?? old.label,
+      req.body.notes ?? old.notes,
+      id
+    )
+    res.json({ ok:true })
+  } catch {
+    res.status(400).send('Impossible de modifier cet élément.')
+  }
+})
+app.delete('/api/arrangement/:id',(req,res)=>{
+  db
+    .prepare('DELETE FROM arrangement_items WHERE id=?')
+    .run(Number(req.params.id))
+  res.sendStatus(204)
+})
 
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {

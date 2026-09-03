@@ -163,16 +163,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
       <div><span className="eyebrow">ÉDITION</span><h2>{song.title}</h2></div>
       <div className="actions"><button type="button" onClick={onCancel}>Annuler</button><button className="actions" onClick={saveSong}>Enregistrer</button></div>
     </div>
-    <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
-      <option value="metadata">⚙️ Metadata</option>
-      <option value="partitions">🎼 Partitions</option>
-      <option value="grille">🎹 Grille</option>
-      <option value="structure">🧭 Structure</option>
-      <option value="paroles">📝 Paroles</option>
-    </select> 
-    <nav className="desktop-song-nav">
-      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
-    </nav>
+    <Nav tab={tab} setTab={setTab}/>
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
@@ -208,16 +199,8 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
       </div>
       <div className="actions"><button onClick={onEdit}>Modifier</button><button className="danger" onClick={onDelete}>Supprimer</button></div>
     </div>
-    <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
-      <option value="metadata">⚙️ Metadata</option>
-      <option value="partitions">🎼 Partitions</option>
-      <option value="grille">🎹 Grille</option>
-      <option value="structure">🧭 Structure</option>
-      <option value="paroles">📝 Paroles</option>
-    </select> 
-    <nav className="desktop-song-nav">
-      {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
-    </nav>
+    <Nav tab={tab} setTab={setTab}/>
+
     {tab==='metadata' && 
       <div className="meta-grid">
         <Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/>
@@ -242,4 +225,22 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
 }
 
 function Meta({label,value}:{label:string,value:string}){return <div><span>{label}</span><strong>{value||'—'}</strong></div>}
+
+function Nav({tab, setTab}:any){
+  return (
+    <div className='navigation-container'>
+      <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
+        <option value="metadata">⚙️ Metadata</option>
+        <option value="partitions">🎼 Partitions</option>
+        <option value="grille">🎹 Grille</option>
+        <option value="structure">🧭 Structure</option>
+        <option value="paroles">📝 Paroles</option>
+      </select> 
+      <nav className="desktop-song-nav">
+        {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+      </nav>
+    </div>
+  )
+}
+
 export default App

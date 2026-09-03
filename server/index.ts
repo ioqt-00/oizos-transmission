@@ -78,11 +78,22 @@ app.put('/api/songs/:id', (req, res) => {
   }
 })
 app.delete('/api/songs/:id',(req,res)=>{db.prepare('DELETE FROM songs WHERE id=?').run(Number(req.params.id));res.sendStatus(204)})
-app.post('/api/songs/:id/scores',upload.single('file'),(req,res)=>{
- if(!req.file)return res.status(400).send('Veuillez sélectionner un PDF.')
- const songId=Number(req.params.id),partId=Number(req.body.partId),old=db.prepare('SELECT * FROM scores WHERE song_id=? AND part_id=?').get(songId,partId) as any
- if(old){const p=path.join(uploadDir,old.file_path);if(fs.existsSync(p))fs.unlinkSync(p);db.prepare('UPDATE scores SET file_name=?,file_path=? WHERE id=?').run(req.file.originalname,req.file.filename,old.id)}
- else db.prepare('INSERT INTO scores(song_id,part_id,file_name,file_path) VALUES(?,?,?,?)').run(songId,partId,req.file.originalname,req.file.filename)
+app.post('/api/songs/:id/scores',(req,res)=>{ // upload.single('file')
+  return res.status(400).send("Pour des raisons de sécurité, le upload est désactivé pour le moment")
+  if(!req.file)
+    return res.status(400).send('Veuillez sélectionner un PDF.')
+  const songId=Number(req.params.id)
+  const partId=Number(req.body.partId)
+  const old=db.prepare('SELECT * FROM scores WHERE song_id=? AND part_id=?').get(songId,partId) as any
+  if(old){
+    const p=path.join(uploadDir,old.file_path)
+    if(fs.existsSync(p)){
+      fs.unlinkSync(p)
+      db.prepare('UPDATE scores SET file_name=?,file_path=? WHERE id=?').run(req.file.originalname,req.file.filename,old.id)
+    }
+  }
+ else 
+  db.prepare('INSERT INTO scores(song_id,part_id,file_name,file_path) VALUES(?,?,?,?)').run(songId,partId,req.file.originalname,req.file.filename)
  res.json({ok:true})
 })
 app.post('/api/songs/:id/blocks',(req,res)=>{

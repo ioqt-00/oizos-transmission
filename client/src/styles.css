@@ -23,7 +23,7 @@ button{cursor:pointer;border:0}
 .search{width:100%;padding:11px 13px;border:1px solid #d6d9de;border-radius:8px}
 .song-count{margin:18px 4px 8px}
 .song-item{display:block;width:100%;text-align:left;background:transparent;padding:12px;border-radius:8px;margin-bottom:3px}.song-item:hover,.song-item.active{background:#eef1f5}.song-item strong,.song-item small{display:block}.song-item small{color:#777;margin-top:3px}
-.content{padding:32px;max-width:1250px;width:100%;margin:auto}
+.content{padding:32px;max-width:1250px;width:100%}
 .page-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:24px}h2{font-size:34px;margin:5px 0}.subtitle{color:#6e747d;margin:0}.actions{display:flex;gap:8px}.actions button,.primary{padding:10px 15px;border-radius:7px;background:#e9ebef}.primary{background:#20242a;color:white}.danger{color:#9c3030}.ghost{background:transparent}
 .welcome{text-align:center;padding:120px 20px}.big-icon{font-size:52px}.welcome
 

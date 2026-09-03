@@ -26,8 +26,7 @@ function App() {
   const [editing, setEditing] = useState(false)
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState(emptySong)
-  const [viewTab, setViewTab] = useState<'partitions'|'grille'|'structure'|'paroles'>('partitions')
-  const [editTab, setEditTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'>('metadata')
+  const [tab, setTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'|'arrangement'>('metadata')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   async function loadSongs(){ setSongs(await (await fetch('/api/songs')).json()) }
@@ -40,11 +39,12 @@ function App() {
     const song = await r.json() as Song
     return song
   }
-  async function openSong(id:number,tab=viewTab){
+
+  async function openSong(id:number,t=tab){
     setSelected(await fetchSong(id));
     setEditing(false);
     setCreating(false);
-    setViewTab(tab);
+    setTab(t);
     setSidebarOpen(false);
   }
   function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
@@ -53,7 +53,8 @@ function App() {
       title:song.title,artist:song.artist,composer:song.composer,arranger:song.arranger,
       duration:song.duration,tempo:song.tempo,key_signature:song.key_signature,
       notes:song.notes,lyrics:song.lyrics,url_drive:song.url_drive
-    }); setEditing(true); setEditTab('metadata')
+    })
+    setEditing(true)
   }
 
   async function deleteSong(){
@@ -115,9 +116,9 @@ function App() {
 
         {creating&&<Creator form={form} setForm={setForm} onSaved={handleSongSaved} onCancel={()=>setCreating(false)}/>}
 
-        {editing&&<Editor song={selected} form={form} setForm={setForm} tab={editTab} setTab={setEditTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
+        {editing&&<Editor song={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
 
-        {selected&&!editing&&<RenderSong song={selected} tab={viewTab} setTab={setViewTab} onEdit={()=>startEdit(selected)} onDelete={deleteSong} parts={parts}/>}
+        {selected&&!editing&&<RenderSong song={selected} tab={tab} setTab={setTab} onEdit={()=>startEdit(selected)} onDelete={deleteSong} parts={parts}/>}
       </section>
     </main>
   </div>

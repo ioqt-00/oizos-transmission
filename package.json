@@ -6,8 +6,8 @@
     "dev:client": "vite --config client/vite.config.ts",
     "dev:server": "tsx server/index.ts",
     "build": "vite build --config client/vite.config.ts",
-    "dummy:save": "tsx server/dump-dummy.ts",
-    "dummy:load": "tsx server/seed.ts"
+    "dummy:save": "tsx server/dummy-save.ts",
+    "dummy:load": "tsx server/dummy-load.ts"
   },
   "dependencies": {
     "better-sqlite3": "^11.10.0",

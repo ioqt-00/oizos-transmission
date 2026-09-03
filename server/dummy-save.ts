@@ -36,21 +36,20 @@ const structure = db
   .prepare('SELECT * FROM structure_items ORDER BY id')
   .all() as any[]
 
+const arrangement = db
+  .prepare('SELECT * FROM arrangement_items ORDER BY id')
+  .all() as any[]
+
 const data = {
   version: 1,
   exportedAt: new Date().toISOString(),
-
   parts,
-
   songs,
-
   scores,
-
   blocks,
-
   measures,
-
-  structure
+  structure,
+  arrangement
 }
 
 const output = path.join(seedDir, 'dummy-data.json')

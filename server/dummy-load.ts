@@ -186,6 +186,31 @@ const transaction = db.transaction(() => {
   for (const item of data.structure) {
     insertStructure.run(item)
   }
+
+  const insertArrangement = db.prepare(`
+    INSERT INTO arrangement_items (
+      id,
+      song_id,
+      part_id,
+      start_halfbeat,
+      end_halfbeat,
+      label,
+      notes
+    )
+    VALUES (
+      @id,
+      @song_id,
+      @part_id,
+      @start_halfbeat,
+      @end_halfbeat,
+      @label,
+      @notes
+    )
+  `)
+
+  for (const item of data.arrangement) {
+    insertArrangement.run(item)
+  }
 })
 
 transaction()

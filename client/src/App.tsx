@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
-import type { Part, Score, GridBlock, Measure, StructureItem, Song } from './types/song';
+import { ArrangementTab, ArrangementEditor } from './components/Arrangement';
+import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem } from './types/song';
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',
@@ -37,7 +38,9 @@ function App() {
     setTab(t);
     setSidebarOpen(false);
   }
+
   function startNew(){setSelected(null);setForm(emptySong);setCreating(true)}
+
   function startEdit(song:Song){
     setForm({
       title:song.title,artist:song.artist,composer:song.composer,arranger:song.arranger,
@@ -138,11 +141,12 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
   const [blocks, setBlocks] = useState<GridBlock[]>(song.blocks)
   const [measures, setMeasures] = useState<Measure[]>(song.measures)
   const [structure, setStructure] = useState<StructureItem[]>(song.structure)
-  
+  const [arrangement, setArrangement] = useState<ArrangementItem[]>(song.arrangement)
+
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
     const r=await fetch(`/api/songs/${song.id}`,{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure})
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement})
     })
     if(!r.ok)return alert(await r.text())
     await onSaved(song.id)
@@ -157,8 +161,9 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
-    {tab==='structure'&&<StructureEditor song={song} blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
+    {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
   </div>
 }
 
@@ -211,6 +216,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='grille'&& <GridRender song={song}/>}
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
+    {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
   </div>
 }
 
@@ -225,9 +231,10 @@ function Nav({tab, setTab}:any){
         <option value="grille">🎹 Grille</option>
         <option value="structure">🧭 Structure</option>
         <option value="paroles">📝 Paroles</option>
+        <option value="paroles">🧩 Arrangement</option>
       </select> 
       <nav className="desktop-song-nav">
-        {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+        {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','🧩 Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
       </nav>
     </div>
   )

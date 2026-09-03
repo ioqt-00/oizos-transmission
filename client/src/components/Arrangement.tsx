@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import './Arrangement.css'
-import { start } from 'node:repl'
 
 type Part = {
   id: number
@@ -131,10 +130,7 @@ export function ArrangementTab({
     () => buildTimeline(song),
     [song]
   )
-  const totalHalfbeats =
-    timeline.length
-      ? timeline[timeline.length - 1].end
-      : 0
+  const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
   return (
     <section className="card arrangement-card">
@@ -259,12 +255,16 @@ export function ArrangementEditor({
       initialX: number
       initialStart: number
       initialEnd: number
+      previousEnd: number
+      nextStart: number
     } | null>(null)
 
   const timeline = useMemo(
     () => buildTimeline(song),
     [song]
   )
+
+  const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
   function addItem(arr: ArrangementItem){
     setArrangement(current => [
@@ -295,6 +295,12 @@ export function ArrangementEditor({
     startHalfbeat: number
   ) {
     const endHalfbeat = startHalfbeat + ITEM_MINIMUM_SIZE
+
+    const others = arrangement.filter(x => x.part_id === partId)
+    const next_others = others.filter(x => x.start_halfbeat >= startHalfbeat)
+    const next_start = Math.min(...next_others.map(x => x.start_halfbeat), totalHalfbeats)
+
+    if (endHalfbeat > next_start){return}
 
     const item: ArrangementItem = {
       id: -Date.now(),
@@ -331,11 +337,20 @@ export function ArrangementEditor({
     item: ArrangementItem
   ) {
     event.stopPropagation()
+
+    const others = arrangement.filter(x => x.id !== item.id).filter(x => x.part_id === item.part_id)
+    const previous_others = others.filter(x => x.end_halfbeat <= item.start_halfbeat)
+    const next_others = others.filter(x => x.start_halfbeat >= item.end_halfbeat)
+    const previous_end =  Math.max(...previous_others.map(x => x.end_halfbeat), 0)
+    const next_start = Math.min(...next_others.map(x => x.start_halfbeat), totalHalfbeats)
+
     setResizing({
       id: item.id,
       initialX: event.clientX,
       initialStart: item.start_halfbeat,
-      initialEnd: item.end_halfbeat
+      initialEnd: item.end_halfbeat,
+      previousEnd: previous_end,
+      nextStart: next_start
     })
     ;(
       event.currentTarget as HTMLElement
@@ -348,11 +363,21 @@ export function ArrangementEditor({
     type: string
   ) {
     if (!resizing) return
+    // min for start is end of previous
+    // max for start is end of this - MIN_SIZE
+    // min for end is start of this + MIN_SIZE
+    // max for end is start of next
+
     const delta = event.clientX - resizing.initialX
     const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
-    const start = type==='left' ? Math.max(0, Math.min(resizing.initialStart+deltaHalfbeats, resizing.initialEnd-ITEM_MINIMUM_SIZE)) : resizing.initialStart
-    const end = type==='left' ? resizing.initialEnd : Math.max(resizing.initialStart+ITEM_MINIMUM_SIZE, resizing.initialEnd + deltaHalfbeats)
-    updateItem(item, {end_halfbeat: end, start_halfbeat: start})
+
+    if (type === 'left') {
+      const start = Math.max(resizing.previousEnd, Math.min(resizing.initialStart+deltaHalfbeats, resizing.initialEnd-ITEM_MINIMUM_SIZE))
+      updateItem(item, {start_halfbeat: start})
+    } else {
+      const end = Math.min(resizing.nextStart, Math.max(resizing.initialStart+ITEM_MINIMUM_SIZE, resizing.initialEnd + deltaHalfbeats))
+      updateItem(item, {end_halfbeat: end})
+    }
   }
 
   async function finishResize() {

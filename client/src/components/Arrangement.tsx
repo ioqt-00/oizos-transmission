@@ -23,14 +23,15 @@ function getBlock(song: Song, structureItem: StructureItem) {
   )
 }
 
-function getMeasures(song: Song, blockId: number) {
-  return song.measures
+function getMeasures(song: Song, blockId: number, repeatCount: number) {
+  const measures = song.measures
     .filter(m => m.block_id === blockId)
     .sort((a,b) => a.position - b.position)
+  return Array.from({ length:repeatCount }, () => measures).flat()
 }
 
 function getBlockDuration(song: Song, blockId: number) {
-  return getMeasures(song, blockId)
+  return getMeasures(song, blockId, 1)
     .reduce(
       (total, measure) =>
         total + measure.beats * 2,
@@ -132,7 +133,6 @@ export function ArrangementTab({
                           .repeat_count}
                       </span>
                     )}
-                    <small>{index + 1}</small>
                   </div>
                 )
               })}
@@ -145,34 +145,19 @@ export function ArrangementTab({
                   <div className="arrangement-track">
                     {timeline.map(entry => {
                       const block = getBlock(song, entry.structureItem)
-                      const measures = block ? getMeasures(song, block.id) : []
+                      const repeat_count = entry.structureItem.repeat_count
+                      const measures = block ? getMeasures(song, block.id, repeat_count) : []
                       let measureCursor = 0
                       return (
-                        <div
-                          key={entry.structureItem.id}
-                          className="arrangement-structure-cell"
-                          style={{
-                            width:
-                              entry.duration *
-                              PX_PER_HALFBEAT
-                          }}
-                        >
+                        <div key={entry.structureItem.id} className="arrangement-structure-cell"
+                          style={{width:entry.duration * PX_PER_HALFBEAT}}>
                           {measures.map(measure => {
 
                             const width = measure.beats * 2 * PX_PER_HALFBEAT
                             const left = measureCursor
                             measureCursor += width
                             return (
-                              <div
-                                key={measure.id}
-                                className="arrangement-measure"
-                                style={{
-                                  left,
-                                  width
-                                }}
-                              >
-                                <span>{measure.position + 1}</span>
-                              </div>
+                              <div className="arrangement-measure" style={{left, width}}></div>
                             )
                           })}
                         </div>
@@ -358,7 +343,6 @@ export function ArrangementEditor({
                   <div key={entry.structureItem.id} className="arrangement-section" style={{width:entry.duration*PX_PER_HALFBEAT}}                  >
                     <strong>{block?.name || 'Bloc supprimé'}</strong>
                     {entry.structureItem.repeat_count > 1 && (<span>×{entry.structureItem.repeat_count}</span>)}
-                    <small>{index + 1}</small>
                   </div>
                 )
               }
@@ -374,7 +358,8 @@ export function ArrangementEditor({
                 <div className="arrangement-track">
                   {timeline.map(entry => {
                     const block = getBlock(song, entry.structureItem)
-                    const measures = block? getMeasures(song, block.id) : []
+                    const repeat_count = entry.structureItem.repeat_count
+                    const measures = block? getMeasures(song, block.id, repeat_count) : []
                     let measureCursor = 0
 
                     return (
@@ -387,9 +372,7 @@ export function ArrangementEditor({
                           const left = measureCursor
                           measureCursor += width
                           return (
-                            <div key={measure.id} className="arrangement-measure" style={{left, width}}>
-                              <span>{measure.position + 1}</span>
-                            </div>
+                            <div className="arrangement-measure" style={{left, width}}></div>
                           )
                         })}
                       </div>

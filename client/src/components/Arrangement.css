@@ -237,20 +237,28 @@
    RESIZE
    ================================ */
 
-.arrangement-resize {
-  position: absolute;
-
-  right: 0;
-  top: 0;
-  bottom: 0;
-
+.arrangement-resize-left {
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
   width: 8px;
 
   cursor: ew-resize;
-
   z-index: 10;
 }
 
-.arrangement-resize:hover {
+.arrangement-resize {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+
+  cursor: ew-resize;
+  z-index: 10;
+}
+
+.arrangement-resize:hover .arrangement-resize-left:hover{
   background: rgba(255,255,255,0.35);
 }

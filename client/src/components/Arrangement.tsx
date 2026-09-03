@@ -279,6 +279,7 @@ export function ArrangementEditor({
       id: number
       initialX: number
       initialDuration: number
+      initialStart: number
     } | null>(null)
 
   const timeline = useMemo(
@@ -357,7 +358,9 @@ export function ArrangementEditor({
       id: item.id,
       initialX: event.clientX,
       initialDuration:
-        item.duration_halfbeats
+        item.duration_halfbeats,
+      initialStart:
+        item.start_halfbeat
     })
     ;(
       event.currentTarget as HTMLElement
@@ -366,20 +369,21 @@ export function ArrangementEditor({
 
   function handleResizeMove(
     event: React.PointerEvent,
-    item: ArrangementItem
+    item: ArrangementItem,
+    type: string
   ) {
     if (!resizing)
       return
     const delta = event.clientX - resizing.initialX
-    const deltaHalfbeats = Math.round(delta / PX_PER_HALFBEAT)
+    const deltaHalfbeats = type==='left' ? -Math.round(delta / PX_PER_HALFBEAT) : Math.round(delta / PX_PER_HALFBEAT)
+    const start = type==='left' ? Math.max(0, resizing.initialStart - deltaHalfbeats) : resizing.initialStart
     const duration = Math.max(1, resizing.initialDuration + deltaHalfbeats)
-    updateItem(item, {duration_halfbeats: duration})
+    updateItem(item, {duration_halfbeats: duration, start_halfbeat: start})
   }
 
   async function finishResize() {
     if (!resizing)
       return
-    const item = arrangement.find(x => x.id === resizing.id)
     setResizing(null)
   }
 
@@ -397,100 +401,36 @@ export function ArrangementEditor({
       </div>
 
       <div className="arrangement-scroll">
-
         <div className="arrangement-grid">
-
-          <div className="arrangement-part-header">
-            Pupitre
-          </div>
-
+          <div className="arrangement-part-header">Pupitre</div>
           <div className="arrangement-header-track">
-
             {timeline.map(
               (entry, index) => {
-
-                const block =
-                  getBlock(
-                    song,
-                    entry.structureItem
-                  )
-
+                const block = getBlock(song, entry.structureItem)
                 return (
-                  <div
-                    key={
-                      entry.structureItem.id
-                    }
-                    className="arrangement-section"
-                    style={{
-                      width:
-                        entry.duration *
-                        PX_PER_HALFBEAT
-                    }}
-                  >
-                    <strong>
-                      {block?.name ||
-                        'Bloc supprimé'}
-                    </strong>
-
-                    {entry.structureItem
-                      .repeat_count > 1 && (
-                      <span>
-                        ×
-                        {
-                          entry.structureItem
-                            .repeat_count
-                        }
-                      </span>
-                    )}
-
-                    <small>
-                      {index + 1}
-                    </small>
+                  <div key={entry.structureItem.id} className="arrangement-section" style={{width:entry.duration*PX_PER_HALFBEAT}}                  >
+                    <strong>{block?.name || 'Bloc supprimé'}</strong>
+                    {entry.structureItem.repeat_count > 1 && (<span>×{entry.structureItem.repeat_count}</span>)}
+                    <small>{index + 1}</small>
                   </div>
                 )
               }
             )}
-
           </div>
 
           {parts.map(part => (
-
-            <div
-              className="arrangement-part-row"
-              key={part.id}
-            >
-
-              <div className="arrangement-part-name">
-                {part.name}
-              </div>
-
+            <div className="arrangement-part-row" key={part.id}>
+              <div className="arrangement-part-name">{part.name}</div>
               <div className="arrangement-track">
-
                 {timeline.map(entry => {
-
-                  const block =
-                    getBlock(
-                      song,
-                      entry.structureItem
-                    )
-
-                  const measures =
-                    block
-                      ? getMeasures(
-                          song,
-                          block.id
-                        )
-                      : []
-
+                  const block = getBlock(song, entry.structureItem)
+                  const measures = block? getMeasures(song, block.id) : []
                   const partItems =
                     arrangement.filter(
                       item =>
-                        item.part_id ===
-                          part.id &&
-                        item.structure_item_id ===
-                          entry.structureItem.id
+                        item.part_id === part.id &&
+                        item.structure_item_id === entry.structureItem.id
                     )
-
                   let measureCursor = 0
 
                   return (
@@ -499,82 +439,38 @@ export function ArrangementEditor({
                       className="arrangement-structure-cell editor-cell"
                       style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
                       onClick={event =>
-                        handleTrackClick(
-                          event,
-                          part.id,
-                          entry.structureItem
-                        )
+                        handleTrackClick(event, part.id, entry.structureItem)
                       }
                     >
-
                       {measures.map(measure => {
-
                         const width = measure.beats * 2 * PX_PER_HALFBEAT
                         const left = measureCursor
                         measureCursor += width
                         return (
-                          <div
-                            key={measure.id}
-                            className="arrangement-measure"
-                            style={{
-                              left,
-                              width
-                            }}
-                          >
-                            <span>
-                              {measure.position + 1}
-                            </span>
+                          <div key={measure.id} className="arrangement-measure" style={{left, width}}>
+                            <span>{measure.position + 1}</span>
                           </div>
                         )
                       })}
 
                       {partItems.map(item => (
                         <div
-                          key={item.id}
-                          className="arrangement-item editor-item"
-                          style={{
-                            left:
-                              item.start_halfbeat *
-                              PX_PER_HALFBEAT,
-                            width:
-                              item.duration_halfbeats *
-                              PX_PER_HALFBEAT
-                          }}
-                          onClick={e =>
-                            e.stopPropagation()
-                          }
+                          key={item.id} className="arrangement-item editor-item"
+                          style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:item.duration_halfbeats*PX_PER_HALFBEAT}}
+                          onClick={e => e.stopPropagation()}
                         >
-
-                          <input
-                            value={item.label}
-                            placeholder="Note"
-                            onChange={e => {updateItem(item,{label:e.target.value})}}
-                          />
-
-                          <button
-                            type="button"
-                            className="arrangement-delete"
-                            onClick={() => deleteItem(item)}
-                          >×</button>
-
-                          <div
-                            className="arrangement-resize"
-                            onPointerDown={e => startResize(e, item)}
-                            onPointerMove={e => handleResizeMove(e, item)}
-                            onPointerUp={finishResize}
-                          />
-
+                          <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
+                          <input value={item.label} placeholder="Note" onChange={e => {updateItem(item,{label:e.target.value})}}/>
+                          <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
+                          <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
                         </div>
                       ))}
-
                     </div>
                   )
                 })}
-
               </div>
             </div>
           ))}
-
         </div>
       </div>
     </section>

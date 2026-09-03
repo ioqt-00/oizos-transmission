@@ -312,7 +312,7 @@ export function ArrangementEditor({
   function handleTrackClick(
     event: React.MouseEvent<HTMLDivElement>,
     partId: number,
-    structureItem: StructureItem
+    block_start_halfbeat: number
   ) {
 
     /*
@@ -322,7 +322,7 @@ export function ArrangementEditor({
 
     const rect=event.currentTarget.getBoundingClientRect()
     const x = event.clientX - rect.left
-    const startHalfbeat = roundToHalfbeat(x)
+    const startHalfbeat = roundToHalfbeat(x) + block_start_halfbeat
     createItem(partId, startHalfbeat)
   }
 
@@ -400,7 +400,7 @@ export function ArrangementEditor({
                     return (
                       <div key={entry.structureItem.id} className="arrangement-structure-cell editor-cell"
                         style={{width:entry.duration * PX_PER_HALFBEAT, backgroundSize: PX_PER_HALFBEAT * 4}}
-                        onClick={event => handleTrackClick(event, part.id, entry.structureItem)}
+                        onClick={event => handleTrackClick(event, part.id, entry.start)}
                       >
                         {measures.map(measure => {
                           const width = measure.beats * 2 * PX_PER_HALFBEAT

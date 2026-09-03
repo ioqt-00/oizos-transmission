@@ -1,17 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
-
-type Part = { id:number; name:string; position:number }
-type Score = { id:number; part_id:number; file_name:string; file_path:string }
-type GridBlock = { id:number; name:string; position:number; notes:string }
-type Measure = { id:number; block_id:number; position:number; chord:string; beats:number; notes:string }
-type StructureItem = { id:number; block_id:number; position:number; repeat_count:number; notes:string }
-type Song = {
-  id:number; title:string; artist:string; composer:string; arranger:string
-  duration:string; tempo:string; key_signature:string; notes:string; lyrics:string; url_drive:string
-  scores:Score[]; blocks:GridBlock[]; measures:Measure[]; structure:StructureItem[]
-}
+import type { Part, Score, GridBlock, Measure, StructureItem, Song } from './types/song';
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',

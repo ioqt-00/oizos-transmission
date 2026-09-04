@@ -33,6 +33,23 @@ CREATE TABLE IF NOT EXISTS arrangement_items (
   label TEXT DEFAULT '',
   notes TEXT DEFAULT ''
   );
+CREATE TABLE IF NOT EXISTS song_resources (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT DEFAULT '',
+  position INTEGER NOT NULL DEFAULT 0
+  );
+CREATE TABLE IF NOT EXISTS transmission_resources (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  song_id INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  arrangement_item_id INTEGER NOT NULL REFERENCES arrangement_items(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT DEFAULT '',
+  position INTEGER NOT NULL DEFAULT 0
+  );
 `)
 
 const defaultParts = ['Accordéon', 'Basse', 'Clarinette', 'Cordes Frottées', 'Flûte', 'Médium', 'Percus', 'Saxophone Alto', 'Trompette', 'Chant', 'Chant 2', 'Chant 3']

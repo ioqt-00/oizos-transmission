@@ -25,48 +25,6 @@ app.use('/api/structure', structureRouter)
 app.use('/api/measures', measuresRouter)
 
 // RESOURCES
-app.get('/api/songs/:id/resources', (req, res) => {
-  const songId = Number(req.params.id)
-  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
-  if (!song) {
-    return res.status(404).send('Morceau introuvable')
-  }
-  const resources = db.prepare(`SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id`).all(songId)
-  res.json(resources)
-})
-
-app.post('/api/songs/:id/resources', (req, res) => {
-  const songId = Number(req.params.id)
-  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
-  if (!song) {
-    return res.status(404).send('Morceau introuvable')
-  }
-  const {type, title, content = ''} = req.body
-
-  if (!isResourceType(type)) {return res.status(400).send('Type de ressource invalide. Types autorisés : audio, video, note, link.')}
-  if (!title?.trim()) {return res.status(400).send('Le titre de la ressource est obligatoire.')}
-
-  const max = db.prepare(`SELECT COALESCE(MAX(position), -1) AS position FROM song_resources WHERE song_id=?`)
-    .get(songId) as { position: number }
-
-  const result = db
-    .prepare(`
-      INSERT INTO song_resources
-        (song_id, type, title, content, position)
-      VALUES
-        (?, ?, ?, ?, ?)
-    `)
-    .run(
-      songId,
-      type,
-      title.trim(),
-      content ?? '',
-      max.position + 1
-    )
-
-  res.json({id: Number(result.lastInsertRowid)})
-})
-
 app.put('/api/song-resources/:id', (req, res) => {
   const id = Number(req.params.id)
 
@@ -115,6 +73,7 @@ app.delete('/api/song-resources/:id', (req, res) => {
   res.sendStatus(204)
 })
 
+
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {
   const clientPath = path.join(ROOT, 'client', 'dist')
@@ -125,5 +84,7 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(clientPath, 'index.html'))
   })
 }
+
+app.use('/api/songs', songRouter)
 
 app.listen(PORT,()=>console.log(`API: http://localhost:${PORT}`))

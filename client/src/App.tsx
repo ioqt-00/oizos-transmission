@@ -167,7 +167,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
     {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={resources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true}/>}
+    {tab==='resources'&&<ResourceTab song={song} resources={resources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true} parts={parts} arrangementItems={arrangement}/>}
   </div>
 }
 
@@ -221,7 +221,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
     {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={song.resources} editing={false} transmission_resources={song.transmission_resources} />}
+    {tab==='resources'&&<ResourceTab song={song} resources={song.resources} editing={false} transmissionResources={song.transmission_resources} parts={parts} arrangementItems={song.arrangement} />}
   </div>
 }
 

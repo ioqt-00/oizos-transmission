@@ -1,18 +1,63 @@
-/* ================================
+/* =====================================================
    SONG RESOURCES
-   ================================ */
+   ===================================================== */
 
 .song-resources {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 24px;
 }
 
 
-/* Carte d'une ressource */
+/* =====================================================
+   SECTIONS
+   ===================================================== */
 
-.song-resource {
-  padding: 12px 14px;
+.resource-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resource-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 8px;
+
+  border-bottom: 1px solid var(--border-color, #ddd);
+}
+
+.resource-section-header h4 {
+  margin: 0;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   RESOURCE LIST
+   ===================================================== */
+
+.resource-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* =====================================================
+   RESOURCE CARD
+   ===================================================== */
+
+.resource-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  padding: 11px 13px;
 
   border: 1px solid var(--border-color, #ddd);
   border-radius: 8px;
@@ -24,104 +69,181 @@
     box-shadow 0.15s ease;
 }
 
-.song-resource:hover {
+.resource-card:hover {
   border-color: var(--border-hover, #bbb);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 
-/* En-tête */
+/* =====================================================
+   ICON
+   ===================================================== */
 
-.song-resource-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  min-width: 0;
-}
-
-.song-resource-icon {
+.resource-icon {
   flex: 0 0 auto;
 
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 1.1rem;
-
   border-radius: 6px;
+
   background: rgba(0, 0, 0, 0.05);
+
+  font-size: 1.05rem;
 }
 
-.song-resource-header strong {
-  flex: 1;
 
+/* =====================================================
+   BODY
+   ===================================================== */
+
+.resource-body {
+  flex: 1;
   min-width: 0;
 
-  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.resource-body > strong {
+  font-size: 0.92rem;
   line-height: 1.3;
 }
 
 
-/* Contenu */
+/* =====================================================
+   CONTENT
+   ===================================================== */
 
-.song-resource-content {
-  margin: 8px 0 0 38px;
+.resource-content {
+  margin: 2px 0 0;
 
   color: var(--text-muted, #666);
-  font-size: 0.9rem;
+
+  font-size: 0.88rem;
   line-height: 1.45;
 
   white-space: pre-wrap;
 }
 
 
-/* Liens */
+/* =====================================================
+   LINKS
+   ===================================================== */
 
-.song-resource a {
-  display: inline-block;
+.resource-body a {
+  width: fit-content;
 
-  margin: 8px 0 0 38px;
+  margin-top: 2px;
 
   color: var(--link-color, #2563eb);
-  font-size: 0.9rem;
+
+  font-size: 0.88rem;
   font-weight: 500;
 
   text-decoration: none;
 }
 
-.song-resource a:hover {
+.resource-body a:hover {
   text-decoration: underline;
 }
 
 
-/* Audio / vidéo */
+/* =====================================================
+   AUDIO / VIDEO
+   ===================================================== */
 
-.song-resource audio,
-.song-resource video {
+.resource-body audio,
+.resource-body video {
   display: block;
 
-  width: calc(100% - 38px);
-  margin: 10px 0 0 38px;
-
+  width: 100%;
   max-width: 600px;
+
+  margin-top: 5px;
 }
 
-.song-resource video {
+.resource-body video {
   border-radius: 6px;
 }
 
 
-/* ================================
-   MODE ÉDITION
-   ================================ */
+/* =====================================================
+   TRANSMISSION
+   ===================================================== */
 
-.song-resource select,
-.song-resource input,
-.song-resource textarea {
+.transmission-section {
+  margin-top: 4px;
+}
+
+.transmission-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.transmission-part {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.transmission-part-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 2px;
+}
+
+.transmission-part-header strong {
+  font-size: 0.9rem;
+}
+
+
+/* Petit séparateur avant chaque pupitre */
+
+.transmission-part + .transmission-part {
+  padding-top: 14px;
+
+  border-top: 1px solid var(--border-color, #eee);
+}
+
+
+/* =====================================================
+   EMPTY STATE
+   ===================================================== */
+
+.resource-empty {
+  margin: 0 0 0 2px;
+
+  font-size: 0.82rem;
+}
+
+
+/* =====================================================
+   EDITOR
+   ===================================================== */
+
+.resource-card-edit {
+  position: relative;
+}
+
+.resource-card-edit .resource-body {
+  gap: 7px;
+}
+
+
+/* Inputs */
+
+.resource-card input,
+.resource-card select,
+.resource-card textarea {
   box-sizing: border-box;
 
   width: 100%;
@@ -135,31 +257,43 @@
   font: inherit;
 }
 
-.song-resource select,
-.song-resource input {
-  padding: 8px 10px;
+.resource-card input,
+.resource-card select {
+  min-height: 34px;
+
+  padding: 6px 9px;
+
+  font-size: 0.88rem;
 }
 
-.song-resource textarea {
-  min-height: 80px;
+.resource-card textarea {
+  min-height: 70px;
 
-  margin-top: 8px;
-  padding: 9px 10px;
+  padding: 8px 9px;
 
   resize: vertical;
+
+  font-size: 0.88rem;
+}
+
+.resource-card input:focus,
+.resource-card select:focus,
+.resource-card textarea:focus {
+  outline: none;
+
+  border-color: var(--accent-color, #888);
+
+  box-shadow:
+    0 0 0 2px
+    rgba(0, 0, 0, 0.05);
 }
 
 
-/* Le select sous le titre */
+/* =====================================================
+   DELETE
+   ===================================================== */
 
-.song-resource-header + select {
-  margin-top: 10px;
-}
-
-
-/* Bouton supprimer */
-
-.song-resource-header button {
+.resource-delete {
   flex: 0 0 auto;
 
   border: none;
@@ -170,74 +304,122 @@
   border-radius: 5px;
 
   cursor: pointer;
-  opacity: 0.55;
+
+  opacity: 0.45;
 
   transition:
     opacity 0.15s ease,
     background 0.15s ease;
 }
 
-.song-resource-header button:hover {
+.resource-delete:hover {
   opacity: 1;
-  background: rgba(200, 0, 0, 0.08);
+
+  background: rgba(180, 0, 0, 0.08);
 }
 
 
-/* ================================
-   AJOUTER UNE RESSOURCE
-   ================================ */
+/* =====================================================
+   ADD BUTTONS
+   ===================================================== */
 
-.song-resources + button,
-.song-resources ~ button {
-  margin-top: 14px;
+.resource-add-button {
+  padding: 5px 9px;
 
-  padding: 9px 13px;
-
-  border: 1px dashed var(--border-color, #bbb);
-  border-radius: 7px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px;
 
   background: transparent;
-  color: var(--text-muted, #666);
+  color: var(--text-color, #333);
 
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 
   cursor: pointer;
 
   transition:
-    border-color 0.15s ease,
     background 0.15s ease,
-    color 0.15s ease;
+    border-color 0.15s ease;
 }
 
-.song-resources + button:hover,
-.song-resources ~ button:hover {
-  border-color: var(--text-color, #444);
-  background: rgba(0, 0, 0, 0.03);
+.resource-add-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+
+  border-color: var(--border-hover, #aaa);
+}
+
+
+/* + à côté d'un pupitre */
+
+.resource-add-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 23px;
+  height: 23px;
+
+  padding: 0;
+
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 5px;
+
+  background: transparent;
+  color: var(--text-muted, #666);
+
+  font-size: 1rem;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.resource-add-small:hover {
+  background: rgba(0, 0, 0, 0.05);
+
   color: var(--text-color, #222);
 }
 
 
-/* ================================
+/* =====================================================
    MOBILE
-   ================================ */
+   ===================================================== */
 
 @media (max-width: 700px) {
-  .song-resource {
-    padding: 11px 12px;
+
+  .song-resources {
+    gap: 20px;
   }
 
-  .song-resource-content {
-    margin-left: 0;
+  .resource-card {
+    padding: 10px 11px;
   }
 
-  .song-resource a {
-    margin-left: 0;
+  .resource-icon {
+    width: 28px;
+    height: 28px;
+
+    font-size: 1rem;
   }
 
-  .song-resource audio,
-  .song-resource video {
-    width: 100%;
-    margin-left: 0;
+  .resource-body > strong {
+    font-size: 0.9rem;
+  }
+
+  .resource-content {
+    font-size: 0.86rem;
+  }
+
+  .resource-body audio,
+  .resource-body video {
+    max-width: 100%;
+  }
+
+  .transmission-groups {
+    gap: 14px;
+  }
+
+  .transmission-part + .transmission-part {
+    padding-top: 12px;
   }
 }

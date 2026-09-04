@@ -215,7 +215,7 @@ const transaction = db.transaction(() => {
     insertArrangement.run(item)
   }
 
-  const insertResources = db.prepare(`
+  const insertSongResources = db.prepare(`
     INSERT INTO song_resources(
       id,
       song_id,
@@ -234,9 +234,35 @@ const transaction = db.transaction(() => {
     )
   `)
 
-  for (const item of (data.resources)) {
-    insertResources.run(item)
+  for (const item of (data.song_resources)) {
+    insertSongResources.run(item)
   }
+
+  const insertTransmissionResources = db.prepare(`
+    INSERT INTO transmission_resources(
+      id,
+      song_id,
+      arrangement_item_id,
+      type,
+      title,
+      content, 
+      position
+    )
+    VALUES(
+      @id,
+      @song_id,
+      @arrangement_item_id,
+      @type,
+      @title,
+      @content,
+      @position
+    )
+  `)
+
+  for (const item of (data.transmission_resources)) {
+    insertTransmissionResources.run(item)
+  }
+
 })
 
 transaction()

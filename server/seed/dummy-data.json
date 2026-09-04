@@ -917,7 +917,7 @@
       "notes": ""
     }
   ],
-  "resources": [
+  "song_resources": [
     {
       "id": 24,
       "song_id": 3,
@@ -950,5 +950,6 @@
       "content": "qsdqsdqsdqsdqsdqsdqsd",
       "position": 3
     }
-  ]
+  ],
+  "transmission_resources": []
 }

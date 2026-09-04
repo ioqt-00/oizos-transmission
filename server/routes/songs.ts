@@ -4,7 +4,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 import multer from 'multer'
 import { createSaveSong } from '../saveSong'
-import { uploadDir } from '../services/song'
+import { uploadDir, isResourceType } from '../services/song'
 
 const songsRouter = Router()
 
@@ -12,15 +12,17 @@ const storage=multer.diskStorage({destination:(_r,_f,cb)=>cb(null,uploadDir),fil
 const upload=multer({storage,fileFilter:(_r,file,cb)=>cb(null,file.mimetype==='application/pdf')})
 
 function songWithData(id:number){
- const song=db.prepare('SELECT * FROM songs WHERE id=?').get(id) as any;if(!song)return null
- return {
-  ...song,
-  scores:db.prepare('SELECT * FROM scores WHERE song_id=? ORDER BY part_id').all(id),
-  blocks:db.prepare('SELECT * FROM grid_blocks WHERE song_id=? ORDER BY position,id').all(id),
-  measures:db.prepare(`SELECT m.* FROM measures m JOIN grid_blocks b ON b.id=m.block_id WHERE b.song_id=? ORDER BY b.position,m.position,m.id`).all(id),
-  structure:db.prepare('SELECT * FROM structure_items WHERE song_id=? ORDER BY position,id').all(id),
-  arrangement:db.prepare('SELECT * FROM arrangement_items WHERE song_id=? ORDER BY part_id').all(id)
- }
+  const song=db.prepare('SELECT * FROM songs WHERE id=?').get(id) as any;if(!song)return null
+  return {
+    ...song,
+    scores:db.prepare('SELECT * FROM scores WHERE song_id=? ORDER BY part_id').all(id),
+    blocks:db.prepare('SELECT * FROM grid_blocks WHERE song_id=? ORDER BY position,id').all(id),
+    measures:db.prepare(`SELECT m.* FROM measures m JOIN grid_blocks b ON b.id=m.block_id WHERE b.song_id=? ORDER BY b.position,m.position,m.id`).all(id),
+    structure:db.prepare('SELECT * FROM structure_items WHERE song_id=? ORDER BY position,id').all(id),
+    arrangement:db.prepare('SELECT * FROM arrangement_items WHERE song_id=? ORDER BY part_id').all(id),
+    resources:db.prepare('SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id').all(id),
+    transmission_resources:db.prepare('SELECT * FROM transmission_resources WHERE song_id=? ORDER BY position, id').all(id) 
+  }
 }
 
 const saveSong = createSaveSong(db)
@@ -150,6 +152,91 @@ songsRouter.post('/:id/arrangement', (req,res)=>{
   } catch {
     res.status(400).send("Impossible de créer l'élément d'arrangement.")
   }
+})
+
+songsRouter.get('/:id/song-resources', (req, res) => {
+  const songId = Number(req.params.id)
+  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
+  if (!song) {
+    return res.status(404).send('Morceau introuvable')
+  }
+  const resources = db.prepare(`SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id`).all(songId)
+  res.json(resources)
+})
+
+songsRouter.post('/:id/song-resources', (req, res) => {
+  const songId = Number(req.params.id)
+  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
+  if (!song) {
+    return res.status(404).send('Morceau introuvable')
+  }
+  const {type, title, content = ''} = req.body
+
+  if (!isResourceType(type)) {return res.status(400).send('Type de ressource invalide. Types autorisés : audio, video, note, link.')}
+  if (!title?.trim()) {return res.status(400).send('Le titre de la ressource est obligatoire.')}
+
+  const max = db.prepare(`SELECT COALESCE(MAX(position), -1) AS position FROM song_resources WHERE song_id=?`)
+    .get(songId) as { position: number }
+
+  const result = db
+    .prepare(`
+      INSERT INTO song_resources
+        (song_id, type, title, content, position)
+      VALUES
+        (?, ?, ?, ?, ?)
+    `)
+    .run(
+      songId,
+      type,
+      title.trim(),
+      content ?? '',
+      max.position + 1
+    )
+
+  res.json({id: Number(result.lastInsertRowid)})
+})
+
+songsRouter.get('/:id/transmission-resources', (req, res) => {
+  const songId = Number(req.params.id)
+  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
+  if (!song) {
+    return res.status(404).send('Morceau introuvable')
+  }
+  const resources = db.prepare(`SELECT * FROM transmission_resources WHERE song_id=? ORDER BY position, id`).all(songId)
+  res.json(resources)
+})
+
+songsRouter.post('/:id/transmission-resources', (req, res) => {
+  const songId = Number(req.params.id)
+  const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
+  if (!song) {
+    return res.status(404).send('Morceau introuvable')
+  }
+  const {arrangementItemId, type, title, content = ''} = req.body
+
+  if (!isResourceType(type)) {return res.status(400).send('Type de ressource invalide. Types autorisés : audio, video, note, link.')}
+  if (!title?.trim()) {return res.status(400).send('Le titre de la ressource est obligatoire.')}
+
+  const max = db.prepare(`SELECT COALESCE(MAX(position), -1) AS position FROM transmission_resources WHERE song_id=?`)
+    .get(songId) as { position: number }
+
+  const result = db
+    .prepare(`
+      INSERT INTO transmission_resources
+        (song_id, arrangement_item_id, type, title, content, position)
+      VALUES
+        (?, ?, ?, ?, ?, ?)
+    `)
+    .run(
+      songId,
+      arrangementItemId,
+      type,
+      title.trim(),
+      content ?? '',
+      max.position + 1
+    )
+
+  res.json({id: Number(result.lastInsertRowid)})
 })
 
 export default songsRouter

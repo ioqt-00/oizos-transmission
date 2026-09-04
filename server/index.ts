@@ -3,13 +3,13 @@ import cors from 'cors'
 import path from 'node:path'
 import db from './db.ts'
 
+import { uploadDir, PORT, ROOT } from './services/song.ts'
 import songsRouter from './routes/songs.ts'
 import arrangementRouter from './routes/arrangement.ts'
 import blocksRouter from './routes/blocks.ts'
 import structureRouter from './routes/structure.ts'
 import measuresRouter from './routes/measures.ts'
-
-import { uploadDir, PORT, ROOT } from './services/song.ts'
+import songResourcesRouter from './routes/songResources.ts'
 
 const app=express()
 
@@ -23,57 +23,7 @@ app.use('/api/arrangement', arrangementRouter)
 app.use('/api/blocks', blocksRouter)
 app.use('/api/structure', structureRouter)
 app.use('/api/measures', measuresRouter)
-
-// RESOURCES
-app.put('/api/song-resources/:id', (req, res) => {
-  const id = Number(req.params.id)
-
-  const resource = db.prepare('SELECT * FROM song_resources WHERE id=?').get(id) as any
-
-  if (!resource) {return res.status(404).send('Ressource introuvable')}
-
-  const type = req.body.type ?? resource.type
-  const title = req.body.title ?? resource.title
-  const content = req.body.content ?? resource.content
-
-  if (!isResourceType(type)) {
-    return res.status(400).send('Type de ressource invalide. Types autorisés : audio, video, note, link.')
-  }
-
-  if (!title?.trim()) {
-    return res.status(400).send('Le titre de la ressource est obligatoire.')
-  }
-
-  db.prepare(`
-    UPDATE song_resources
-    SET
-      type=?,
-      title=?,
-      content=?
-    WHERE id=?
-  `).run(
-    type,
-    title.trim(),
-    content ?? '',
-    id
-  )
-
-  res.json({ ok: true })
-})
-
-app.delete('/api/song-resources/:id', (req, res) => {
-  const id = Number(req.params.id)
-
-  const result = db.prepare('DELETE FROM song_resources WHERE id=?').run(id)
-
-  if (result.changes === 0) {
-    return res.status(404).send('Ressource introuvable')
-  }
-
-  res.sendStatus(204)
-})
-
-app.use('/api/songs', songRouter)
+app.use('/api/song-resources', songResourcesRouter)
 
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {

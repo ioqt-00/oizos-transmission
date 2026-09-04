@@ -167,8 +167,7 @@ export function ResourceTab({
         part,
         resources:
           transmissionResources.filter(resource => {
-            const resourcePart =
-              getPartForResource(resource)
+            const resourcePart = getPartForResource(resource)
 
             return resourcePart?.id === part.id
           })

@@ -73,6 +73,7 @@ app.delete('/api/song-resources/:id', (req, res) => {
   res.sendStatus(204)
 })
 
+app.use('/api/songs', songRouter)
 
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {
@@ -84,7 +85,5 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(clientPath, 'index.html'))
   })
 }
-
-app.use('/api/songs', songRouter)
 
 app.listen(PORT,()=>console.log(`API: http://localhost:${PORT}`))

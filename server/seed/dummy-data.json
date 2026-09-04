@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-03T18:15:16.604Z",
+  "exportedAt": "2026-09-03T19:39:16.734Z",
   "parts": [
     {
       "id": 13,
@@ -77,7 +77,7 @@
       "lyrics": "\n\nA chaque fois que nos regards\nSe croisent au vol je m’imagine\nNuances de gris, romans de gare\nUne histoire sensuelle et câline\nDes liens sacrés qui nous unissent\nLe secret d’un amour perdu\nChante sirène tes artifices\nLaisse-moi plonger dans tes nues\nJe veux me noyer dans ta voix\nDans le chaud parfum de tes mots\nNe vivre que d’eau fraîche et de toi\nUlysse épris de Calypso\n\nEmbrasse-moi jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi pour un jour, pour une heure\nFais de ta bouche en fleur\nMon tout dernier repas\n\nEt si l’illusion est mon arme\nLe seul chemin vers mon désir\nDéverse en mon cœur tous tes charmes\nTes sortilèges, tes élixirs\nQu’importe l’ivresse tant qu’le flacon\nDe tes lèvres sur ma bouche posée\nMe laisse boire à l’aiguillon\nDes plaisirs rares et opiacés\nCar si cet amour n’est en somme\nQu’le fruit d’mon imagination\nBlanche neige ou rouge pomme\nLaquelle est la pire des poisons\n\nEmbrasse-moi, jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi que tes lèvres m’enchainent\nEt versent dans mes veines\nL’amour et le trépas\n\nL’amour est un poison vorace\nL’état de manque est permanent\nA chaque baiser posé qui passe\nIl m’en faut toujours plus souvent\nUne drogue dure et délétère\nLe sourire froid de la strychnine\nMon corps se délite et se perd\nLorsque j’embrasse mon héroïne\nOh toi sombre héros des seringues\nDont la vie tient dans une cuillère\nSi la désintox te rend dingue\nMet de l’overdose dans ta prière\n\nEmbra(s)se-moi, mets-moi le corps en flammes\nDéchire mes os et mon âme\nLèvres ardentes et feu de joie\nEmbrase-moi, que ma vie se consume\nEn volutes d’écume\nEn un souffle de toi\n",
       "url_drive": "https://drive.google.com/drive/folders/1E4mkjsTEofBK9Oxlljm45wzLnxeGC7qz",
       "created_at": "2026-08-31 10:52:07",
-      "updated_at": "2026-09-03 18:12:32"
+      "updated_at": "2026-09-03 19:19:06"
     },
     {
       "id": 3,
@@ -92,796 +92,796 @@
       "lyrics": "When I was young, it seemed that life was so wonderful\nA miracle, oh it was beautiful, magical\nAnd all the birds in the trees, well they'd be singing so happily\nOh joyfully, playfully watching me\n\nBut then they send me away to teach me how to be sensible\nLogical, oh responsible, practical\nAnd they showed me a world where I could be so dependable\nOh clinical, oh intellectual, cynical\n\nThere are times when all the world's asleep\nThe questions run too deep\nFor such a simple man\nWon't you please, please tell me what we've learned\nI know it sounds absurd\nPlease tell me who I am\n\nI said, watch what you say or they'll be calling you a radical\nLiberal, oh fanatical, criminal\nWon't you sign up your name, we'd like to feel you're acceptable\nRespectable, oh presentable, a vegetable\nOh, take it take it take it yeah\n\nBut at night, when all the world's asleep\nThe questions run so deep\nFor such a simple man\nWon't you please tell me what we've learned\nI know it sounds absurd\nPlease tell me who I am, who I am, who I am, who I am\n'Cause I was feeling so logical\nD-d-digital\nOne, two, three, five\nOh, oh, oh, oh\nIt's getting unbelievable\n",
       "url_drive": "https://drive.google.com/drive/folders/1IYVCG0bv-5lwC-oG7isqpBttHHLiAZ1r?usp=drive_link",
       "created_at": "2026-08-31 14:36:42",
-      "updated_at": "2026-09-01 10:23:19"
+      "updated_at": "2026-09-03 19:33:24"
     }
   ],
   "scores": [],
   "blocks": [
     {
-      "id": 4,
-      "song_id": 3,
-      "name": "Couplet 1",
-      "position": 0,
-      "notes": ""
-    },
-    {
-      "id": 7,
-      "song_id": 3,
-      "name": "Couplet 2",
-      "position": 1,
-      "notes": ""
-    },
-    {
-      "id": 8,
-      "song_id": 3,
-      "name": "Refrain",
-      "position": 2,
-      "notes": ""
-    },
-    {
-      "id": 9,
-      "song_id": 3,
-      "name": "Riff",
-      "position": 3,
-      "notes": ""
-    },
-    {
-      "id": 16,
+      "id": 31,
       "song_id": 1,
       "name": "Refrain",
       "position": 0,
       "notes": ""
     },
     {
-      "id": 17,
+      "id": 32,
       "song_id": 1,
       "name": "A",
       "position": 1,
       "notes": "Guitare + Basse ne rentrent que sur le G"
     },
     {
-      "id": 18,
+      "id": 33,
       "song_id": 1,
       "name": "A'",
       "position": 2,
+      "notes": ""
+    },
+    {
+      "id": 74,
+      "song_id": 3,
+      "name": "Couplet 1",
+      "position": 0,
+      "notes": ""
+    },
+    {
+      "id": 75,
+      "song_id": 3,
+      "name": "Couplet 2",
+      "position": 1,
+      "notes": ""
+    },
+    {
+      "id": 76,
+      "song_id": 3,
+      "name": "Refrain",
+      "position": 2,
+      "notes": ""
+    },
+    {
+      "id": 77,
+      "song_id": 3,
+      "name": "Riff",
+      "position": 3,
       "notes": ""
     }
   ],
   "measures": [
     {
-      "id": 20,
-      "block_id": 4,
-      "position": 0,
-      "chord": "C-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 21,
-      "block_id": 4,
-      "position": 1,
-      "chord": "C-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 22,
-      "block_id": 4,
-      "position": 2,
-      "chord": "C-/Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 23,
-      "block_id": 4,
-      "position": 3,
-      "chord": "G-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 24,
-      "block_id": 4,
-      "position": 4,
-      "chord": "G-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 25,
-      "block_id": 4,
-      "position": 5,
-      "chord": "Bb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 26,
-      "block_id": 4,
-      "position": 6,
-      "chord": "Bb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 27,
-      "block_id": 4,
-      "position": 7,
-      "chord": "Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 28,
-      "block_id": 4,
-      "position": 8,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 29,
-      "block_id": 4,
-      "position": 9,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 30,
-      "block_id": 7,
-      "position": 0,
-      "chord": "C-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 31,
-      "block_id": 7,
-      "position": 1,
-      "chord": "C-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 32,
-      "block_id": 7,
-      "position": 2,
-      "chord": "C-/Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 33,
-      "block_id": 7,
-      "position": 3,
-      "chord": "G-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 34,
-      "block_id": 7,
-      "position": 4,
-      "chord": "G-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 35,
-      "block_id": 7,
-      "position": 5,
-      "chord": "Bb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 36,
-      "block_id": 7,
-      "position": 6,
-      "chord": "Bb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 37,
-      "block_id": 7,
-      "position": 7,
-      "chord": "Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 38,
-      "block_id": 7,
-      "position": 8,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 39,
-      "block_id": 7,
-      "position": 9,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 40,
-      "block_id": 7,
-      "position": 10,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 41,
-      "block_id": 7,
-      "position": 11,
-      "chord": "A°",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 42,
-      "block_id": 8,
-      "position": 0,
-      "chord": "Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 43,
-      "block_id": 8,
-      "position": 1,
-      "chord": "Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 44,
-      "block_id": 8,
-      "position": 2,
-      "chord": "Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 45,
-      "block_id": 8,
-      "position": 3,
-      "chord": "Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 46,
-      "block_id": 8,
-      "position": 4,
-      "chord": "A°/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 47,
-      "block_id": 8,
-      "position": 5,
-      "chord": "A°/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 48,
-      "block_id": 8,
-      "position": 6,
-      "chord": "A°/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 49,
-      "block_id": 8,
-      "position": 7,
-      "chord": "A°/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 50,
-      "block_id": 8,
-      "position": 8,
-      "chord": "Abmaj7/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 51,
-      "block_id": 8,
-      "position": 9,
-      "chord": "Abmaj7/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 52,
-      "block_id": 8,
-      "position": 10,
-      "chord": "Abmaj7/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 53,
-      "block_id": 8,
-      "position": 11,
-      "chord": "Abmaj7/Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 54,
-      "block_id": 8,
-      "position": 12,
-      "chord": "Db",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 55,
-      "block_id": 8,
-      "position": 13,
-      "chord": "Db/C",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 56,
-      "block_id": 8,
-      "position": 14,
-      "chord": "Bb-",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 57,
-      "block_id": 8,
-      "position": 15,
-      "chord": "Bb-/Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 58,
-      "block_id": 9,
-      "position": 0,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 59,
-      "block_id": 9,
-      "position": 1,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 60,
-      "block_id": 9,
-      "position": 2,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 61,
-      "block_id": 9,
-      "position": 3,
-      "chord": "Fm Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 62,
-      "block_id": 9,
-      "position": 4,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 63,
-      "block_id": 9,
-      "position": 5,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 64,
-      "block_id": 9,
-      "position": 6,
-      "chord": "C7",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 65,
-      "block_id": 9,
-      "position": 7,
-      "chord": "Fm Eb",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 66,
-      "block_id": 9,
-      "position": 8,
-      "chord": "Ab",
-      "beats": 4,
-      "notes": ""
-    },
-    {
-      "id": 105,
-      "block_id": 16,
+      "id": 200,
+      "block_id": 31,
       "position": 0,
       "chord": "D-9",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 106,
-      "block_id": 16,
+      "id": 201,
+      "block_id": 31,
       "position": 1,
       "chord": "D-9",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 107,
-      "block_id": 16,
+      "id": 202,
+      "block_id": 31,
       "position": 2,
       "chord": "A-9",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 108,
-      "block_id": 16,
+      "id": 203,
+      "block_id": 31,
       "position": 3,
       "chord": "A-9",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 109,
-      "block_id": 16,
+      "id": 204,
+      "block_id": 31,
       "position": 4,
       "chord": "E7",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 110,
-      "block_id": 16,
+      "id": 205,
+      "block_id": 31,
       "position": 5,
       "chord": "E7",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 111,
-      "block_id": 16,
+      "id": 206,
+      "block_id": 31,
       "position": 6,
       "chord": "A-9",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 112,
-      "block_id": 16,
+      "id": 207,
+      "block_id": 31,
       "position": 7,
       "chord": "A-/A7",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 113,
-      "block_id": 17,
+      "id": 208,
+      "block_id": 32,
       "position": 0,
       "chord": "A-",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 114,
-      "block_id": 17,
+      "id": 209,
+      "block_id": 32,
       "position": 1,
       "chord": "A-",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 115,
-      "block_id": 17,
+      "id": 210,
+      "block_id": 32,
       "position": 2,
       "chord": "G",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 116,
-      "block_id": 17,
+      "id": 211,
+      "block_id": 32,
       "position": 3,
       "chord": "G",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 117,
-      "block_id": 17,
+      "id": 212,
+      "block_id": 32,
       "position": 4,
       "chord": "G",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 118,
-      "block_id": 17,
+      "id": 213,
+      "block_id": 32,
       "position": 5,
       "chord": "A-",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 119,
-      "block_id": 18,
+      "id": 214,
+      "block_id": 33,
       "position": 0,
       "chord": "A-",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 120,
-      "block_id": 18,
+      "id": 215,
+      "block_id": 33,
       "position": 1,
       "chord": "G",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 121,
-      "block_id": 18,
+      "id": 216,
+      "block_id": 33,
       "position": 2,
       "chord": "A-",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 122,
-      "block_id": 18,
+      "id": 217,
+      "block_id": 33,
       "position": 3,
       "chord": "G",
       "beats": 4,
       "notes": ""
     },
     {
-      "id": 123,
-      "block_id": 18,
+      "id": 218,
+      "block_id": 33,
       "position": 4,
       "chord": "A-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 689,
+      "block_id": 74,
+      "position": 0,
+      "chord": "C-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 690,
+      "block_id": 74,
+      "position": 1,
+      "chord": "C-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 691,
+      "block_id": 74,
+      "position": 2,
+      "chord": "C-/Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 692,
+      "block_id": 74,
+      "position": 3,
+      "chord": "G-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 693,
+      "block_id": 74,
+      "position": 4,
+      "chord": "G-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 694,
+      "block_id": 74,
+      "position": 5,
+      "chord": "Bb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 695,
+      "block_id": 74,
+      "position": 6,
+      "chord": "Bb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 696,
+      "block_id": 74,
+      "position": 7,
+      "chord": "Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 697,
+      "block_id": 74,
+      "position": 8,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 698,
+      "block_id": 74,
+      "position": 9,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 699,
+      "block_id": 75,
+      "position": 0,
+      "chord": "C-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 700,
+      "block_id": 75,
+      "position": 1,
+      "chord": "C-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 701,
+      "block_id": 75,
+      "position": 2,
+      "chord": "C-/Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 702,
+      "block_id": 75,
+      "position": 3,
+      "chord": "G-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 703,
+      "block_id": 75,
+      "position": 4,
+      "chord": "G-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 704,
+      "block_id": 75,
+      "position": 5,
+      "chord": "Bb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 705,
+      "block_id": 75,
+      "position": 6,
+      "chord": "Bb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 706,
+      "block_id": 75,
+      "position": 7,
+      "chord": "Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 707,
+      "block_id": 75,
+      "position": 8,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 708,
+      "block_id": 75,
+      "position": 9,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 709,
+      "block_id": 75,
+      "position": 10,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 710,
+      "block_id": 75,
+      "position": 11,
+      "chord": "A°",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 711,
+      "block_id": 76,
+      "position": 0,
+      "chord": "Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 712,
+      "block_id": 76,
+      "position": 1,
+      "chord": "Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 713,
+      "block_id": 76,
+      "position": 2,
+      "chord": "Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 714,
+      "block_id": 76,
+      "position": 3,
+      "chord": "Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 715,
+      "block_id": 76,
+      "position": 4,
+      "chord": "A°/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 716,
+      "block_id": 76,
+      "position": 5,
+      "chord": "A°/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 717,
+      "block_id": 76,
+      "position": 6,
+      "chord": "A°/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 718,
+      "block_id": 76,
+      "position": 7,
+      "chord": "A°/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 719,
+      "block_id": 76,
+      "position": 8,
+      "chord": "Abmaj7/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 720,
+      "block_id": 76,
+      "position": 9,
+      "chord": "Abmaj7/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 721,
+      "block_id": 76,
+      "position": 10,
+      "chord": "Abmaj7/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 722,
+      "block_id": 76,
+      "position": 11,
+      "chord": "Abmaj7/Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 723,
+      "block_id": 76,
+      "position": 12,
+      "chord": "Db",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 724,
+      "block_id": 76,
+      "position": 13,
+      "chord": "Db/C",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 725,
+      "block_id": 76,
+      "position": 14,
+      "chord": "Bb-",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 726,
+      "block_id": 76,
+      "position": 15,
+      "chord": "Bb-/Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 727,
+      "block_id": 77,
+      "position": 0,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 728,
+      "block_id": 77,
+      "position": 1,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 729,
+      "block_id": 77,
+      "position": 2,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 730,
+      "block_id": 77,
+      "position": 3,
+      "chord": "Fm Ab",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 731,
+      "block_id": 77,
+      "position": 4,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 732,
+      "block_id": 77,
+      "position": 5,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 733,
+      "block_id": 77,
+      "position": 6,
+      "chord": "C7",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 734,
+      "block_id": 77,
+      "position": 7,
+      "chord": "Fm Eb",
+      "beats": 4,
+      "notes": ""
+    },
+    {
+      "id": 735,
+      "block_id": 77,
+      "position": 8,
+      "chord": "Ab",
       "beats": 4,
       "notes": ""
     }
   ],
   "structure": [
     {
-      "id": 10,
-      "song_id": 3,
-      "block_id": 4,
+      "id": 90,
+      "song_id": 1,
+      "block_id": 31,
       "position": 0,
       "repeat_count": 1,
       "notes": ""
     },
     {
-      "id": 11,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 1,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 12,
-      "song_id": 3,
-      "block_id": 4,
-      "position": 2,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 13,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 3,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 14,
-      "song_id": 3,
-      "block_id": 8,
-      "position": 4,
-      "repeat_count": 2,
-      "notes": "2 descentes à la fin"
-    },
-    {
-      "id": 15,
-      "song_id": 3,
-      "block_id": 4,
-      "position": 5,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 16,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 6,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 18,
-      "song_id": 3,
-      "block_id": 4,
-      "position": 7,
-      "repeat_count": 1,
-      "notes": "Chorus"
-    },
-    {
-      "id": 19,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 8,
-      "repeat_count": 1,
-      "notes": "Chorus"
-    },
-    {
-      "id": 20,
-      "song_id": 3,
-      "block_id": 8,
-      "position": 9,
-      "repeat_count": 2,
-      "notes": "4 descentes à la fin"
-    },
-    {
-      "id": 21,
-      "song_id": 3,
-      "block_id": 9,
-      "position": 10,
-      "repeat_count": 2,
-      "notes": "2 mesures de Ab à la fin"
-    },
-    {
-      "id": 22,
-      "song_id": 3,
-      "block_id": 4,
-      "position": 11,
-      "repeat_count": 1,
-      "notes": "Thème"
-    },
-    {
-      "id": 23,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 12,
-      "repeat_count": 1,
-      "notes": "Thème"
-    },
-    {
-      "id": 24,
-      "song_id": 3,
-      "block_id": 4,
-      "position": 13,
-      "repeat_count": 1,
-      "notes": "Thème calme"
-    },
-    {
-      "id": 25,
-      "song_id": 3,
-      "block_id": 7,
-      "position": 14,
-      "repeat_count": 1,
-      "notes": "Thème calme"
-    },
-    {
-      "id": 26,
-      "song_id": 3,
-      "block_id": 8,
-      "position": 15,
-      "repeat_count": 1,
-      "notes": "Outro, 4 descentes à la fin vers point d'orgue"
-    },
-    {
-      "id": 45,
+      "id": 91,
       "song_id": 1,
-      "block_id": 16,
-      "position": 0,
-      "repeat_count": 1,
-      "notes": ""
-    },
-    {
-      "id": 46,
-      "song_id": 1,
-      "block_id": 17,
+      "block_id": 32,
       "position": 1,
       "repeat_count": 3,
       "notes": "Guitare rentre sur premier G"
     },
     {
-      "id": 47,
+      "id": 92,
       "song_id": 1,
-      "block_id": 16,
+      "block_id": 31,
       "position": 2,
       "repeat_count": 2,
       "notes": ""
     },
     {
-      "id": 48,
+      "id": 93,
       "song_id": 1,
-      "block_id": 17,
+      "block_id": 32,
       "position": 3,
       "repeat_count": 2,
       "notes": "Guitare rentre sur premier G"
     },
     {
-      "id": 49,
+      "id": 94,
       "song_id": 1,
-      "block_id": 18,
+      "block_id": 33,
       "position": 4,
       "repeat_count": 1,
       "notes": ""
     },
     {
-      "id": 50,
+      "id": 95,
       "song_id": 1,
-      "block_id": 16,
+      "block_id": 31,
       "position": 5,
       "repeat_count": 4,
       "notes": "2 chantés, 2 chorus"
     },
     {
-      "id": 51,
+      "id": 96,
       "song_id": 1,
-      "block_id": 17,
+      "block_id": 32,
       "position": 6,
       "repeat_count": 1,
       "notes": "Guitare rentre sur premier G"
     },
     {
-      "id": 52,
+      "id": 97,
       "song_id": 1,
-      "block_id": 18,
+      "block_id": 33,
       "position": 7,
       "repeat_count": 2,
       "notes": ""
     },
     {
-      "id": 53,
+      "id": 98,
       "song_id": 1,
-      "block_id": 16,
+      "block_id": 31,
       "position": 8,
       "repeat_count": 4,
       "notes": ""
+    },
+    {
+      "id": 259,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 0,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 260,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 1,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 261,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 2,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 262,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 3,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 263,
+      "song_id": 3,
+      "block_id": 76,
+      "position": 4,
+      "repeat_count": 2,
+      "notes": "2 descentes à la fin"
+    },
+    {
+      "id": 264,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 5,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 265,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 6,
+      "repeat_count": 1,
+      "notes": ""
+    },
+    {
+      "id": 266,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 7,
+      "repeat_count": 1,
+      "notes": "Chorus"
+    },
+    {
+      "id": 267,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 8,
+      "repeat_count": 1,
+      "notes": "Chorus"
+    },
+    {
+      "id": 268,
+      "song_id": 3,
+      "block_id": 76,
+      "position": 9,
+      "repeat_count": 2,
+      "notes": "4 descentes à la fin"
+    },
+    {
+      "id": 269,
+      "song_id": 3,
+      "block_id": 77,
+      "position": 10,
+      "repeat_count": 2,
+      "notes": "2 mesures de Ab à la fin"
+    },
+    {
+      "id": 270,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 11,
+      "repeat_count": 1,
+      "notes": "Thème"
+    },
+    {
+      "id": 271,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 12,
+      "repeat_count": 1,
+      "notes": "Thème"
+    },
+    {
+      "id": 272,
+      "song_id": 3,
+      "block_id": 74,
+      "position": 13,
+      "repeat_count": 1,
+      "notes": "Thème calme"
+    },
+    {
+      "id": 273,
+      "song_id": 3,
+      "block_id": 75,
+      "position": 14,
+      "repeat_count": 1,
+      "notes": "Thème calme"
+    },
+    {
+      "id": 274,
+      "song_id": 3,
+      "block_id": 76,
+      "position": 15,
+      "repeat_count": 1,
+      "notes": "Outro, 4 descentes à la fin vers point d'orgue"
     }
   ],
   "arrangement": [
     {
-      "id": 6,
+      "id": 22,
       "song_id": 1,
       "part_id": 13,
       "start_halfbeat": 48,
@@ -890,7 +890,16 @@
       "notes": ""
     },
     {
-      "id": 7,
+      "id": 23,
+      "song_id": 1,
+      "part_id": 14,
+      "start_halfbeat": 24,
+      "end_halfbeat": 99,
+      "label": "",
+      "notes": ""
+    },
+    {
+      "id": 24,
       "song_id": 1,
       "part_id": 15,
       "start_halfbeat": 29,
@@ -899,13 +908,47 @@
       "notes": ""
     },
     {
-      "id": 8,
+      "id": 25,
       "song_id": 1,
       "part_id": 16,
       "start_halfbeat": 31,
       "end_halfbeat": 51,
       "label": "",
       "notes": ""
+    }
+  ],
+  "resources": [
+    {
+      "id": 24,
+      "song_id": 3,
+      "type": "link",
+      "title": "test",
+      "content": "https://www.youtube.com/",
+      "position": 0
+    },
+    {
+      "id": 25,
+      "song_id": 3,
+      "type": "note",
+      "title": "test",
+      "content": "note random",
+      "position": 1
+    },
+    {
+      "id": 26,
+      "song_id": 3,
+      "type": "audio",
+      "title": "Comment faire",
+      "content": "uploads/orphelin.wav",
+      "position": 2
+    },
+    {
+      "id": 27,
+      "song_id": 3,
+      "type": "video",
+      "title": "Vid2o",
+      "content": "qsdqsdqsdqsdqsdqsdqsd",
+      "position": 3
     }
   ]
 }

@@ -62,4 +62,14 @@ export type Song = {
   measures: Measure[]
   structure: StructureItem[]
   arrangement: ArrangementItem[]
+  resources: SongResource[]
+}
+
+export type SongResource = {
+  id: number
+  song_id: number
+  type: 'audio' | 'video' | 'note' | 'link'
+  title: string
+  content: string
+  position: number
 }

@@ -329,7 +329,7 @@ export function ArrangementEditor({
     <section className="card arrangement-card">
 
       <div className="arrangement-title">
-        <div><h3>🎼 Arrangement</h3><p>Cliquez dans une ligne pour créer un événement.</p></div>
+        <div><h3>🧩 Arrangement</h3><p>Cliquez dans une ligne pour créer un événement.</p></div>
       </div>
 
       <div className="arrangement-scroll">

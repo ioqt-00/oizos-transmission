@@ -205,10 +205,7 @@ export function createSaveSong(db: Database.Database) {
      * ============================================================
      */
 
-    db.prepare(`
-      DELETE FROM arrangement_items
-      WHERE song_id=?
-    `).run(songId)
+    db.prepare(`DELETE FROM arrangement_items WHERE song_id=?`).run(songId)
 
     const insertArrangement = db.prepare(`
       INSERT INTO arrangement_items(
@@ -222,11 +219,7 @@ export function createSaveSong(db: Database.Database) {
       VALUES(?,?,?,?,?,?)
     `)
 
-    for (
-      const item
-      of (data.arrangement ?? [])
-    ) {
-
+    for (const item of (data.arrangement ?? [])) {
       const start_halfbeat = Number(item.start_halfbeat) || 0
 
       insertArrangement.run(
@@ -242,6 +235,35 @@ export function createSaveSong(db: Database.Database) {
         ),
         item.label ?? '',
         item.notes ?? ''
+      )
+    }
+
+    /*
+     * ============================================================
+     * RESSOURCES
+     * ============================================================
+     */
+
+    db.prepare(`DELETE FROM song_resources WHERE song_id=?`).run(songId)
+
+    const insertResources = db.prepare(`
+      INSERT INTO song_resources(
+        song_id,
+        type,
+        title,
+        content, 
+        position
+      )
+      VALUES(?,?,?,?,?)
+    `)
+
+    for (const item of (data.resources ?? [])) {
+      insertResources.run(
+        songId,
+        item.type,
+        item.title,
+        item.content,
+        item.position
       )
     }
   })

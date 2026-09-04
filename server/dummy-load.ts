@@ -44,6 +44,8 @@ const transaction = db.transaction(() => {
   db.prepare('DELETE FROM scores').run()
   db.prepare('DELETE FROM songs').run()
   db.prepare('DELETE FROM parts').run()
+  db.prepare('DELETE FROM arrangement').run()
+  db.prepare('DELETE FROM song_resources').run()
 
   const insertPart = db.prepare(`
     INSERT INTO parts (
@@ -210,6 +212,29 @@ const transaction = db.transaction(() => {
 
   for (const item of data.arrangement) {
     insertArrangement.run(item)
+  }
+
+  const insertResources = db.prepare(`
+    INSERT INTO song_resources(
+      id,
+      song_id,
+      type,
+      title,
+      content, 
+      position
+    )
+    VALUES(
+      @id,
+      @song_id,
+      @type,
+      @title,
+      @content,
+      @position
+    )
+  `)
+
+  for (const item of (data.resources)) {
+    insertResources.run(item)
   }
 })
 

@@ -12,9 +12,7 @@ Fix songlist for 650px->850px widths
 Empecher collision arrangement (backend)
 
 Pour V1 à presenter:
-Add onglet ressources
 Add TransmissionRessources (audio, video, notes, lien_externe, tous duplicables)
-Add SongRessources (audio, video, notes, lien_externe, tous duplicables)
 Add ArrangementItem clicable qui ouvre l'onglet ressources
 Filter ressources par pupitre dans onglet ressources
 
@@ -22,3 +20,5 @@ Pour V1.2:
 Add vue pupitre, selection de morceaux et drive de ressources pour chaque morceaux
 ex: selection pupitre -> "12 partitions et 34 ressources" -> liste des morceaux avec pour chaque entrée "x partition et x ressources"
 + timeline globale + metadata 
+
+clean up backend index.ts

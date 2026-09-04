@@ -3,7 +3,7 @@ import db from '../db'
 import path from 'node:path'
 import fs from 'node:fs'
 import multer from 'multer'
-import { createSaveSong } from '../saveSong'
+import { saveSong } from '../saveSong'
 import { uploadDir, isResourceType } from '../services/song'
 
 const songsRouter = Router()
@@ -25,8 +25,6 @@ function songWithData(id:number){
   }
 }
 
-const saveSong = createSaveSong(db)
-
 songsRouter.get('/',(_r,res)=>res.json(db.prepare('SELECT * FROM songs ORDER BY title COLLATE NOCASE').all()))
 
 songsRouter.get('/:id',(req,res)=>{
@@ -43,10 +41,7 @@ songsRouter.post('/',(req,res)=>{
 
 songsRouter.put('/:id', (req, res) => {
   try {
-    saveSong(
-      Number(req.params.id),
-      req.body
-    )
+    saveSong(req, res)
     res.json({
       ok: true
     })

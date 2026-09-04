@@ -149,7 +149,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
     const r=await fetch(`/api/songs/${song.id}`,{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement, resources})
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement, resources, transmission_resources: transmissionResources})
     })
     if(!r.ok)return alert(await r.text())
     await onSaved(song.id)

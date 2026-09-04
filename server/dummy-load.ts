@@ -44,8 +44,9 @@ const transaction = db.transaction(() => {
   db.prepare('DELETE FROM scores').run()
   db.prepare('DELETE FROM songs').run()
   db.prepare('DELETE FROM parts').run()
-  db.prepare('DELETE FROM arrangement').run()
+  db.prepare('DELETE FROM arrangement_items').run()
   db.prepare('DELETE FROM song_resources').run()
+  db.prepare('DELETE FROM transmission_resources').run()
 
   const insertPart = db.prepare(`
     INSERT INTO parts (

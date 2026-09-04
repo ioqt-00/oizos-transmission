@@ -6,11 +6,11 @@ import type { Song, SongResource, TransmissionResource, Part, ArrangementItem } 
 type SongResourcesProps = {
   song: Song
   resources: SongResource[]
-  setResources: React.Dispatch<
+  setResources?: React.Dispatch<
     React.SetStateAction<SongResource[]>
   >
   transmissionResources: TransmissionResource[]
-  setTransmissionResources: React.Dispatch<
+  setTransmissionResources?: React.Dispatch<
     React.SetStateAction<TransmissionResource[]>
   >
   parts: Part[]
@@ -49,8 +49,15 @@ export function ResourceTab({
   editing = false
 }: SongResourcesProps) {
 
-  function addSongResource() {
-    const nextPosition =
+  function addSongResource(resource: SongResource) {
+    setResources(current => [
+      ...current,
+      resource
+    ])
+  }
+
+  function createSongResource() {
+    const nextPosition = 
       resources.length > 0
         ? Math.max(...resources.map(r => r.position)) + 1
         : 0
@@ -64,12 +71,8 @@ export function ResourceTab({
       position: nextPosition
     }
 
-    setResources(current => [
-      ...current,
-      resource
-    ])
+    addSongResource(resource)
   }
-
 
   function updateSongResource(
     id: number,
@@ -84,7 +87,6 @@ export function ResourceTab({
     )
   }
 
-
   function deleteSongResource(id: number) {
     setResources(current =>
       current.filter(resource =>
@@ -93,12 +95,12 @@ export function ResourceTab({
     )
   }
 
-
-  function addTransmissionResource(
-    partId: number
+  function createTransmissionResource(
+    partId
   ) {
-    const item = arrangementItems.find(
-      x => x.part_id === partId
+    // need existing arrangement_item_id
+    const arrangementItem = arrangementItems.find(
+      x => x.part_id === partId 
     )
 
     const nextPosition =
@@ -107,23 +109,20 @@ export function ResourceTab({
             ...transmissionResources.map(r => r.position)
           ) + 1
         : 0
-
     const resource: TransmissionResource = {
       id: -Date.now(),
       song_id: song.id,
-      arrangement_item_id: item?.id ?? 0,
+      arrangement_item_id: arrangementItem?.id ?? 0,
       type: 'note',
       title: 'Nouvelle ressource',
       content: '',
       position: nextPosition
     }
-
     setTransmissionResources(current => [
       ...current,
       resource
     ])
   }
-
 
   function updateTransmissionResource(
     id: number,
@@ -138,7 +137,6 @@ export function ResourceTab({
     )
   }
 
-
   function deleteTransmissionResource(
     id: number
   ) {
@@ -149,21 +147,19 @@ export function ResourceTab({
     )
   }
 
-
   function getPartForResource(
     resource: TransmissionResource
   ) {
-    const item = arrangementItems.find(
+    const arrangementItem = arrangementItems.find(
       x => x.id === resource.arrangement_item_id
     )
 
-    if (!item) return undefined
+    if (!arrangementItem) return undefined
 
     return parts.find(
-      part => part.id === item.part_id
+      part => part.id === arrangementItem.part_id
     )
   }
-
 
   const transmissionByPart =
     parts
@@ -180,7 +176,6 @@ export function ResourceTab({
       .filter(group =>
         editing || group.resources.length > 0
       )
-
 
   return (
     <section className="card song-resources">
@@ -201,7 +196,7 @@ export function ResourceTab({
             <button
               type="button"
               className="resource-add-button"
-              onClick={addSongResource}
+              onClick={createSongResource}
             >
               + Ajouter
             </button>
@@ -282,11 +277,7 @@ export function ResourceTab({
                       <button
                         type="button"
                         className="resource-add-small"
-                        onClick={() =>
-                          addTransmissionResource(
-                            part.id
-                          )
-                        }
+                        onClick={() => createTransmissionResource(part.id)}
                       >
                         +
                       </button>
@@ -374,38 +365,21 @@ function SongResourceCard({
   if (!editing) {
     return (
       <div className="resource-card">
-
         <div className="resource-icon">
           {resourceIcons[resource.type]}
         </div>
-
         <div className="resource-body">
-
-          <strong>
-            {resource.title}
-          </strong>
-
-          <ResourceContent
-            type={resource.type}
-            content={resource.content}
-          />
-
+          <strong>{resource.title}</strong>
+          <ResourceContent type={resource.type} content={resource.content}/>
         </div>
-
       </div>
     )
   }
 
-
   return (
     <div className="resource-card resource-card-edit">
-
-      <div className="resource-icon">
-        {resourceIcons[resource.type]}
-      </div>
-
+      <div className="resource-icon">{resourceIcons[resource.type]}</div>
       <div className="resource-body">
-
         <input
           value={resource.title}
           onChange={e =>
@@ -415,52 +389,26 @@ function SongResourceCard({
           }
           placeholder="Titre"
         />
-
         <select
           value={resource.type}
-          onChange={e =>
-            onUpdate({
-              type:
-                e.target.value as SongResource['type']
-            })
-          }
+          onChange={e => onUpdate({type: e.target.value as SongResource['type']})}
         >
           {Object.entries(resourceLabels).map(
-            ([value, label]) => (
-              <option
-                key={value}
-                value={value}
-              >
-                {label}
-              </option>
-            )
+            ([value, label]) => (<option key={value} value={value}>{label}</option>)
           )}
         </select>
 
         <textarea
           value={resource.content}
-          onChange={e =>
-            onUpdate({
-              content: e.target.value
-            })
-          }
+          onChange={e => onUpdate({content: e.target.value})}
           placeholder={
             resource.type === 'link'
               ? 'URL'
               : 'Contenu'
           }
         />
-
       </div>
-
-      <button
-        type="button"
-        className="resource-delete"
-        onClick={onDelete}
-      >
-        🗑️
-      </button>
-
+      <button type="button" className="resource-delete" onClick={onDelete}>🗑️</button>
     </div>
   )
 }
@@ -473,14 +421,9 @@ function SongResourceCard({
 type TransmissionResourceCardProps = {
   resource: TransmissionResource
   editing: boolean
-
-  onUpdate: (
-    patch: Partial<TransmissionResource>
-  ) => void
-
+  onUpdate: (patch: Partial<TransmissionResource>) => void
   onDelete: () => void
 }
-
 
 function TransmissionResourceCard({
   resource,
@@ -492,97 +435,49 @@ function TransmissionResourceCard({
   if (!editing) {
     return (
       <div className="resource-card transmission-resource">
-
-        <div className="resource-icon">
-          {resourceIcons[resource.type]}
-        </div>
-
+        <div className="resource-icon">{resourceIcons[resource.type]}</div>
         <div className="resource-body">
-
-          <strong>
-            {resource.title}
-          </strong>
-
-          <ResourceContent
-            type={resource.type}
-            content={resource.content}
-          />
-
+          <strong>{resource.title}</strong>
+          <ResourceContent type={resource.type} content={resource.content}/>
         </div>
-
       </div>
     )
   }
 
-
   return (
     <div className="resource-card resource-card-edit transmission-resource">
-
-      <div className="resource-icon">
-        {resourceIcons[resource.type]}
-      </div>
-
+      <div className="resource-icon">{resourceIcons[resource.type]}</div>
       <div className="resource-body">
-
         <input
           value={resource.title}
-          onChange={e =>
-            onUpdate({
-              title: e.target.value
-            })
-          }
+          onChange={e => onUpdate({title: e.target.value})}
           placeholder="Titre"
         />
-
         <select
           value={resource.type}
-          onChange={e =>
-            onUpdate({
-              type:
-                e.target.value as TransmissionResource['type']
-            })
-          }
+          onChange={e => onUpdate({type:e.target.value as TransmissionResource['type']})}
         >
           {Object.entries(resourceLabels).map(
             ([value, label]) => (
-              <option
-                key={value}
-                value={value}
-              >
-                {label}
-              </option>
+              <option key={value} value={value}>{label}</option>
             )
           )}
         </select>
 
         <textarea
           value={resource.content}
-          onChange={e =>
-            onUpdate({
-              content: e.target.value
-            })
-          }
+          onChange={e => onUpdate({content: e.target.value})}
           placeholder={
             resource.type === 'link'
               ? 'URL'
               : 'Contenu'
           }
         />
-
       </div>
-
-      <button
-        type="button"
-        className="resource-delete"
-        onClick={onDelete}
-      >
-        🗑️
-      </button>
-
+      <button type="button" className="resource-delete" onClick={onDelete}>🗑️</button>
     </div>
   )
 }
-
 
 /* =====================================================
    CONTENT
@@ -603,40 +498,26 @@ function ResourceContent({
 
   if (type === 'link') {
     return (
-      <a
-        href={content}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Ouvrir le lien →
-      </a>
+      <a href={content} target="_blank" rel="noopener noreferrer">Ouvrir le lien →</a>
     )
   }
 
 
   if (type === 'audio') {
     return (
-      <audio
-        controls
-        src={content}
-      />
+      <audio controls src={content}/>
     )
   }
 
 
   if (type === 'video') {
     return (
-      <video
-        controls
-        src={content}
-      />
+      <video controls src={content}/>
     )
   }
 
 
   return (
-    <p className="resource-content">
-      {content}
-    </p>
+    <p className="resource-content">{content}</p>
   )
 }

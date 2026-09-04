@@ -71,16 +71,18 @@ songRouter.post('/:id/scores',(req,res)=>{ // upload.single('file')
 })
 
 songRouter.post('/:id/blocks',(req,res)=>{
- const songId=Number(req.params.id),max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM grid_blocks WHERE song_id=?').get(songId) as any
- const r=db.prepare('INSERT INTO grid_blocks(song_id,name,position,notes) VALUES(?,?,?,?)').run(songId,req.body.name||'Bloc',max.p+1,req.body.notes||'')
- res.json({id:Number(r.lastInsertRowid)})
+  const songId=Number(req.params.id)
+  const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM grid_blocks WHERE song_id=?').get(songId) as any
+  const r=db.prepare('INSERT INTO grid_blocks(song_id,name,position,notes) VALUES(?,?,?,?)').run(songId,req.body.name||'Bloc',max.p+1,req.body.notes||'')
+  res.json({id:Number(r.lastInsertRowid)})
 })
 
 songRouter.post('/:id/structure',(req,res)=>{
- const songId=Number(req.params.id),block=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),songId) as any
- if(!block)return res.status(400).send('Bloc invalide.')
- const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM structure_items WHERE song_id=?').get(songId) as any
- const r=db.prepare('INSERT INTO structure_items(song_id,block_id,position,repeat_count,notes) VALUES(?,?,?,?,?)').run(songId,block.id,max.p+1,Number(req.body.repeat_count)||1,req.body.notes||'');res.json({id:Number(r.lastInsertRowid)})
+  const songId=Number(req.params.id)
+  const block=db.prepare('SELECT id FROM grid_blocks WHERE id=? AND song_id=?').get(Number(req.body.block_id),songId) as any
+  if(!block)return res.status(400).send('Bloc invalide.')
+  const max=db.prepare('SELECT COALESCE(MAX(position),-1) p FROM structure_items WHERE song_id=?').get(songId) as any
+  const r=db.prepare('INSERT INTO structure_items(song_id,block_id,position,repeat_count,notes) VALUES(?,?,?,?,?)').run(songId,block.id,max.p+1,Number(req.body.repeat_count)||1,req.body.notes||'');res.json({id:Number(r.lastInsertRowid)})
 })
 
 songRouter.post('/:id/arrangement', (req,res)=>{
@@ -187,17 +189,17 @@ songRouter.post('/:id/song-resources', (req, res) => {
   res.json({id: Number(result.lastInsertRowid)})
 })
 
-songRouter.get('/:id/part-resources', (req, res) => {
+songRouter.get('/:id/transmission-resources', (req, res) => {
   const songId = Number(req.params.id)
   const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
   if (!song) {
     return res.status(404).send('Morceau introuvable')
   }
-  const resources = db.prepare(`SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id`).all(songId)
+  const resources = db.prepare(`SELECT * FROM transmission_resources WHERE song_id=? ORDER BY position, id`).all(songId)
   res.json(resources)
 })
 
-songRouter.post('/:id/part-resources', (req, res) => {
+songRouter.post('/:id/transmission-resources', (req, res) => {
   const songId = Number(req.params.id)
   const song = db.prepare('SELECT id FROM songs WHERE id=?').get(songId)
   if (!song) {

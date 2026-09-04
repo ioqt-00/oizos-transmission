@@ -15,7 +15,6 @@ export function createSaveSong(db: Database.Database) {
       throw new Error('Morceau introuvable.')
     }
 
-
     /*
      * ============================================================
      * METADATA
@@ -260,6 +259,37 @@ export function createSaveSong(db: Database.Database) {
     for (const item of (data.resources ?? [])) {
       insertResources.run(
         songId,
+        item.type,
+        item.title,
+        item.content,
+        item.position
+      )
+    }
+
+    /*
+     * ============================================================
+     * TRANSMISSION RESSOURCES
+     * ============================================================
+     */
+
+    db.prepare(`DELETE FROM transmission_resources WHERE song_id=?`).run(songId)
+
+    const insertTransmissionResources = db.prepare(`
+      INSERT INTO transmission_resources(
+        song_id,
+        arrangement_item_id,
+        type,
+        title,
+        content, 
+        position
+      )
+      VALUES(?,?,?,?,?,?)
+    `)
+
+    for (const item of (data.transmission_resources ?? [])) {
+      insertTransmissionResources.run(
+        songId,
+        item.arrangement_item_id,
         item.type,
         item.title,
         item.content,

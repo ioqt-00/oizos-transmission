@@ -1,0 +1,243 @@
+/* ================================
+   SONG RESOURCES
+   ================================ */
+
+.song-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* Carte d'une ressource */
+
+.song-resource {
+  padding: 12px 14px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 8px;
+
+  background: var(--card-background, #fff);
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.song-resource:hover {
+  border-color: var(--border-hover, #bbb);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+
+/* En-tête */
+
+.song-resource-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.song-resource-icon {
+  flex: 0 0 auto;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.1rem;
+
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.song-resource-header strong {
+  flex: 1;
+
+  min-width: 0;
+
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+
+/* Contenu */
+
+.song-resource-content {
+  margin: 8px 0 0 38px;
+
+  color: var(--text-muted, #666);
+  font-size: 0.9rem;
+  line-height: 1.45;
+
+  white-space: pre-wrap;
+}
+
+
+/* Liens */
+
+.song-resource a {
+  display: inline-block;
+
+  margin: 8px 0 0 38px;
+
+  color: var(--link-color, #2563eb);
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+.song-resource a:hover {
+  text-decoration: underline;
+}
+
+
+/* Audio / vidéo */
+
+.song-resource audio,
+.song-resource video {
+  display: block;
+
+  width: calc(100% - 38px);
+  margin: 10px 0 0 38px;
+
+  max-width: 600px;
+}
+
+.song-resource video {
+  border-radius: 6px;
+}
+
+
+/* ================================
+   MODE ÉDITION
+   ================================ */
+
+.song-resource select,
+.song-resource input,
+.song-resource textarea {
+  box-sizing: border-box;
+
+  width: 100%;
+
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px;
+
+  background: var(--input-background, #fff);
+  color: var(--text-color, #222);
+
+  font: inherit;
+}
+
+.song-resource select,
+.song-resource input {
+  padding: 8px 10px;
+}
+
+.song-resource textarea {
+  min-height: 80px;
+
+  margin-top: 8px;
+  padding: 9px 10px;
+
+  resize: vertical;
+}
+
+
+/* Le select sous le titre */
+
+.song-resource-header + select {
+  margin-top: 10px;
+}
+
+
+/* Bouton supprimer */
+
+.song-resource-header button {
+  flex: 0 0 auto;
+
+  border: none;
+  background: transparent;
+
+  padding: 5px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+  opacity: 0.55;
+
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
+}
+
+.song-resource-header button:hover {
+  opacity: 1;
+  background: rgba(200, 0, 0, 0.08);
+}
+
+
+/* ================================
+   AJOUTER UNE RESSOURCE
+   ================================ */
+
+.song-resources + button,
+.song-resources ~ button {
+  margin-top: 14px;
+
+  padding: 9px 13px;
+
+  border: 1px dashed var(--border-color, #bbb);
+  border-radius: 7px;
+
+  background: transparent;
+  color: var(--text-muted, #666);
+
+  font: inherit;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.song-resources + button:hover,
+.song-resources ~ button:hover {
+  border-color: var(--text-color, #444);
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--text-color, #222);
+}
+
+
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 700px) {
+  .song-resource {
+    padding: 11px 12px;
+  }
+
+  .song-resource-content {
+    margin-left: 0;
+  }
+
+  .song-resource a {
+    margin-left: 0;
+  }
+
+  .song-resource audio,
+  .song-resource video {
+    width: 100%;
+    margin-left: 0;
+  }
+}

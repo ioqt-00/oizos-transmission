@@ -1,4 +1,5 @@
 import type {GridBlock, Measure, StructureItem} from '../types/song'
+import './Structure.css'
 
 export function StructureEditor({blocks, measures, structure, setStructure}:any){
   function updateStructureItem(structure_item:StructureItem, patch:Partial<StructureItem>){

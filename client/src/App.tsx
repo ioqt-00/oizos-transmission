@@ -3,7 +3,7 @@ import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
 import { ArrangementTab, ArrangementEditor } from './components/Arrangement';
 import { ResourceTab } from './components/Resource';
-import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem, SongResource } from './types/song';
+import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem, SongResource, TransmissionResource } from './types/song';
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',
@@ -143,7 +143,8 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
   const [measures, setMeasures] = useState<Measure[]>(song.measures)
   const [structure, setStructure] = useState<StructureItem[]>(song.structure)
   const [arrangement, setArrangement] = useState<ArrangementItem[]>(song.arrangement)
-  const [resources, setResources] = useState<SongResource[]>(song.resources) || []
+  const [resources, setResources] = useState<SongResource[]>(song.resources)
+  const [transmissionResources, setTransmissionResources] = useState<TransmissionResource[]>(song.transmission_resources)
 
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
@@ -166,7 +167,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
     {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={resources} setResources={setResources} editing={true}/>}
+    {tab==='resources'&&<ResourceTab song={song} resources={resources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true}/>}
   </div>
 }
 
@@ -220,7 +221,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
     {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={song.resources} editing={false}/>}
+    {tab==='resources'&&<ResourceTab song={song} resources={song.resources} editing={false} transmission_resources={song.transmission_resources} />}
   </div>
 }
 

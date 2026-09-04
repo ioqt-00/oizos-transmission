@@ -42,9 +42,6 @@ songsRouter.post('/',(req,res)=>{
 songsRouter.put('/:id', (req, res) => {
   try {
     saveSong(req, res)
-    res.json({
-      ok: true
-    })
   } catch (error) {
     console.error(error)
     res.status(400).send(

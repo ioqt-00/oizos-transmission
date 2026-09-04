@@ -11,11 +11,13 @@ Empecher collision arrangement (backend)
 
 Pour V1 à presenter:
 Add ArrangementItem clicable qui ouvre l'onglet ressources
-Filter ressources par pupitre dans onglet ressources
 add associate existing transmissionresource to arrangementitem (or modify link)
+disable new transitem when no arrangementitem, clean up transitem creation 
 
 Pour V1.2:
+Filter ressources par pupitre dans onglet ressources
 Add vue pupitre, selection de morceaux et drive de ressources pour chaque morceaux
 ex: selection pupitre -> "12 partitions et 34 ressources" -> liste des morceaux avec pour chaque entrée "x partition et x ressources"
 + timeline globale + metadata 
 
+ensure ids client side are all positive after save

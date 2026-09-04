@@ -637,8 +637,7 @@ export function saveSong (req, res) {
         * --------------------------------------------------------
         */
 
-      const songResources =
-        data.song_resources ?? []
+      const songResources = data.song_resources ?? []
 
       const existingSongResources = db.prepare(`
         SELECT id

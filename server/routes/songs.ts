@@ -20,7 +20,7 @@ function songWithData(id:number){
     measures:db.prepare(`SELECT m.* FROM measures m JOIN grid_blocks b ON b.id=m.block_id WHERE b.song_id=? ORDER BY b.position,m.position,m.id`).all(id),
     structure:db.prepare('SELECT * FROM structure_items WHERE song_id=? ORDER BY position,id').all(id),
     arrangement:db.prepare('SELECT * FROM arrangement_items WHERE song_id=? ORDER BY part_id').all(id),
-    resources:db.prepare('SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id').all(id),
+    song_resources:db.prepare('SELECT * FROM song_resources WHERE song_id=? ORDER BY position, id').all(id),
     transmission_resources:db.prepare('SELECT * FROM transmission_resources WHERE song_id=? ORDER BY position, id').all(id) 
   }
 }

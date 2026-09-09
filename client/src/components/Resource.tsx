@@ -487,33 +487,24 @@ function ResourceContent({
   type: SongResource['type']
   content: string
 }) {
-
   if (!content) {
     return null
   }
-
-
   if (type === 'link') {
     return (
       <a href={content} target="_blank" rel="noopener noreferrer">Ouvrir le lien →</a>
     )
   }
-
-
   if (type === 'audio') {
     return (
       <audio controls src={content}/>
     )
   }
-
-
   if (type === 'video') {
     return (
       <video controls src={content}/>
     )
   }
-
-
   return (
     <p className="resource-content">{content}</p>
   )

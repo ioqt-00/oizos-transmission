@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import './Arrangement.css'
-import type { Part, StructureItem, ArrangementItem, Song } from '../types/song'
+import type { Part, StructureItem, ArrangementItem, Song, TransmissionResource, SongResource } from '../types/song'
 
 type EditorProps = {
   song: Song
@@ -12,6 +12,17 @@ type EditorProps = {
 type ViewerProps = {
   song: Song
   parts: Part[]
+}
+
+type ArrangementResourcePanelProps = {
+  arrangementItemId: number,
+  song: Song,
+  parts: Part[],
+  editor: boolean,
+  onClose,
+  onAddResource,
+  onUpdateResource,
+  onDeleteResource
 }
 
 const PX_PER_HALFBEAT = 2
@@ -73,6 +84,20 @@ function roundToHalfbeat(value: number) {
   )
 }
 
+const resourceIcons: Record<SongResource['type'], string> = {
+  audio: '🎧',
+  video: '🎥',
+  note: '📝',
+  link: '🔗'
+}
+
+const resourceLabels: Record<SongResource['type'], string> = {
+  audio: 'Audio',
+  video: 'Vidéo',
+  note: 'Note',
+  link: 'Lien'
+}
+
 /* ============================================================
    RENDU
    ============================================================ */
@@ -81,6 +106,7 @@ export function ArrangementTab({
   song,
   parts
 }: ViewerProps) {
+  const [selectedItem, setSelectedItem] = useState<number|null>(null)
   const arrangementItems = song.arrangement
   const timeline = useMemo(
     () => buildTimeline(song),
@@ -167,6 +193,7 @@ export function ArrangementTab({
                       <div
                         key={item.id} className="arrangement-item editor-item"
                         style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
+                        onClick={()=>setSelectedItem(item.id)}
                       >{item.label}</div>
                     ))}
                   </div>
@@ -176,7 +203,14 @@ export function ArrangementTab({
           </div>
         </div>
       )}
-    </section>
+      {selectedItem &&
+        <ArrangementResourcePanel 
+          arrangementItemId={selectedItem} song={song} parts={parts} editor={false} 
+          onClose={() => setSelectedItem(null)}
+          onAddResource={()=>{}} onUpdateResource={()=>{}} onDeleteResource={()=>{}}
+        /> 
+      }
+      </section>
   )
 }
 
@@ -190,6 +224,7 @@ export function ArrangementEditor({
   setArrangement,
   parts
 }: EditorProps) {
+  const [selectedItem, setSelectedItem] = useState<number|null>(null)
   const [resizing, setResizing] = useState<{
       id: number
       initialX: number
@@ -199,10 +234,7 @@ export function ArrangementEditor({
       nextStart: number
     } | null>(null)
 
-  const timeline = useMemo(
-    () => buildTimeline(song),
-    [song]
-  )
+  const timeline = useMemo(() => buildTimeline(song), [song])
 
   const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
@@ -382,7 +414,7 @@ export function ArrangementEditor({
                           <div
                             key={item.id} className="arrangement-item editor-item"
                             style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
-                            onClick={e => e.stopPropagation()}
+                            onClick={() => setSelectedItem(item.id)}
                           >
                             <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
                             <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
@@ -396,6 +428,244 @@ export function ArrangementEditor({
           })}
         </div>
       </div>
+
+      {selectedItem &&
+        <ArrangementResourcePanel 
+          arrangementItemId={selectedItem} song={song} parts={parts} editor={true} 
+          onClose={() => setSelectedItem(null)}
+          onAddResource={()=>{}} onUpdateResource={()=>{}} onDeleteResource={()=>{}}
+        /> 
+      }
     </section>
+  )
+}
+
+export default function ArrangementResourcePanel({
+  arrangementItemId,
+  song,
+  parts,
+  editor = false,
+  onClose,
+  onAddResource,
+  onUpdateResource,
+  onDeleteResource
+}: ArrangementResourcePanelProps) {
+  const resources = song.transmission_resources
+  
+  const arrangementItem = song.arrangement.find(
+    item => item.id === arrangementItemId
+  )
+  if(!arrangementItem) return
+
+  const part = parts.find(
+    item => item.id === arrangementItem.part_id
+  )
+  if(!part) return
+
+  const itemResources = resources
+    .filter(
+      resource =>
+        Number(resource.arrangement_item_id) === Number(arrangementItem.id)
+    )
+    .sort((a, b) => a.position - b.position)
+
+  const formatHalfbeat = (value: number) => {
+    const beat = Math.floor(value / 2) + 1
+    const half = value % 2 === 0 ? '' : ' +'
+    return `${beat}${half}`
+  }
+
+  const addResource = () => {
+    if (!onAddResource) return
+
+    const newResource: Omit<TransmissionResource, 'id'> = {
+      song_id: arrangementItem.song_id,
+      arrangement_item_id: arrangementItem.id,
+      type: 'note',
+      title: 'Nouvelle Ressource',
+      content: '',
+      position: itemResources.length
+    }
+
+    onAddResource(newResource)
+  }
+
+  return (
+    <>
+      <div className="arrangement-resource-backdrop" onClick={onClose}/>
+      <aside className="arrangement-resource-panel" onClick={event => event.stopPropagation()}>
+        {/* HEADER */}
+        <div className="arrangement-resource-panel-header">
+          <div>
+            <div className="arrangement-resource-panel-eyebrow">
+              Transmission
+            </div>
+
+            <h2>
+              {part.name}
+            </h2>
+
+            {arrangementItem.label && (
+              <div className="arrangement-resource-panel-label">
+                {arrangementItem.label}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="arrangement-resource-panel-close"
+            onClick={onClose}
+            aria-label="Fermer"
+          >
+            ×
+          </button>
+        </div>
+
+
+        {/* INFOS ARRANGEMENT */}
+        <div className="arrangement-resource-panel-info">
+
+          <div>
+            <span>Début</span>
+            <strong>
+              {formatHalfbeat(arrangementItem.start_halfbeat)}
+            </strong>
+          </div>
+
+          <div>
+            <span>Fin</span>
+            <strong>
+              {formatHalfbeat(arrangementItem.end_halfbeat)}
+            </strong>
+          </div>
+        </div>
+
+        {/* NOTES DE L'ARRANGEMENT */}
+
+        {arrangementItem.notes && (
+          <div className="arrangement-resource-panel-notes">
+            <div className="arrangement-resource-panel-section-title"> Note de direction</div>
+            <div className="arrangement-resource-panel-note-content">
+              {arrangementItem.notes}
+            </div>
+          </div>
+        )}
+
+        {/* RESSOURCES */}
+        <div className="arrangement-resource-panel-resources">
+          <div className="arrangement-resource-panel-section-header">
+            <div className="arrangement-resource-panel-section-title">
+              Ressources
+            </div>
+            {editor && onAddResource && (
+              <button
+                type="button"
+                className="arrangement-resource-add-button"
+                onClick={addResource}
+              >+</button>
+            )}
+          </div>
+
+          {itemResources.length === 0 ? (
+            <div className="arrangement-resource-empty">
+              {editor ? 'Aucune ressource pour ce passage.' : 'Aucune ressource disponible pour ce passage.'}
+            </div>
+          ) : (
+            <div className="arrangement-resource-list">
+              {itemResources.map(resource => (
+                <div key={resource.id} className="arrangement-resource-card">
+                  <div className="arrangement-resource-icon">
+                    {resourceIcons[resource.type]}
+                  </div>
+
+                  <div className="arrangement-resource-body">
+                    {editor ? (
+                      <>
+                        <div className="arrangement-resource-edit-row">
+                          <select
+                            value={resource.type}
+                            onChange={event =>
+                              onUpdateResource?.(
+                                resource.id, 
+                                {type: event.target.value as TransmissionResource['type']}
+                              )
+                            }
+                          >
+                            {Object.entries(resourceLabels).map(
+                              ([value, label]) => (<option key={value} value={value}>{label}</option>)
+                            )}
+                          </select>
+                          <button
+                            type="button"
+                            className="arrangement-resource-delete"
+                            onClick={() => onDeleteResource?.(resource.id)} 
+                            title="Supprimer"
+                          > 🗑️ </button>
+                        </div>
+
+                        <input
+                          type="text"
+                          className="arrangement-resource-title-input"
+                          value={resource.title}
+                          onChange={event =>
+                            onUpdateResource?.(
+                              resource.id,
+                              {
+                                title: event.target.value
+                              }
+                            )
+                          }
+                          placeholder="Titre"
+                        />
+
+                        <textarea
+                          className="arrangement-resource-content-input"
+                          value={resource.content}
+                          onChange={event =>
+                            onUpdateResource?.(
+                              resource.id,
+                              {
+                                content: event.target.value
+                              }
+                            )
+                          }
+                          placeholder={ 
+                            resource.type === 'link'
+                              ? 'https://...'
+                              : 'Contenu de la ressource...'
+                          }
+                          rows={3}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <div className="arrangement-resource-title">
+                          {resource.title}
+                        </div>
+                        {resource.type === 'link' ? (
+                          <a
+                            href={resource.content}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="arrangement-resource-link"
+                          >
+                            {resource.content}
+                          </a>
+                        ) : (
+                          <div className="arrangement-resource-content">
+                            {resource.content}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   )
 }

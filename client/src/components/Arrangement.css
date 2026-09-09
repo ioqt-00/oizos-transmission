@@ -194,10 +194,8 @@
 
   overflow: hidden;
   white-space: nowrap;
-}
 
-.editor-item {
-  cursor: default;
+  cursor: pointer;
 }
 
 .editor-item input {
@@ -262,4 +260,382 @@
 
 .arrangement-resize:hover .arrangement-resize-left:hover{
   background: rgba(255,255,255,0.35);
+}
+
+/* ================================
+   RESOURCE PANEL
+   ================================ */
+
+.arrangement-resource-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: min(420px, 90vw);
+
+  z-index: 1000;
+
+  overflow-y: auto;
+
+  box-shadow: -6px 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.arrangement-resource-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 999;
+}
+
+
+.arrangement-resource-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  width: min(420px, 92vw);
+  height: 100dvh;
+
+  background: white;
+
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: -6px 0 20px rgba(0, 0, 0, 0.18);
+
+  overflow-y: auto;
+}
+
+
+/* HEADER */
+
+.arrangement-resource-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+
+.arrangement-resource-panel-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  color: #777;
+
+  margin-bottom: 4px;
+}
+
+
+.arrangement-resource-panel-header h2 {
+  margin: 0;
+
+  font-size: 21px;
+}
+
+
+.arrangement-resource-panel-label {
+  margin-top: 5px;
+
+  font-size: 14px;
+  color: #555;
+}
+
+
+.arrangement-resource-panel-close {
+  border: none;
+  background: transparent;
+
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  color: #666;
+
+  padding: 0 4px;
+}
+
+
+.arrangement-resource-panel-close:hover {
+  color: #111;
+}
+
+
+/* INFO */
+
+.arrangement-resource-panel-info {
+  display: flex;
+
+  border-bottom: 1px solid #ddd;
+}
+
+
+.arrangement-resource-panel-info > div {
+  flex: 1;
+
+  padding: 12px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+
+.arrangement-resource-panel-info > div + div {
+  border-left: 1px solid #ddd;
+}
+
+
+.arrangement-resource-panel-info span {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+
+.arrangement-resource-panel-info strong {
+  font-size: 14px;
+}
+
+
+/* NOTES */
+
+.arrangement-resource-panel-notes {
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+
+.arrangement-resource-panel-section-title {
+  font-size: 13px;
+  font-weight: 600;
+
+  margin-bottom: 10px;
+}
+
+
+.arrangement-resource-panel-note-content {
+  background: #f5f5f5;
+
+  padding: 10px 12px;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+  white-space: pre-wrap;
+}
+
+
+/* RESOURCES */
+
+.arrangement-resource-panel-resources {
+  padding: 16px 20px 30px;
+}
+
+
+.arrangement-resource-panel-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 12px;
+}
+
+
+.arrangement-resource-panel-section-header
+.arrangement-resource-panel-section-title {
+  margin-bottom: 0;
+}
+
+
+.arrangement-resource-add-button {
+  width: 28px;
+  height: 28px;
+
+  border: 1px solid #ccc;
+  border-radius: 50%;
+
+  background: white;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+
+.arrangement-resource-add-button:hover {
+  background: #f2f2f2;
+}
+
+
+/* EMPTY */
+
+.arrangement-resource-empty {
+  padding: 20px 10px;
+
+  text-align: center;
+
+  color: #888;
+
+  font-size: 14px;
+}
+
+
+/* RESOURCE CARD */
+
+.arrangement-resource-card {
+  display: flex;
+  gap: 12px;
+
+  padding: 12px;
+
+  margin-bottom: 10px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  background: #fafafa;
+}
+
+
+.arrangement-resource-icon {
+  flex: 0 0 auto;
+
+  font-size: 22px;
+
+  width: 30px;
+
+  text-align: center;
+}
+
+
+.arrangement-resource-body {
+  min-width: 0;
+  flex: 1;
+}
+
+
+.arrangement-resource-title {
+  font-weight: 600;
+
+  margin-bottom: 5px;
+}
+
+
+.arrangement-resource-content {
+  font-size: 14px;
+
+  color: #555;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: anywhere;
+}
+
+
+.arrangement-resource-link {
+  display: block;
+
+  font-size: 13px;
+
+  color: #2670d9;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* EDITION */
+
+.arrangement-resource-edit-row {
+  display: flex;
+  gap: 8px;
+
+  margin-bottom: 8px;
+}
+
+
+.arrangement-resource-edit-row select {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 7px 8px;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  background: white;
+}
+
+
+.arrangement-resource-delete {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  padding: 4px;
+
+  opacity: 0.7;
+}
+
+
+.arrangement-resource-delete:hover {
+  opacity: 1;
+}
+
+
+.arrangement-resource-title-input,
+.arrangement-resource-content-input {
+  box-sizing: border-box;
+
+  width: 100%;
+
+  padding: 8px;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  font: inherit;
+
+  background: white;
+}
+
+
+.arrangement-resource-title-input {
+  margin-bottom: 7px;
+}
+
+
+.arrangement-resource-content-input {
+  resize: vertical;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .arrangement-resource-panel {
+    width: min(420px, 94vw);
+  }
+
+  .arrangement-resource-panel-header {
+    padding: 16px;
+  }
+
+  .arrangement-resource-panel-resources {
+    padding: 14px 16px 25px;
+  }
 }

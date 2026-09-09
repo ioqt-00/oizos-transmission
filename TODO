@@ -1,23 +1,26 @@
-tests avec cue etc.
 
-Filtre par pupitre
+Pour V0.8.1 à presenter:
+Add ArrangementItem clicable qui ouvre l'onglet ressources (editor)
+fix arrangementItem creation, disallow creation on existing Item
 
-Clean up modèle ? 
+Pour V0.8.2:
+Clean up states, use only song. 
+add localId for arrangement, in order from left to right
+bugs on save when arr is deleted but not associated transmissionResource
+bug arrId not updated on transmissionResource Editor after saveSong (for rerender after fetchSong)
+Distinguer arrangementItem avec ressource et sans
+Animate ResourcePanel
 
-clean up @media entries in css 
-Fix songlist for 650px->850px widths
-
-Empecher collision arrangement (backend)
-
-Pour V1 à presenter:
-Add ArrangementItem clicable qui ouvre l'onglet ressources
-add associate existing transmissionresource to arrangementitem (or modify link)
-disable new transitem when no arrangementitem, clean up transitem creation 
-
-Pour V1.2:
+Pour V0.9.1:
 Filter ressources par pupitre dans onglet ressources
 Add vue pupitre, selection de morceaux et drive de ressources pour chaque morceaux
 ex: selection pupitre -> "12 partitions et 34 ressources" -> liste des morceaux avec pour chaque entrée "x partition et x ressources"
 + timeline globale + metadata 
 
+backlog:
 ensure ids client side are all positive after save
+clean up resourceicons resourcelabels
+clean up @media entries in css 
+Fix songlist for 650px->850px widths
+Empecher collision arrangement (backend)
+Clean up modèle ? 

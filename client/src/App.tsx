@@ -106,8 +106,7 @@ function App() {
         </aside>
       </div>
       <section className="content">
-        {!selected&&!editing&&!creating&&<div className="welcome"><div className="big-icon">🎼</div><h2>Le répertoire de l'orchestre</h2><p>Sélectionne un morceau ou crée le premier.</p><button className="primary" onClick={startNew}>Créer un morceau</button></div>}
-
+        {!selected&&!editing&&!creating&&<Landing />}
         {creating&&<Creator form={form} setForm={setForm} onSaved={handleSongSaved} onCancel={()=>setCreating(false)}/>}
 
         {editing&&<Editor songInput={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
@@ -116,6 +115,29 @@ function App() {
       </section>
     </main>
   </div>
+}
+
+function Landing(){
+  return (
+  <div className="landing">
+    <div className="welcome">
+      <div className="big-icon">🎼</div>
+      <h2>Le répertoire de l'orchestre</h2>
+      <p>Sélectionne un morceau.</p>
+    </div>
+    <div className="warning">
+      <h2>Merci pour l'intérêt {":)"}</h2>
+      <p>Cette app est en cours de développement. Les problèmes connus pour le moment:</p>
+      <li>Erreur à la sauvegarde si plusieurs objets interdépendants sont modifiés, fix en cours</li>
+      <li>A la modification de plusieurs objets en même temps, y a des nombres chelous qui apparaissent. Pas d'inquiétude, c'est pas dangereux</li>
+      <li>La vue arrangement est inutilisable sur mobile, pour avoir un aperçu, passez en mode paysage</li>
+      <li>L'affichage est moche sur des écrans plus petits que mon téléphone, parce que j'ai pas testé</li>
+      <li>L'upload de fichier est désactivé pour des raisons de sécurité, mais c'est en prévision</li>
+      <li>Les audios ne se lisent pas dans certaines conditions (si l'url n'est pas root)</li>
+      <p>Pour tout autre problème, n'hésitez pas à faire un ticket sur github (ça nécessite de se connecter, désolé, je vais mettre une solution alternative plus tard)</p>
+    </div>
+  </div>
+  )
 }
 
 function Creator({form, setForm, onCancel, onSaved}:any){

@@ -110,7 +110,7 @@ function App() {
 
         {creating&&<Creator form={form} setForm={setForm} onSaved={handleSongSaved} onCancel={()=>setCreating(false)}/>}
 
-        {editing&&<Editor song={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
+        {editing&&<Editor songInput={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
 
         {selected&&!editing&&<RenderSong song={selected} tab={tab} setTab={setTab} onEdit={()=>startEdit(selected)} onDelete={deleteSong} parts={parts}/>}
       </section>
@@ -138,7 +138,8 @@ function Creator({form, setForm, onCancel, onSaved}:any){
   </div>
 }
 
-function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onUpload}:any){
+function Editor({songInput, form, setForm, tab, setTab, onSaved, onCancel, parts, onUpload}:any){
+  const [song, setSong] = useState<Song>(songInput)
   const [blocks, setBlocks] = useState<GridBlock[]>(song.blocks)
   const [measures, setMeasures] = useState<Measure[]>(song.measures)
   const [structure, setStructure] = useState<StructureItem[]>(song.structure)
@@ -166,7 +167,7 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
     {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
-    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} setSong={setSong} parts={parts}/>}
     {tab==='resources'&&<ResourceTab song={song} resources={songResources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true} parts={parts} arrangementItems={arrangement}/>}
   </div>
 }

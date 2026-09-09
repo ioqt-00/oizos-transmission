@@ -7,6 +7,7 @@ type EditorProps = {
   parts: Part[]
   arrangement: ArrangementItem[]
   setArrangement: React.Dispatch<React.SetStateAction<ArrangementItem[]>>
+  setSong: React.Dispatch<React.SetStateAction<Song>>
 }
 
 type ViewerProps = {
@@ -20,9 +21,7 @@ type ArrangementResourcePanelProps = {
   parts: Part[],
   editor: boolean,
   onClose,
-  onAddResource,
-  onUpdateResource,
-  onDeleteResource
+  setSong: React.Dispatch<React.SetStateAction<Song>>
 }
 
 const PX_PER_HALFBEAT = 2
@@ -222,6 +221,7 @@ export function ArrangementEditor({
   song,
   arrangement,
   setArrangement,
+  setSong,
   parts
 }: EditorProps) {
   const [selectedItem, setSelectedItem] = useState<number|null>(null)
@@ -433,7 +433,7 @@ export function ArrangementEditor({
         <ArrangementResourcePanel 
           arrangementItemId={selectedItem} song={song} parts={parts} editor={true} 
           onClose={() => setSelectedItem(null)}
-          onAddResource={()=>{}} onUpdateResource={()=>{}} onDeleteResource={()=>{}}
+          setSong={setSong}
         /> 
       }
     </section>
@@ -446,10 +446,47 @@ export default function ArrangementResourcePanel({
   parts,
   editor = false,
   onClose,
-  onAddResource,
-  onUpdateResource,
-  onDeleteResource
+  setSong
 }: ArrangementResourcePanelProps) {
+  function onAddResource(item: TransmissionResource) {
+    setSong(prev => {
+      if (!prev) return prev
+
+      return {
+        ...prev,
+        transmission_resources:
+          [...prev.transmission_resources, item]
+      }
+    })
+  }
+
+  function onUpdateResource(item: TransmissionResource, patch: Partial<TransmissionResource>) {
+    setSong(prev => {
+      if (!prev) return prev
+
+      return {
+        ...prev,
+        transmission_resources:
+          prev.transmission_resources.map(resource =>
+            resource.id === item.id ? { ...resource, ...patch } 
+                                    : resource
+        )
+      }
+    })
+  }
+
+  function onDeleteResource(item: TransmissionResource) {
+    setSong(prev => {
+      if (!prev) return prev
+
+      return {
+        ...prev,
+        transmission_resources:
+          prev.transmission_resources.filter(prev => prev.id != item.id)
+      }
+    })
+  }
+
   const resources = song.transmission_resources
   
   const arrangementItem = song.arrangement.find(
@@ -478,7 +515,8 @@ export default function ArrangementResourcePanel({
   const addResource = () => {
     if (!onAddResource) return
 
-    const newResource: Omit<TransmissionResource, 'id'> = {
+    const newResource: TransmissionResource = {
+      id: -Date.now(),
       song_id: arrangementItem.song_id,
       arrangement_item_id: arrangementItem.id,
       type: 'note',
@@ -586,10 +624,7 @@ export default function ArrangementResourcePanel({
                           <select
                             value={resource.type}
                             onChange={event =>
-                              onUpdateResource?.(
-                                resource.id, 
-                                {type: event.target.value as TransmissionResource['type']}
-                              )
+                              onUpdateResource(resource, {type: event.target.value as TransmissionResource['type']})
                             }
                           >
                             {Object.entries(resourceLabels).map(
@@ -599,7 +634,7 @@ export default function ArrangementResourcePanel({
                           <button
                             type="button"
                             className="arrangement-resource-delete"
-                            onClick={() => onDeleteResource?.(resource.id)} 
+                            onClick={() => onDeleteResource(resource)} 
                             title="Supprimer"
                           > 🗑️ </button>
                         </div>
@@ -608,28 +643,14 @@ export default function ArrangementResourcePanel({
                           type="text"
                           className="arrangement-resource-title-input"
                           value={resource.title}
-                          onChange={event =>
-                            onUpdateResource?.(
-                              resource.id,
-                              {
-                                title: event.target.value
-                              }
-                            )
-                          }
+                          onChange={event => onUpdateResource(resource, {title: event.target.value})}
                           placeholder="Titre"
                         />
 
                         <textarea
                           className="arrangement-resource-content-input"
                           value={resource.content}
-                          onChange={event =>
-                            onUpdateResource?.(
-                              resource.id,
-                              {
-                                content: event.target.value
-                              }
-                            )
-                          }
+                          onChange={event => onUpdateResource(resource, {content: event.target.value})}
                           placeholder={ 
                             resource.type === 'link'
                               ? 'https://...'

@@ -62,7 +62,7 @@ export type Song = {
   measures: Measure[]
   structure: StructureItem[]
   arrangement: ArrangementItem[]
-  resources: SongResource[]
+  song_resources: SongResource[]
   transmission_resources: TransmissionResource[]
 }
 

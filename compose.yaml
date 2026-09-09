@@ -14,7 +14,7 @@ services:
 
     volumes:
       - orchestre-data:/app/server/data
-      - orchestre-uploads:/app/server/uploads
+      - ./server/uploads:/app/server/uploads
 
     networks:
       - proxy
@@ -24,9 +24,7 @@ services:
 
 
 volumes:
-
   orchestre-data:
-  orchestre-uploads:
 
 
 networks:

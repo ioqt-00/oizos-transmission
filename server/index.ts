@@ -15,7 +15,7 @@ const app=express()
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads',express.static(uploadDir))
+app.use('/uploads', express.static(uploadDir))
 
 app.get('/api/parts',(_r,res)=>res.json(db.prepare('SELECT * FROM parts ORDER BY position').all()))
 app.use('/api/songs', songsRouter)

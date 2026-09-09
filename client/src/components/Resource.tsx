@@ -96,7 +96,7 @@ export function ResourceTab({
   }
 
   function createTransmissionResource(
-    partId
+    partId: number
   ) {
     // need existing arrangement_item_id
     const arrangementItem = arrangementItems.find(
@@ -112,7 +112,7 @@ export function ResourceTab({
     const resource: TransmissionResource = {
       id: -Date.now(),
       song_id: song.id,
-      arrangement_item_id: arrangementItem?.id ?? 0,
+      arrangement_item_id: arrangementItem.id,
       type: 'note',
       title: 'Nouvelle ressource',
       content: '',
@@ -158,6 +158,12 @@ export function ResourceTab({
 
     return parts.find(
       part => part.id === arrangementItem.part_id
+    )
+  }
+
+  function getArrangementItemsForPart(part: Part) {
+    return arrangementItems.filter(
+      x => x.song_id === song.id && x.part_id === part.id
     )
   }
 
@@ -259,20 +265,20 @@ export function ResourceTab({
           <div className="transmission-groups">
 
             {transmissionByPart.map(
-              ({ part, resources }) => (
+              ({ part, resources }) => {
+                const arrItems = getArrangementItemsForPart(part)
 
+                return (
                 <section
                   className="transmission-part"
                   key={part.id}
                 >
-
                   <div className="transmission-part-header">
-
                     <strong>
                       {part.name}
                     </strong>
 
-                    {editing && (
+                    {editing && arrItems.length>0 && ( 
                       <button
                         type="button"
                         className="resource-add-small"
@@ -283,7 +289,6 @@ export function ResourceTab({
                     )}
 
                   </div>
-
 
                   {resources.length === 0 ? (
 
@@ -303,36 +308,19 @@ export function ResourceTab({
                           key={resource.id}
                           resource={resource}
                           editing={editing}
-                          onUpdate={patch =>
-                            updateTransmissionResource(
-                              resource.id,
-                              patch
-                            )
-                          }
-                          onDelete={() =>
-                            deleteTransmissionResource(
-                              resource.id
-                            )
-                          }
+                          onUpdate={patch => updateTransmissionResource(resource.id, patch)}
+                          arrangementItemsForPart={arrItems}
+                          onDelete={() => deleteTransmissionResource(resource.id)}
                         />
-
                       ))}
-
                     </div>
-
                   )}
-
                 </section>
-
-              )
+              )}
             )}
-
           </div>
-
         )}
-
       </section>
-
     </section>
   )
 }
@@ -422,13 +410,15 @@ type TransmissionResourceCardProps = {
   editing: boolean
   onUpdate: (patch: Partial<TransmissionResource>) => void
   onDelete: () => void
+  arrangementItemsForPart: ArrangementItem[]
 }
 
 function TransmissionResourceCard({
   resource,
   editing,
   onUpdate,
-  onDelete
+  onDelete,
+  arrangementItemsForPart
 }: TransmissionResourceCardProps) {
 
   if (!editing) {
@@ -466,12 +456,20 @@ function TransmissionResourceCard({
         <textarea
           value={resource.content}
           onChange={e => onUpdate({content: e.target.value})}
-          placeholder={
-            resource.type === 'link'
-              ? 'URL'
-              : 'Contenu'
-          }
+          placeholder={resource.type === 'link' ? 'URL' : 'Contenu'}
         />
+        <select
+          value={resource.arrangement_item_id}
+          onChange={e => onUpdate({arrangement_item_id:Number(e.target.value) as TransmissionResource['arrangement_item_id']})}
+        >
+          {
+          arrangementItemsForPart.map(
+            item => (
+              <option key={item.id} value={item.id}>{item.id} {item.label}</option>
+            )
+          )}
+        </select>
+
       </div>
       <button type="button" className="resource-delete" onClick={onDelete}>🗑️</button>
     </div>

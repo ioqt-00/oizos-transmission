@@ -524,10 +524,7 @@ export function saveSong (req, res) {
             item.notes ?? ''
           )
 
-          arrangementIdMap.set(
-            item.id,
-            Number(result.lastInsertRowid)
-          )
+          arrangementIdMap.set(item.id, Number(result.lastInsertRowid))
         }
       }
 
@@ -540,14 +537,12 @@ export function saveSong (req, res) {
         * --------------------------------------------------------
         */
 
+
       for (const resource of transmissionResources) {
 
         assertResourceType(resource.type)
 
-        const realArrangementItemId =
-          arrangementIdMap.get(
-            resource.arrangement_item_id
-          )
+        const realArrangementItemId = arrangementIdMap.get(resource.arrangement_item_id)
 
         if (!realArrangementItemId) {
           throw new Error(

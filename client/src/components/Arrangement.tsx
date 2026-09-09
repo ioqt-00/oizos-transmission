@@ -248,7 +248,7 @@ export function ArrangementEditor({
       part_id: partId,
       start_halfbeat: startHalfbeat,
       end_halfbeat: endHalfbeat,
-      label: '',
+      label: 'Label',
       notes: ''
     }
 
@@ -385,7 +385,7 @@ export function ArrangementEditor({
                             onClick={e => e.stopPropagation()}
                           >
                             <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
-                            <input value={item.label} placeholder="Note" onChange={e => {updateItem(item,{label:e.target.value})}}/>
+                            <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
                             <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
                             <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
                           </div>

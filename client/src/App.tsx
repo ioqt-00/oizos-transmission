@@ -237,7 +237,7 @@ function Nav({tab, setTab}:any){
         <option value="grille">🎹 Grille</option>
         <option value="structure">🧭 Structure</option>
         <option value="paroles">📝 Paroles</option>
-        <option value="paroles">🧩 Arrangement</option>
+        <option value="arrangement">🧩 Arrangement</option>
         <option value="resources">🧰 Ressources</option>
       </select> 
       <nav className="desktop-song-nav">

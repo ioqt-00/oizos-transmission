@@ -1,14 +1,13 @@
 
-Pour V0.8.1 à presenter:
-DONE ! 
-
-Pour V0.8.2:
+Pour V0.8.2 à presenter:
 Clean up states, use only song. (need rework client saveSong)
 add localId for arrangement, in order from left to right
 bugs on save when arr is deleted but not associated transmissionResource
 bug arrId not updated on transmissionResource Editor after saveSong (for rerender after fetchSong)
 Distinguer arrangementItem avec ressource et sans
 Animate ResourcePanel
+Test mobile 
+View arrangement pour mobile...
 
 Pour V0.9.1:
 Confirmation on close without save
@@ -17,6 +16,10 @@ Add vue pupitre, selection de morceaux et drive de ressources pour chaque morcea
 ex: selection pupitre -> "12 partitions et 34 ressources" -> liste des morceaux avec pour chaque entrée "x partition et x ressources"
 + timeline globale + metadata 
 
+Pour V1:
+Authentication minimale
+Uploads identifiés, historique d'upload
+
 backlog:
 ensure ids client side are all positive after save
 clean up resourceicons resourcelabels
@@ -24,3 +27,4 @@ clean up @media entries in css
 Fix songlist for 650px->850px widths
 Empecher collision arrangement (backend)
 Clean up modèle ? 
+audio not loading if url is not root (ex: localhost/test)

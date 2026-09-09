@@ -44,6 +44,9 @@ const transaction = db.transaction(() => {
   db.prepare('DELETE FROM scores').run()
   db.prepare('DELETE FROM songs').run()
   db.prepare('DELETE FROM parts').run()
+  db.prepare('DELETE FROM arrangement_items').run()
+  db.prepare('DELETE FROM song_resources').run()
+  db.prepare('DELETE FROM transmission_resources').run()
 
   const insertPart = db.prepare(`
     INSERT INTO parts (
@@ -211,6 +214,55 @@ const transaction = db.transaction(() => {
   for (const item of data.arrangement) {
     insertArrangement.run(item)
   }
+
+  const insertSongResources = db.prepare(`
+    INSERT INTO song_resources(
+      id,
+      song_id,
+      type,
+      title,
+      content, 
+      position
+    )
+    VALUES(
+      @id,
+      @song_id,
+      @type,
+      @title,
+      @content,
+      @position
+    )
+  `)
+
+  for (const item of (data.song_resources)) {
+    insertSongResources.run(item)
+  }
+
+  const insertTransmissionResources = db.prepare(`
+    INSERT INTO transmission_resources(
+      id,
+      song_id,
+      arrangement_item_id,
+      type,
+      title,
+      content, 
+      position
+    )
+    VALUES(
+      @id,
+      @song_id,
+      @arrangement_item_id,
+      @type,
+      @title,
+      @content,
+      @position
+    )
+  `)
+
+  for (const item of (data.transmission_resources)) {
+    insertTransmissionResources.run(item)
+  }
+
 })
 
 transaction()

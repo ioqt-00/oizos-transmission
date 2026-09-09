@@ -40,6 +40,14 @@ const arrangement = db
   .prepare('SELECT * FROM arrangement_items ORDER BY id')
   .all() as any[]
 
+const song_resources = db
+  .prepare('SELECT * FROM song_resources ORDER BY id')
+  .all() as any[]
+
+const transmission_resources = db
+  .prepare('SELECT * FROM transmission_resources ORDER BY id')
+  .all() as any[]
+
 const data = {
   version: 1,
   exportedAt: new Date().toISOString(),
@@ -49,7 +57,9 @@ const data = {
   blocks,
   measures,
   structure,
-  arrangement
+  arrangement,
+  song_resources,
+  transmission_resources
 }
 
 const output = path.join(seedDir, 'dummy-data.json')

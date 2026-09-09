@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
 import { ArrangementTab, ArrangementEditor } from './components/Arrangement';
-import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem } from './types/song';
+import { ResourceTab } from './components/Resource';
+import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem, SongResource, TransmissionResource } from './types/song';
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',
@@ -17,7 +18,7 @@ function App() {
   const [editing, setEditing] = useState(false)
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState(emptySong)
-  const [tab, setTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'|'arrangement'>('metadata')
+  const [tab, setTab] = useState<'metadata'|'partitions'|'grille'|'structure'|'paroles'|'arrangement'|'resources'>('metadata')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   async function loadSongs(){ setSongs(await (await fetch('/api/songs')).json()) }
@@ -79,7 +80,7 @@ function App() {
 
   return <div className="app">
     <header className="topbar">
-      <div className='topbar-title'><h1>Oizos Transmission</h1><span>V0.5</span></div>
+      <div className='topbar-title'><h1>Oizos Transmission</h1><span>V0.8.1</span></div>
       <a
         href="https://github.com/ioqt-00/oizos-transmission/issues/new"
         target="_blank"
@@ -109,7 +110,7 @@ function App() {
 
         {creating&&<Creator form={form} setForm={setForm} onSaved={handleSongSaved} onCancel={()=>setCreating(false)}/>}
 
-        {editing&&<Editor song={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
+        {editing&&<Editor songInput={selected} form={form} setForm={setForm} tab={tab} setTab={setTab} onSaved={handleSongSaved} onCancel={()=>selected?openSong(selected.id):setEditing(false)} parts={parts} onUpload={uploadScore}/>}
 
         {selected&&!editing&&<RenderSong song={selected} tab={tab} setTab={setTab} onEdit={()=>startEdit(selected)} onDelete={deleteSong} parts={parts}/>}
       </section>
@@ -137,16 +138,19 @@ function Creator({form, setForm, onCancel, onSaved}:any){
   </div>
 }
 
-function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onUpload}:any){
+function Editor({songInput, form, setForm, tab, setTab, onSaved, onCancel, parts, onUpload}:any){
+  const [song, setSong] = useState<Song>(songInput)
   const [blocks, setBlocks] = useState<GridBlock[]>(song.blocks)
   const [measures, setMeasures] = useState<Measure[]>(song.measures)
   const [structure, setStructure] = useState<StructureItem[]>(song.structure)
   const [arrangement, setArrangement] = useState<ArrangementItem[]>(song.arrangement)
+  const [songResources, setResources] = useState<SongResource[]>(song.song_resources)
+  const [transmissionResources, setTransmissionResources] = useState<TransmissionResource[]>(song.transmission_resources)
 
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
     const r=await fetch(`/api/songs/${song.id}`,{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement})
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement, song_resources: songResources, transmission_resources: transmissionResources})
     })
     if(!r.ok)return alert(await r.text())
     await onSaved(song.id)
@@ -163,7 +167,8 @@ function Editor({song, form, setForm, tab, setTab, onSaved, onCancel, parts, onU
     {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
     {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
-    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} parts={parts}/>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} setSong={setSong} parts={parts}/>}
+    {tab==='resources'&&<ResourceTab song={song} resources={songResources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true} parts={parts} arrangementItems={arrangement}/>}
   </div>
 }
 
@@ -217,6 +222,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
     {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
+    {tab==='resources'&&<ResourceTab song={song} resources={song.song_resources} editing={false} transmissionResources={song.transmission_resources} parts={parts} arrangementItems={song.arrangement} />}
   </div>
 }
 
@@ -232,9 +238,17 @@ function Nav({tab, setTab}:any){
         <option value="structure">🧭 Structure</option>
         <option value="paroles">📝 Paroles</option>
         <option value="paroles">🧩 Arrangement</option>
+        <option value="resources">🧰 Ressources</option>
       </select> 
       <nav className="desktop-song-nav">
-        {([['metadata','⚙️ Metadata'],['partitions','🎼 Partitions'],['grille','🎹 Grille'],['structure','🧭 Structure'],['paroles','📝 Paroles'],['arrangement','🧩 Arrangement']] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
+        {([['metadata','⚙️ Metadata'],
+          ['partitions','🎼 Partitions'],
+          ['grille','🎹 Grille'],
+          ['structure','🧭 Structure'],
+          ['paroles','📝 Paroles'],
+          ['arrangement','🧩 Arrangement'],
+          ['resources','🧰 Ressources']
+          ] as const).map(([k,l])=><button key={k} className={tab===k?'active':''} onClick={()=>setTab(k)}>{l}</button>)}
       </nav>
     </div>
   )

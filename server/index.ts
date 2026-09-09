@@ -3,13 +3,13 @@ import cors from 'cors'
 import path from 'node:path'
 import db from './db.ts'
 
+import { uploadDir, PORT, ROOT } from './services/song.ts'
 import songsRouter from './routes/songs.ts'
 import arrangementRouter from './routes/arrangement.ts'
 import blocksRouter from './routes/blocks.ts'
 import structureRouter from './routes/structure.ts'
 import measuresRouter from './routes/measures.ts'
-
-import { uploadDir, PORT, ROOT } from './services/song.ts'
+import songResourcesRouter from './routes/songResources.ts'
 
 const app=express()
 
@@ -23,6 +23,7 @@ app.use('/api/arrangement', arrangementRouter)
 app.use('/api/blocks', blocksRouter)
 app.use('/api/structure', structureRouter)
 app.use('/api/measures', measuresRouter)
+app.use('/api/song-resources', songResourcesRouter)
 
 // FRONTEND EN PRODUCTION
 if (process.env.NODE_ENV === 'production') {

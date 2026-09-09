@@ -270,9 +270,13 @@ export function ArrangementEditor({
 
     const others = arrangement.filter(x => x.part_id === partId)
     const next_others = others.filter(x => x.start_halfbeat >= startHalfbeat)
+    const previous_others = others.filter(x => x.start_halfbeat <= startHalfbeat)
+    const previous_one = previous_others.find(x => x.start_halfbeat === Math.max(...previous_others.map(x=>x.start_halfbeat)))
     const next_start = Math.min(...next_others.map(x => x.start_halfbeat), totalHalfbeats)
+    const previous_end = previous_one ? previous_one.end_halfbeat : 0
 
     if (endHalfbeat > next_start){return}
+    if (startHalfbeat < previous_end){return}
 
     const item: ArrangementItem = {
       id: -Date.now(),

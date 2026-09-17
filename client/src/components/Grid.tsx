@@ -1,14 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
-import type { GridBlock, Measure } from '../types/song';
+import type { GridBlock, Measure, Song } from '../types/song';
 
 type GridEditorProps = {
-  blocks: GridBlock[]
-  measures: Measure[]
-  setBlocks: React.Dispatch<
-    React.SetStateAction<GridBlock[]>
-  >
-  setMeasures: React.Dispatch<
-    React.SetStateAction<Measure[]>
+  song: Song
+  setSong: React.Dispatch<
+    React.SetStateAction<Song>
   >
 }
 
@@ -19,69 +14,106 @@ function MeasureEditor({m,index,update,deleteMeasure}:any){
   </div>
 }
 
-export function GridEditor({blocks, measures, setBlocks, setMeasures}:GridEditorProps){
+export function GridEditor({song, setSong}:GridEditorProps){
+  const blocks = song.blocks
+  const measures = song.measures 
+
   function addMeasure(blockId:number){
-    setMeasures(current => [
-    ...current,
-    {
-      id: -Date.now(),
-      block_id: blockId,
-      position: current.filter(
-        m => m.block_id === blockId
-      ).length,
-      chord: '',
-      beats: 4,
-      notes: ''
-    }
-  ])
+    setSong(prev => {
+      if (!prev) return prev
+
+      return {
+        ...prev,
+
+        measures:
+          [...(prev.measures),
+            {
+              id: -Date.now(),
+              block_id: blockId,
+              position: prev.measures.filter(m => m.block_id === blockId).length,
+              chord: '',
+              beats: 4,
+              notes: ''
+            }
+          ]
+      }
+    })
   }
 
   function updateMeasure(m:Measure,patch:Partial<Measure>){
-    setMeasures(current =>
-      current.map(item =>
-        item.id === m.id
-          ? { ...item, ...patch }
-          : item
-      )
-    )
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        measures:
+          prev.measures.map(item =>
+            item.id === m.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   function deleteMeasure(m:Measure){
-    setMeasures(current =>
-      current.filter(item =>
-        item.id !== m.id
-      )
-    )
+    setSong(prev => {
+      return {
+        ...prev,
+
+        measures:
+          prev.measures.filter(item =>
+            item.id != m.id
+          )
+      }
+    })
   }
 
   function addBlock(){
-    setBlocks(current => [
-    ...current,
-    {
-      id: -Date.now(),
-      name: '',
-      position: 0,
-      notes: ''
-    }
-  ])
+    setSong(prev => {
+      return {
+        ...prev,
+
+        blocks:
+          [...(prev.blocks),
+            {
+              id: -Date.now(),
+              name: '',
+              position: prev.blocks.length,
+              notes: ''
+            }
+          ]
+      }
+    })
   }
 
   function updateBlock(b:GridBlock,patch:Partial<GridBlock>){
-    setBlocks(current =>
-      current.map(item =>
-        item.id === b.id
-          ? { ...item, ...patch }
-          : item
-      )
-    )
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        blocks:
+          prev.blocks.map(item =>
+            item.id === b.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   function deleteBlock(b:GridBlock){
-    setBlocks(current =>
-      current.filter(item =>
-        item.id !== b.id
-      )
-    )
+    setSong(prev => {
+      return {
+        ...prev,
+
+        blocks:
+          prev.blocks.filter(item =>
+            item.id != b.id
+          )
+      }
+    })
   }
 
   return <section className="card">

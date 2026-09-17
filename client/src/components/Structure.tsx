@@ -1,37 +1,62 @@
-import type {GridBlock, Measure, StructureItem} from '../types/song'
+import type {GridBlock, Measure, StructureItem, Song} from '../types/song'
 import './Structure.css'
 
-export function StructureEditor({blocks, measures, structure, setStructure}:any){
-  function updateStructureItem(structure_item:StructureItem, patch:Partial<StructureItem>){
-    setStructure(current =>
-      current.map(item =>
-        item.id === structure_item.id
-          ? { ...item, ...patch }
-          : item
-      )
-    )
-  }
+type StructureEditorProps = {
+  song: Song
+  setSong: React.Dispatch<React.SetStateAction<Song>>
+}
+
+export function StructureEditor({song, setSong}: StructureEditorProps){
+  const blocks = song.blocks
+  const measures = song.measures
+  const structure = song.structure
 
   function addStructureItem(){
-    setStructure(current => [
-    ...current,
-    {
-      id: -Date.now(),
-      song_id: -1,
-      block_id: 1,
-      position: current.length,
-      repeat_count: 1,
-      notes: ''
-    }
-    ])
+    setSong(prev => {
+      return {
+        ...prev,
+
+        structure:
+          [...(prev.structure),
+            {
+              id: -Date.now(),
+              block_id: 1,
+              position: prev.structure.length,
+              repeat_count: 1,
+              notes: ''
+            }
+          ]
+      }
+    })
   }
 
-  function deleteStructureItem(structure_item: StructureItem){
-    setStructure(current =>
-          current.filter(item =>
-            item.id !== structure_item.id
+  function deleteStructureItem(edited: StructureItem){
+    setSong(prev => {
+      return {
+        ...prev,
+
+        structure:
+          prev.structure.filter(item =>
+            item.id != edited.id
           )
-        )
+      }
+    })
+  }
+
+  function updateStructureItem(edited:StructureItem, patch:Partial<StructureItem>){
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        structure:
+          prev.structure.map(item =>
+            item.id === edited.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   return <section className="card">

@@ -1,6 +1,5 @@
 
 Pour V0.8.2 à presenter:
-Clean up states, use only song. (need rework client saveSong)
 add localId for arrangement, in order from left to right
 bugs on save when arr is deleted but not associated transmissionResource
 bug arrId not updated on transmissionResource Editor after saveSong (for rerender after fetchSong)
@@ -28,3 +27,4 @@ Fix songlist for 650px->850px widths
 Empecher collision arrangement (backend)
 Clean up modèle ? 
 audio not loading if url is not root (ex: localhost/test)
+bug suppression bloc avant suppression mesures

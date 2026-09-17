@@ -5,8 +5,6 @@ import type { Part, StructureItem, ArrangementItem, Song, TransmissionResource, 
 type EditorProps = {
   song: Song
   parts: Part[]
-  arrangement: ArrangementItem[]
-  setArrangement: React.Dispatch<React.SetStateAction<ArrangementItem[]>>
   setSong: React.Dispatch<React.SetStateAction<Song>>
 }
 
@@ -20,8 +18,8 @@ type ArrangementResourcePanelProps = {
   song: Song,
   parts: Part[],
   editor: boolean,
-  onClose,
-  setSong: React.Dispatch<React.SetStateAction<Song>>
+  onClose: any,
+  setSong?: React.Dispatch<React.SetStateAction<Song>>
 }
 
 const PX_PER_HALFBEAT = 2
@@ -206,7 +204,6 @@ export function ArrangementTab({
         <ArrangementResourcePanel 
           arrangementItemId={selectedItem} song={song} parts={parts} editor={false} 
           onClose={() => setSelectedItem(null)}
-          onAddResource={()=>{}} onUpdateResource={()=>{}} onDeleteResource={()=>{}}
         /> 
       }
       </section>
@@ -219,11 +216,10 @@ export function ArrangementTab({
 
 export function ArrangementEditor({
   song,
-  arrangement,
-  setArrangement,
   setSong,
   parts
 }: EditorProps) {
+  const arrangement = song.arrangement
   const [selectedItem, setSelectedItem] = useState<number|null>(null)
   const [resizing, setResizing] = useState<{
       id: number
@@ -238,28 +234,47 @@ export function ArrangementEditor({
 
   const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
-  function addItem(arr: ArrangementItem){
-    setArrangement(current => [
-        ...current, arr
-      ])
-    }
+  function addItem(edited: ArrangementItem){
+    setSong(prev => {
+      return {
+        ...prev,
 
-  function deleteItem(arr: ArrangementItem){
-    setArrangement(current =>
-          current.filter(item =>
-            item.id !== arr.id
-          )
-        )
+        arrangement:
+          [
+            ...(prev.arrangement), 
+            edited
+          ]
+      }
+    })
   }
 
-  function updateItem(arr: ArrangementItem, patch:Partial<ArrangementItem>){
-    setArrangement(current =>
-      current.map(item =>
-        item.id === arr.id
-          ? { ...item, ...patch }
-          : item
-      )
-    )
+  function deleteItem(edited: ArrangementItem){
+      setSong(prev => {
+      return {
+        ...prev,
+
+        arrangement:
+          prev.arrangement.filter(item =>
+            item.id != edited.id
+          )
+      }
+    })
+  }
+
+  function updateItem(edited: ArrangementItem, patch:Partial<ArrangementItem>){
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        arrangement:
+          prev.arrangement.map(item =>
+            item.id === edited.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   async function createItem(
@@ -453,6 +468,7 @@ export default function ArrangementResourcePanel({
   setSong
 }: ArrangementResourcePanelProps) {
   function onAddResource(item: TransmissionResource) {
+    if (!setSong) return 
     setSong(prev => {
       if (!prev) return prev
 
@@ -465,6 +481,7 @@ export default function ArrangementResourcePanel({
   }
 
   function onUpdateResource(item: TransmissionResource, patch: Partial<TransmissionResource>) {
+    if (!setSong) return 
     setSong(prev => {
       if (!prev) return prev
 
@@ -480,6 +497,7 @@ export default function ArrangementResourcePanel({
   }
 
   function onDeleteResource(item: TransmissionResource) {
+    if (!setSong) return 
     setSong(prev => {
       if (!prev) return prev
 
@@ -600,7 +618,7 @@ export default function ArrangementResourcePanel({
             <div className="arrangement-resource-panel-section-title">
               Ressources
             </div>
-            {editor && onAddResource && (
+            {editor && (
               <button
                 type="button"
                 className="arrangement-resource-add-button"

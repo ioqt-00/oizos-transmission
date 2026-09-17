@@ -5,16 +5,8 @@ import type { Song, SongResource, TransmissionResource, Part, ArrangementItem } 
 
 type SongResourcesProps = {
   song: Song
-  resources: SongResource[]
-  setResources?: React.Dispatch<
-    React.SetStateAction<SongResource[]>
-  >
-  transmissionResources: TransmissionResource[]
-  setTransmissionResources?: React.Dispatch<
-    React.SetStateAction<TransmissionResource[]>
-  >
+  setSong?: React.Dispatch<React.SetStateAction<Song>>
   parts: Part[]
-  arrangementItems: ArrangementItem[]
   editing?: boolean
 }
 
@@ -40,20 +32,55 @@ const resourceLabels: Record<
 
 export function ResourceTab({
   song,
-  resources,
-  setResources,
-  transmissionResources,
-  setTransmissionResources,
+  setSong,
   parts,
-  arrangementItems,
   editing = false
 }: SongResourcesProps) {
+  const arrangementItems = song.arrangement
+  const resources = song.song_resources
+  const transmissionResources = song.transmission_resources
 
-  function addSongResource(resource: SongResource) {
-    setResources(current => [
-      ...current,
-      resource
-    ])
+  function addSongResource(edited: SongResource){
+    setSong(prev => {
+      return {
+        ...prev,
+
+        song_resources:
+          [
+            ...(prev.song_resources), 
+            edited
+          ]
+      }
+    })
+  }
+
+  function deleteSongResource(edited: SongResource){
+    setSong(prev => {
+      return {
+        ...prev,
+
+        song_resources:
+          prev.song_resources.filter(item =>
+            item.id != edited.id
+          )
+      }
+    })
+  }
+
+  function updateSongResource(edited: SongResource, patch:Partial<SongResource>){
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        song_resources:
+          prev.song_resources.map(item =>
+            item.id === edited.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   function createSongResource() {
@@ -74,25 +101,47 @@ export function ResourceTab({
     addSongResource(resource)
   }
 
-  function updateSongResource(
-    id: number,
-    patch: Partial<SongResource>
-  ) {
-    setResources(current =>
-      current.map(resource =>
-        resource.id === id
-          ? { ...resource, ...patch }
-          : resource
-      )
-    )
+  function addTransmissionResource(edited: TransmissionResource){
+    setSong(prev => {
+      return {
+        ...prev,
+
+        transmission_resources:
+          [
+            ...(prev.transmission_resources), 
+            edited
+          ]
+      }
+    })
   }
 
-  function deleteSongResource(id: number) {
-    setResources(current =>
-      current.filter(resource =>
-        resource.id !== id
-      )
-    )
+  function deleteTransmissionResource(edited: TransmissionResource){
+    setSong(prev => {
+      return {
+        ...prev,
+
+        transmission_resources:
+          prev.transmission_resources.filter(item =>
+            item.id != edited.id
+          )
+      }
+    })
+  }
+
+  function updateTransmissionResource(edited: TransmissionResource, patch:Partial<TransmissionResource>){
+    setSong(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+
+        transmission_resources:
+          prev.transmission_resources.map(item =>
+            item.id === edited.id
+              ? { ...item, ...patch }
+              : item
+          )
+      }
+    })
   }
 
   function createTransmissionResource(
@@ -118,33 +167,7 @@ export function ResourceTab({
       content: '',
       position: nextPosition
     }
-    setTransmissionResources(current => [
-      ...current,
-      resource
-    ])
-  }
-
-  function updateTransmissionResource(
-    id: number,
-    patch: Partial<TransmissionResource>
-  ) {
-    setTransmissionResources(current =>
-      current.map(resource =>
-        resource.id === id
-          ? { ...resource, ...patch }
-          : resource
-      )
-    )
-  }
-
-  function deleteTransmissionResource(
-    id: number
-  ) {
-    setTransmissionResources(current =>
-      current.filter(resource =>
-        resource.id !== id
-      )
-    )
+    addTransmissionResource(resource)
   }
 
   function getPartForResource(
@@ -223,15 +246,8 @@ export function ResourceTab({
                 key={resource.id}
                 resource={resource}
                 editing={editing}
-                onUpdate={patch =>
-                  updateSongResource(
-                    resource.id,
-                    patch
-                  )
-                }
-                onDelete={() =>
-                  deleteSongResource(resource.id)
-                }
+                onUpdate={patch => updateSongResource(resource, patch)}
+                onDelete={() => deleteSongResource(resource)}
               />
 
             ))}
@@ -308,9 +324,9 @@ export function ResourceTab({
                           key={resource.id}
                           resource={resource}
                           editing={editing}
-                          onUpdate={patch => updateTransmissionResource(resource.id, patch)}
+                          onUpdate={patch => updateTransmissionResource(resource, patch)}
                           arrangementItemsForPart={arrItems}
-                          onDelete={() => deleteTransmissionResource(resource.id)}
+                          onDelete={() => deleteTransmissionResource(resource)}
                         />
                       ))}
                     </div>

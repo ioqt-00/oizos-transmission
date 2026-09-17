@@ -3,7 +3,7 @@ import { GridEditor, GridRender } from './components/Grid';
 import { StructureEditor, StructureRender } from './components/Structure';
 import { ArrangementTab, ArrangementEditor } from './components/Arrangement';
 import { ResourceTab } from './components/Resource';
-import type { Part, Score, GridBlock, Measure, StructureItem, Song, ArrangementItem, SongResource, TransmissionResource } from './types/song';
+import type { Part, Score, Song, ArrangementItem, SongResource, TransmissionResource } from './types/song';
 
 const emptySong = {
   title:'', artist:'', composer:'', arranger:'', duration:'', tempo:'',
@@ -162,17 +162,11 @@ function Creator({form, setForm, onCancel, onSaved}:any){
 
 function Editor({songInput, form, setForm, tab, setTab, onSaved, onCancel, parts, onUpload}:any){
   const [song, setSong] = useState<Song>(songInput)
-  const [blocks, setBlocks] = useState<GridBlock[]>(song.blocks)
-  const [measures, setMeasures] = useState<Measure[]>(song.measures)
-  const [structure, setStructure] = useState<StructureItem[]>(song.structure)
-  const [arrangement, setArrangement] = useState<ArrangementItem[]>(song.arrangement)
-  const [songResources, setResources] = useState<SongResource[]>(song.song_resources)
-  const [transmissionResources, setTransmissionResources] = useState<TransmissionResource[]>(song.transmission_resources)
 
   async function saveSong(e:React.FormEvent){
     e.preventDefault()
     const r=await fetch(`/api/songs/${song.id}`,{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks, measures, structure, arrangement, song_resources: songResources, transmission_resources: transmissionResources})
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form, blocks: song.blocks, measures: song.measures, structure: song.structure, arrangement: song.arrangement, song_resources: song.song_resources, transmission_resources: song.transmission_resources})
     })
     if(!r.ok)return alert(await r.text())
     await onSaved(song.id)
@@ -186,11 +180,11 @@ function Editor({songInput, form, setForm, tab, setTab, onSaved, onCancel, parts
     <Nav tab={tab} setTab={setTab}/>
     {tab==='metadata'&&<MetadataEditor form={form} setForm={setForm}/>}
     {tab==='partitions'&&<PartitionsEditor song={song} parts={parts} onUpload={onUpload}/>}
-    {tab==='grille'&&<GridEditor blocks={blocks} measures={measures} setBlocks={setBlocks} setMeasures={setMeasures}/>}
-    {tab==='structure'&&<StructureEditor blocks={blocks} measures={measures} structure={structure} setStructure={setStructure}/>}
+    {tab==='grille'&&<GridEditor song={song} setSong={setSong}/>}
+    {tab==='structure'&&<StructureEditor song={song} setSong={setSong}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
-    {tab==='arrangement'&&<ArrangementEditor song={song} arrangement={arrangement} setArrangement={setArrangement} setSong={setSong} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={songResources} setResources={setResources} transmissionResources={transmissionResources} setTransmissionResources={setTransmissionResources} editing={true} parts={parts} arrangementItems={arrangement}/>}
+    {tab==='arrangement'&&<ArrangementEditor song={song} setSong={setSong} parts={parts}/>}
+    {tab==='resources'&&<ResourceTab song={song} editing={true} parts={parts}/>}
   </div>
 }
 
@@ -244,7 +238,7 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
     {tab==='structure'&&<StructureRender song={song}/>}
     {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
     {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} resources={song.song_resources} editing={false} transmissionResources={song.transmission_resources} parts={parts} arrangementItems={song.arrangement} />}
+    {tab==='resources'&&<ResourceTab song={song} editing={false} parts={parts}/>}
   </div>
 }
 

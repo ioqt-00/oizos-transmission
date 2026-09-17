@@ -41,6 +41,7 @@ export function ResourceTab({
   const transmissionResources = song.transmission_resources
 
   function addSongResource(edited: SongResource){
+    if (!setSong) return
     setSong(prev => {
       return {
         ...prev,
@@ -55,6 +56,7 @@ export function ResourceTab({
   }
 
   function deleteSongResource(edited: SongResource){
+    if (!setSong) return
     setSong(prev => {
       return {
         ...prev,
@@ -68,6 +70,7 @@ export function ResourceTab({
   }
 
   function updateSongResource(edited: SongResource, patch:Partial<SongResource>){
+    if (!setSong) return
     setSong(prev => {
       if (!prev) return prev
       return {
@@ -102,6 +105,7 @@ export function ResourceTab({
   }
 
   function addTransmissionResource(edited: TransmissionResource){
+    if (!setSong) return
     setSong(prev => {
       return {
         ...prev,
@@ -116,6 +120,7 @@ export function ResourceTab({
   }
 
   function deleteTransmissionResource(edited: TransmissionResource){
+    if (!setSong) return
     setSong(prev => {
       return {
         ...prev,
@@ -129,6 +134,7 @@ export function ResourceTab({
   }
 
   function updateTransmissionResource(edited: TransmissionResource, patch:Partial<TransmissionResource>){
+    if (!setSong) return
     setSong(prev => {
       if (!prev) return prev
       return {
@@ -151,6 +157,7 @@ export function ResourceTab({
     const arrangementItem = arrangementItems.find(
       x => x.part_id === partId 
     )
+    if (!arrangementItem) return
 
     const nextPosition =
       transmissionResources.length > 0

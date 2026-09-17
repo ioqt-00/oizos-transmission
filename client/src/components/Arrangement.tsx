@@ -14,6 +14,7 @@ type ViewerProps = {
 }
 
 type ArrangementResourcePanelProps = {
+  isOpen: boolean,
   arrangementItemId: number,
   song: Song,
   parts: Part[],
@@ -245,6 +246,11 @@ export function ArrangementEditor({
     } | null>(null)
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false)
 
+  function openResourcePanel(id: number){
+    setSelectedItem(id)
+    setIsPanelOpen(true)
+  }
+
   const timeline = useMemo(() => buildTimeline(song), [song])
 
   const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
@@ -454,7 +460,7 @@ export function ArrangementEditor({
                           width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT,
                           backgroundColor: item_resources.length>0 ? "#4b6cb7" : "#a4bbee"
                         }}
-                        onClick={() => setSelectedItem(item.id)}
+                        onClick={() => openResourcePanel(item.id)}
                       >
                         <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
                         <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
@@ -470,7 +476,7 @@ export function ArrangementEditor({
         </div>
       </div>
 
-      {selectedItem && isPanelOpen &&
+      {selectedItem &&
         <ArrangementResourcePanel
           isOpen={isPanelOpen}
           arrangementItemId={selectedItem} song={song} parts={parts} editor={true} 

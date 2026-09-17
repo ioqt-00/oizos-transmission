@@ -2,6 +2,7 @@
 Pour V0.8.2 à presenter:
 add localId (position) for arrangement, in order from left to right, display it in transresource édition instead of realId
 bugs on save when arr is deleted but not associated transmissionResource
+bug suppression bloc avant suppression mesures
 Test mobile 
 View arrangement pour mobile...
 
@@ -24,5 +25,4 @@ Fix songlist for 650px->850px widths
 Empecher collision arrangement (backend)
 Clean up modèle ? 
 audio not loading if url is not root (ex: localhost/test)
-bug suppression bloc avant suppression mesures
 clean up code duplication in arrangement 

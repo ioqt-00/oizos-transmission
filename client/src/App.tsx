@@ -184,7 +184,7 @@ function Editor({songInput, form, setForm, tab, setTab, onSaved, onCancel, parts
     {tab==='structure'&&<StructureEditor song={song} setSong={setSong}/>}
     {tab==='paroles'&&<label>📝 Paroles<textarea className="lyrics-editor tall" value={form.lyrics} onChange={(e)=>setForm({...form,lyrics:e.target.value})}/></label>}
     {tab==='arrangement'&&<ArrangementEditor song={song} setSong={setSong} parts={parts}/>}
-    {tab==='resources'&&<ResourceTab song={song} editing={true} parts={parts}/>}
+    {tab==='resources'&&<ResourceTab song={song} setSong={setSong} editing={true} parts={parts}/>}
   </div>
 }
 

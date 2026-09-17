@@ -1,8 +1,7 @@
 
 Pour V0.8.2 à presenter:
-add localId for arrangement, in order from left to right
+add localId (position) for arrangement, in order from left to right, display it in transresource édition instead of realId
 bugs on save when arr is deleted but not associated transmissionResource
-bug arrId not updated on transmissionResource Editor after saveSong (for rerender after fetchSong)
 Test mobile 
 View arrangement pour mobile...
 

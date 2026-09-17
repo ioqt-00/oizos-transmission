@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './Arrangement.css'
 import type { Part, StructureItem, ArrangementItem, Song, TransmissionResource, SongResource } from '../types/song'
 
@@ -104,12 +104,18 @@ export function ArrangementTab({
   parts
 }: ViewerProps) {
   const [selectedItem, setSelectedItem] = useState<number|null>(null)
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false)
   const arrangementItems = song.arrangement
   const timeline = useMemo(
     () => buildTimeline(song),
     [song]
   )
   const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
+
+  function openResourcePanel(id: number){
+    setSelectedItem(id)
+    setIsPanelOpen(true)
+  }
 
   return (
     <section className="card arrangement-card">
@@ -196,7 +202,7 @@ export function ArrangementTab({
                             width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT,
                             backgroundColor: item_resources.length>0 ? "#4b6cb7" : "#a4bbee"
                           }}
-                          onClick={()=>setSelectedItem(item.id)}
+                          onClick={()=>openResourcePanel(item.id)}
                         >{item.label}</div>
                       )}
                     )}
@@ -208,9 +214,10 @@ export function ArrangementTab({
         </div>
       )}
       {selectedItem &&
-        <ArrangementResourcePanel 
+        <ArrangementResourcePanel
+          isOpen={isPanelOpen}
           arrangementItemId={selectedItem} song={song} parts={parts} editor={false} 
-          onClose={() => setSelectedItem(null)}
+          onClose={() => setIsPanelOpen(false)}
         /> 
       }
       </section>
@@ -236,6 +243,7 @@ export function ArrangementEditor({
       previousEnd: number
       nextStart: number
     } | null>(null)
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false)
 
   const timeline = useMemo(() => buildTimeline(song), [song])
 
@@ -462,10 +470,11 @@ export function ArrangementEditor({
         </div>
       </div>
 
-      {selectedItem &&
-        <ArrangementResourcePanel 
+      {selectedItem && isPanelOpen &&
+        <ArrangementResourcePanel
+          isOpen={isPanelOpen}
           arrangementItemId={selectedItem} song={song} parts={parts} editor={true} 
-          onClose={() => setSelectedItem(null)}
+          onClose={() => setIsPanelOpen(false)}
           setSong={setSong}
         /> 
       }
@@ -474,6 +483,7 @@ export function ArrangementEditor({
 }
 
 export default function ArrangementResourcePanel({
+  isOpen,
   arrangementItemId,
   song,
   parts,
@@ -481,6 +491,20 @@ export default function ArrangementResourcePanel({
   onClose,
   setSong
 }: ArrangementResourcePanelProps) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      const frame = requestAnimationFrame(() => {
+        setVisible(true)
+      })
+
+      return () => cancelAnimationFrame(frame)
+    }
+
+    setVisible(false)
+  }, [isOpen])
+
   function onAddResource(item: TransmissionResource) {
     if (!setSong) return 
     setSong(prev => {
@@ -566,8 +590,10 @@ export default function ArrangementResourcePanel({
 
   return (
     <>
-      <div className="arrangement-resource-backdrop" onClick={onClose}/>
-      <aside className="arrangement-resource-panel" onClick={event => event.stopPropagation()}>
+      <div className={`arrangement-resource-backdrop ${visible ? 'open' : ''}`}
+        onClick={onClose}/>
+      <aside className={`arrangement-resource-panel ${visible ? 'open' : ''}`}
+        onClick={event => event.stopPropagation()}>
         {/* HEADER */}
         <div className="arrangement-resource-panel-header">
           <div>

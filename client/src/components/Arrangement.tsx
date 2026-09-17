@@ -186,13 +186,20 @@ export function ArrangementTab({
                         </div>
                       )
                     })}
-                    {partArrangementItems.map(item => (
-                      <div
-                        key={item.id} className="arrangement-item editor-item"
-                        style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
-                        onClick={()=>setSelectedItem(item.id)}
-                      >{item.label}</div>
-                    ))}
+                    {partArrangementItems.map(item => {
+                      const item_resources = song.transmission_resources.filter(res => res.arrangement_item_id == item.id)
+                      return (
+                        <div
+                          key={item.id} className="arrangement-item editor-item"
+                          style={{
+                            left:item.start_halfbeat*PX_PER_HALFBEAT,
+                            width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT,
+                            backgroundColor: item_resources.length>0 ? "#4b6cb7" : "#a4bbee"
+                          }}
+                          onClick={()=>setSelectedItem(item.id)}
+                        >{item.label}</div>
+                      )}
+                    )}
                   </div>
                 </div>
               )
@@ -429,18 +436,25 @@ export function ArrangementEditor({
                       </div>
                     )
                   })}
-                  {partItems.map(item => (
-                          <div
-                            key={item.id} className="arrangement-item editor-item"
-                            style={{left:item.start_halfbeat*PX_PER_HALFBEAT, width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT}}
-                            onClick={() => setSelectedItem(item.id)}
-                          >
-                            <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
-                            <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
-                            <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
-                            <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
-                          </div>
-                  ))}
+                  {partItems.map(item => {
+                    const item_resources = song.transmission_resources.filter(res => res.arrangement_item_id == item.id)
+                    return (
+                      <div
+                        key={item.id} className="arrangement-item editor-item"
+                        style={{
+                          left:item.start_halfbeat*PX_PER_HALFBEAT,
+                          width:(item.end_halfbeat - item.start_halfbeat)*PX_PER_HALFBEAT,
+                          backgroundColor: item_resources.length>0 ? "#4b6cb7" : "#a4bbee"
+                        }}
+                        onClick={() => setSelectedItem(item.id)}
+                      >
+                        <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
+                        <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
+                        <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
+                        <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
+                      </div>
+                    )}
+                  )}
                 </div>
               </div>
             )

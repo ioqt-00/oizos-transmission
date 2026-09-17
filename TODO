@@ -3,7 +3,6 @@ Pour V0.8.2 à presenter:
 add localId for arrangement, in order from left to right
 bugs on save when arr is deleted but not associated transmissionResource
 bug arrId not updated on transmissionResource Editor after saveSong (for rerender after fetchSong)
-Distinguer arrangementItem avec ressource et sans
 Animate ResourcePanel
 Test mobile 
 View arrangement pour mobile...

@@ -1,7 +1,5 @@
 
 Pour V0.8.2 à presenter:
-bugs on save when arr is deleted but not associated transmissionResource
-bug suppression bloc avant suppression mesures
 Test mobile 
 View arrangement pour mobile...
 
@@ -10,7 +8,7 @@ Confirmation on close without save
 Filter ressources par pupitre dans onglet ressources
 Add vue pupitre, selection de morceaux et drive de ressources pour chaque morceaux
 ex: selection pupitre -> "12 partitions et 34 ressources" -> liste des morceaux avec pour chaque entrée "x partition et x ressources"
-+ timeline globale + metadata 
++ timeline globale + metadata  
 
 Pour V1:
 Authentication minimale
@@ -25,3 +23,7 @@ Empecher collision arrangement (backend)
 Clean up modèle ? 
 audio not loading if url is not root (ex: localhost/test)
 clean up code duplication in arrangement 
+
+bugs on save when arr is deleted but not associated transmissionResource
+bug suppression bloc avant suppression mesures
+bug suppression bloc utilisé dans structures

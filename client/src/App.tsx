@@ -105,7 +105,7 @@ function App() {
           </button>)}
         </aside>
       </div>
-      <section className="content">
+      <section className="content" hidden={sidebarOpen ? true : false}>
         {!selected&&!editing&&!creating&&<Landing />}
         {creating&&<Creator form={form} setForm={setForm} onSaved={handleSongSaved} onCancel={()=>setCreating(false)}/>}
 
@@ -128,8 +128,7 @@ function Landing(){
     <div className="warning">
       <h2>Merci pour l'intérêt {":)"}</h2>
       <p>Cette app est en cours de développement. Les problèmes connus pour le moment:</p>
-      <li>Erreur à la sauvegarde si plusieurs objets interdépendants sont modifiés, fix en cours</li>
-      <li>A la modification de plusieurs objets en même temps, y a des nombres chelous qui apparaissent. Pas d'inquiétude, c'est pas dangereux</li>
+      <li>Erreur à la sauvegarde si plusieurs objets interdépendants sont modifiés</li>
       <li>La vue arrangement est inutilisable sur mobile, pour avoir un aperçu, passez en mode paysage</li>
       <li>L'affichage est moche sur des écrans plus petits que mon téléphone, parce que j'ai pas testé</li>
       <li>L'upload de fichier est désactivé pour des raisons de sécurité, mais c'est en prévision</li>

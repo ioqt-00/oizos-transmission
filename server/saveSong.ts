@@ -1,6 +1,7 @@
 import db from "./db"
 import { GridBlock, Measure, StructureItem, ArrangementItem, SongResource, TransmissionResource } from '../client/src/types/song.ts'
 import { isResourceType } from './services/song.ts'
+import { Request, Response } from "express"
 
 type SaveSongPayload = {
   title?: string
@@ -36,7 +37,7 @@ function assertResourceType(type: string) {
   }
 }
 
-export function saveSong (req, res) {
+export function saveSong (req: Request, res: Response) {
   const songId = Number(req.params.id)
   const data = req.body as SaveSongPayload
 

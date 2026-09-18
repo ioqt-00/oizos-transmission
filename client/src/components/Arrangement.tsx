@@ -168,7 +168,7 @@ export function ArrangementTab({
               })}
             </div>
             {parts.map(part => {
-              const partArrangementItems = arrangementItems.filter(item => item.part_id === part.id)
+              const partArrangementItems = arrangementItems.filter(item => item.part_id === part.id).sort((a,b)=>a.start_halfbeat-b.start_halfbeat)
               return (
                 <div className="arrangement-part-row" key={part.id}>
                   <div className="arrangement-part-name">{part.name}</div>
@@ -193,7 +193,7 @@ export function ArrangementTab({
                         </div>
                       )
                     })}
-                    {partArrangementItems.map(item => {
+                    {partArrangementItems.map((item, index) => {
                       const item_resources = song.transmission_resources.filter(res => res.arrangement_item_id == item.id)
                       return (
                         <div
@@ -204,7 +204,7 @@ export function ArrangementTab({
                             backgroundColor: item_resources.length>0 ? "#4b6cb7" : "#a4bbee"
                           }}
                           onClick={()=>openResourcePanel(item.id)}
-                        >{item.label}</div>
+                        >{`${index + 1} ${item.label}`}</div>
                       )}
                     )}
                   </div>
@@ -236,6 +236,7 @@ export function ArrangementEditor({
 }: EditorProps) {
   const arrangement = song.arrangement
   const [selectedItem, setSelectedItem] = useState<number|null>(null)
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false)
   const [resizing, setResizing] = useState<{
       id: number
       initialX: number
@@ -244,16 +245,13 @@ export function ArrangementEditor({
       previousEnd: number
       nextStart: number
     } | null>(null)
-  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false)
+  const timeline = useMemo(() => buildTimeline(song), [song])
+  const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
   function openResourcePanel(id: number){
     setSelectedItem(id)
     setIsPanelOpen(true)
   }
-
-  const timeline = useMemo(() => buildTimeline(song), [song])
-
-  const totalHalfbeats = timeline.length? timeline[timeline.length - 1].end : 0
 
   function addItem(edited: ArrangementItem){
     setSong(prev => {
@@ -264,7 +262,7 @@ export function ArrangementEditor({
           [
             ...(prev.arrangement), 
             edited
-          ]
+          ].sort((a,b) => a.start_halfbeat - b.start_halfbeat)
       }
     })
   }
@@ -422,7 +420,7 @@ export function ArrangementEditor({
           </div>
 
           {parts.map(part => {
-            const partItems = arrangement.filter(item => item.part_id === part.id)
+            const partItems = arrangement.filter(item => item.part_id === part.id).sort((a,b) => a.start_halfbeat - b.start_halfbeat)
 
             return (
               <div className="arrangement-part-row" key={part.id}>
@@ -450,7 +448,7 @@ export function ArrangementEditor({
                       </div>
                     )
                   })}
-                  {partItems.map(item => {
+                  {partItems.map((item, index) => {
                     const item_resources = song.transmission_resources.filter(res => res.arrangement_item_id == item.id)
                     return (
                       <div
@@ -462,10 +460,24 @@ export function ArrangementEditor({
                         }}
                         onClick={() => openResourcePanel(item.id)}
                       >
-                        <div className="arrangement-resize-left" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'left')} onPointerUp={finishResize}/>
-                        <input value={item.label} onChange={e => {updateItem(item,{label:e.target.value})}}/>
+                        <div className="arrangement-resize-left"
+                          onClick={e => e.stopPropagation()}
+                          onPointerDown={e => startResize(e, item)}
+                          onPointerMove={e => handleResizeMove(e, item, 'left')}
+                          onPointerUp={finishResize}
+                        />
+                        <div>{index+1}</div>
+                        <input value={item.label}
+                          onClick={e => e.stopPropagation()}
+                          onChange={e => {updateItem(item,{label:e.target.value})}}
+                        />
                         <button type="button" className="arrangement-delete" onClick={() => deleteItem(item)}>×</button>
-                        <div className="arrangement-resize" onPointerDown={e => startResize(e, item)} onPointerMove={e => handleResizeMove(e, item, 'right')} onPointerUp={finishResize}/>
+                        <div className="arrangement-resize"
+                          onClick={e => e.stopPropagation()}
+                          onPointerDown={e => startResize(e, item)}
+                          onPointerMove={e => handleResizeMove(e, item, 'right')}
+                          onPointerUp={e => {e.stopPropagation;finishResize()}}
+                        />
                       </div>
                     )}
                   )}

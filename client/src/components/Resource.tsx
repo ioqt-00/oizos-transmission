@@ -194,7 +194,7 @@ export function ResourceTab({
   function getArrangementItemsForPart(part: Part) {
     return arrangementItems.filter(
       x => x.song_id === song.id && x.part_id === part.id
-    )
+    ).sort((a,b) => a.start_halfbeat - b.start_halfbeat)
   }
 
   const transmissionByPart =
@@ -399,7 +399,7 @@ function SongResourceCard({
           }
           placeholder="Titre"
         />
-        <select
+        <select className="resource-type-selection"
           value={resource.type}
           onChange={e => onUpdate({type: e.target.value as SongResource['type']})}
         >
@@ -408,7 +408,7 @@ function SongResourceCard({
           )}
         </select>
 
-        <textarea
+        <textarea className='resource-content-input'
           value={resource.content}
           onChange={e => onUpdate({content: e.target.value})}
           placeholder={
@@ -465,7 +465,7 @@ function TransmissionResourceCard({
           onChange={e => onUpdate({title: e.target.value})}
           placeholder="Titre"
         />
-        <select
+        <select className='resource-type-selection'
           value={resource.type}
           onChange={e => onUpdate({type:e.target.value as TransmissionResource['type']})}
         >
@@ -476,19 +476,19 @@ function TransmissionResourceCard({
           )}
         </select>
 
-        <textarea
+        <textarea className='resource-content-input'
           value={resource.content}
           onChange={e => onUpdate({content: e.target.value})}
           placeholder={resource.type === 'link' ? 'URL' : 'Contenu'}
         />
-        <select
+        <select className='resource-arrangement-item-selection'
           value={resource.arrangement_item_id}
           onChange={e => onUpdate({arrangement_item_id:Number(e.target.value) as TransmissionResource['arrangement_item_id']})}
         >
           {
           arrangementItemsForPart.map(
-            item => (
-              <option key={item.id} value={item.id}>{item.id} {item.label}</option>
+            (item, index) => (
+              <option key={item.id} value={item.id}>{index+1} {item.label}</option>
             )
           )}
         </select>

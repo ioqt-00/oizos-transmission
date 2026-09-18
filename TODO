@@ -1,6 +1,5 @@
 
 Pour V0.8.2 à presenter:
-add localId (position) for arrangement, in order from left to right, display it in transresource édition instead of realId
 bugs on save when arr is deleted but not associated transmissionResource
 bug suppression bloc avant suppression mesures
 Test mobile 

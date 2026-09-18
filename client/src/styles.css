@@ -65,13 +65,21 @@ label input,label textarea,label select{border:1px solid #d6d9de;border-radius:7
 .lyrics-editor{font-family:ui-monospace,SFMono-Regular,monospace}.tall{min-height:400px}
 .block-editor{border:1px solid #d7dbe0;border-radius:10px;padding:16px;margin-bottom:16px;background:#fafbfc}
 .block-head{display:grid;grid-template-columns:220px 1fr auto;gap:10px;align-items:center;margin-bottom:15px}.block-name{font-weight:700;font-size:18px}.block-head input{border:1px solid #ddd;border-radius:6px;padding:8px;background:#fff}.block-note{min-width:0}.measure-grid{display:flex;flex-wrap:wrap;gap:8px}.measure{width:150px;min-height:105px;border:1px solid #cfd3d8;border-radius:7px;background:#fff;padding:10px;position:relative}
-.measure-number{font-size:11px;color:#999}.measure input{width:100%;font-size:19px;font-weight:650;border:0;border-bottom:1px solid #ddd;padding:8px 0;margin-bottom:7px}.measure select{width:100%;border:0;color:#666;font-size:12px;background:transparent}.delete-measure{position:absolute;right:5px;top:3px;background:transparent;color:#9c3030;font-size:16px}.add-measure{margin-top:12px;background:#eef0f3;padding:8px 11px;border-radius:6px}
+
+.measure-number{font-size:11px;color:#999}
+.measure input{width:100%;font-size:19px;font-weight:650;border:0;border-bottom:1px solid #ddd;padding:8px 0;margin-bottom:7px}
+.measure select{width:100%;border:0;color:#666;font-size:12px;background:transparent}
+.delete-measure{position:absolute;right:5px;top:3px;background:transparent;color:#9c3030;font-size:16px}
+.add-measure{margin-top:12px;background:#eef0f3;padding:8px 11px;border-radius:6px}
 
 .render-block{margin-top:20px}
-.render-block-title{font-weight:700;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px}
+.render-block-title{font-weight:700;font-size:18px;border-top:4px solid #bbb;padding:10px}
 .render-block-title small{display:block;color:#888;font-weight:400;font-size:12px;margin-top:3px}
 .render-measures{display:flex;flex-wrap:wrap;margin-top:10px}
-.render-measure{width:145px;min-height:78px;border:1px solid #bbb;border-top:0;padding:9px;display:flex;flex-direction:column}.render-measure small{color:#999}.render-measure strong{font-size:20px;margin:auto 0}.render-measure span{font-size:11px;color:#777}
+.render-measure{width:145px;min-height:78px;border:1px solid #bbb;padding:9px;display:flex;flex-direction:column}
+.render-measure small{color:#999}
+.render-measure strong{font-size:20px;margin:auto 0}
+.render-measure span{font-size:11px;color:#777}
 
 .topbar-bug-button {
   display: inline-flex;

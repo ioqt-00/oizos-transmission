@@ -141,7 +141,14 @@ export function GridRender({song}:any){
       {song.blocks.map((b:GridBlock)=>
           <div className="render-block" key={b.id}>
               <div className="render-block-title">{b.name}{b.notes&&<small>{b.notes}</small>}</div>
-              <div className="render-measures">{song.measures.filter((m:Measure)=>m.block_id===b.id).map((m:Measure,i:number)=><div className="render-measure" key={m.id}><small>{i+1}</small><strong>{m.chord||'—'}</strong><span>{m.beats}/4</span></div>)}</div>
+              <div className="render-measures">
+                {song.measures.filter((m:Measure)=>m.block_id===b.id)
+                  .map((m:Measure,i:number) => 
+                    <div className="render-measure" key={m.id}>
+                      <small>{i+1}</small><strong>{m.chord||'—'}</strong><span>{m.beats}/4</span>
+                    </div>
+                )}
+              </div>
           </div>
       )}
   </section>

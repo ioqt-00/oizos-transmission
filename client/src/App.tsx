@@ -221,21 +221,10 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
         <Meta label="Compositeur" value={song.composer}/><Meta label="Arrangeur" value={song.arranger}/><Meta label="Tonalité" value={song.key_signature}/><Meta label="Tempo" value={song.tempo}/><Meta label="Durée" value={song.duration}/>
       </div>
     }
-    {tab==='partitions' && 
-      <section className="card"><h3>🎼 Partitions</h3>
-        <div className="parts-grid">
-          {parts.map(
-            (p:Part)=>{
-              const s=song.scores.find((x:Score)=>x.part_id===p.id);
-              return <div className="part-card" key={p.id}><strong>{p.name}</strong>{s?<div className="score-actions"><a href={`/uploads/${s.file_path}`} target="_blank">📄 Ouvrir</a></div>:<div className="muted"> Aucune partition</div>}</div>
-            }
-          )}
-        </div>
-      </section>
-    }
+    {tab==='partitions' && <Partition parts={parts} song={song}/>}
     {tab==='grille'&& <GridRender song={song}/>}
     {tab==='structure'&&<StructureRender song={song}/>}
-    {tab==='paroles'&&<section className="card"><h3>📝 Paroles</h3>{song.lyrics?<pre className="lyrics">{song.lyrics}</pre>:<p className="muted">Aucune parole renseignée.</p>}</section>}
+    {tab==='paroles'&&<Paroles song={song}/>}
     {tab==='arrangement'&&<ArrangementTab song={song} parts={parts}/>}
     {tab==='resources'&&<ResourceTab song={song} editing={false} parts={parts}/>}
   </div>
@@ -243,12 +232,38 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
 
 function Meta({label,value}:{label:string,value:string}){return <div><span>{label}</span><strong>{value||'—'}</strong></div>}
 
+function Partition({parts, song}) {
+  return (
+    <section className="card"><h3>🎼 Partitions</h3>
+      <div className="parts-grid">
+        {parts.map(
+          (p:Part)=>{
+            const s=song.scores.find((x:Score)=>x.part_id===p.id);
+            return <div className="part-card" key={p.id}><strong>{p.name}</strong>{s?<div className="score-actions"><a href={`/uploads/${s.file_path}`} target="_blank">📄 Ouvrir</a></div>:<div className="muted"> Aucune partition</div>}</div>
+          }
+        )}
+      </div>
+    </section>
+  )
+}
+
+function Paroles({song}) {
+  return (
+    <section className="card">
+      <h3>📝 Paroles</h3>
+      {song.lyrics
+        ?<pre className="lyrics">{song.lyrics}</pre>
+        :<p className="muted">Aucune parole renseignée.</p>
+      }
+    </section>
+  )
+}
+
 function Nav({tab, setTab}:any){
   return (
     <div className='navigation-container'>
       <select value={tab} onChange={e => setTab(e.target.value)} className='mobile-song-nav'>
         <option value="metadata">⚙️ Metadata</option>
-        <option value="partitions">🎼 Partitions</option>
         <option value="grille">🎹 Grille</option>
         <option value="structure">🧭 Structure</option>
         <option value="paroles">📝 Paroles</option>
@@ -257,7 +272,6 @@ function Nav({tab, setTab}:any){
       </select> 
       <nav className="desktop-song-nav">
         {([['metadata','⚙️ Metadata'],
-          ['partitions','🎼 Partitions'],
           ['grille','🎹 Grille'],
           ['structure','🧭 Structure'],
           ['paroles','📝 Paroles'],

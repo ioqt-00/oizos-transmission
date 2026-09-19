@@ -2,7 +2,6 @@
 Pour V0.8.2 à presenter:
 Test mobile 
 View arrangement pour mobile
-Interact with resources in sidepanel 
 Improve styling resources tab, add display arrangementId for transmissionResource
 Display resources even if arrangementItem doesnt exist
 Clarifier affichage partie dans arrangement

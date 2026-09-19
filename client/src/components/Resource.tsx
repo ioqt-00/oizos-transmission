@@ -10,10 +10,7 @@ type SongResourcesProps = {
   editing?: boolean
 }
 
-const resourceIcons: Record<
-  SongResource['type'],
-  string
-> = {
+export const resourceIcons: Record<SongResource['type'], string> = {
   audio: '🎧',
   video: '🎥',
   image: '🖼️',
@@ -21,10 +18,7 @@ const resourceIcons: Record<
   link: '🔗'
 }
 
-const resourceLabels: Record<
-  SongResource['type'],
-  string
-> = {
+export const resourceLabels: Record<SongResource['type'], string> = {
   audio: 'Audio',
   video: 'Vidéo',
   image: 'Image',
@@ -437,7 +431,7 @@ type TransmissionResourceCardProps = {
   arrangementItemsForPart: ArrangementItem[]
 }
 
-function TransmissionResourceCard({
+export function TransmissionResourceCard({
   resource,
   editing,
   onUpdate,

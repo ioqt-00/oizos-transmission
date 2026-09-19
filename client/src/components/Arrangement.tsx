@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './Arrangement.css'
-import type { Part, StructureItem, ArrangementItem, Song, TransmissionResource, SongResource } from '../types/song'
+import type { Part, StructureItem, ArrangementItem, Song, TransmissionResource } from '../types/song'
+import { TransmissionResourceCard } from './Resource'
 
 type EditorProps = {
   song: Song
@@ -80,20 +81,6 @@ function roundToHalfbeat(value: number) {
     0,
     Math.round(value / PX_PER_HALFBEAT)
   )
-}
-
-const resourceIcons: Record<SongResource['type'], string> = {
-  audio: '🎧',
-  video: '🎥',
-  note: '📝',
-  link: '🔗'
-}
-
-const resourceLabels: Record<SongResource['type'], string> = {
-  audio: 'Audio',
-  video: 'Vidéo',
-  note: 'Note',
-  link: 'Lien'
 }
 
 /* ============================================================
@@ -660,7 +647,6 @@ export default function ArrangementResourcePanel({
         </div>
 
         {/* NOTES DE L'ARRANGEMENT */}
-
         {arrangementItem.notes && (
           <div className="arrangement-resource-panel-notes">
             <div className="arrangement-resource-panel-section-title"> Note de direction</div>
@@ -677,11 +663,9 @@ export default function ArrangementResourcePanel({
               Ressources
             </div>
             {editor && (
-              <button
-                type="button"
-                className="arrangement-resource-add-button"
-                onClick={addResource}
-              >+</button>
+              <p
+                className="arrangement-resource-edit-warning"
+              >Ces ressources sont modifiables dans l'onglet Ressources</p>
             )}
           </div>
 
@@ -692,76 +676,9 @@ export default function ArrangementResourcePanel({
           ) : (
             <div className="arrangement-resource-list">
               {itemResources.map(resource => (
-                <div key={resource.id} className="arrangement-resource-card">
-                  <div className="arrangement-resource-icon">
-                    {resourceIcons[resource.type]}
-                  </div>
-
                   <div className="arrangement-resource-body">
-                    {editor ? (
-                      <>
-                        <div className="arrangement-resource-edit-row">
-                          <select
-                            value={resource.type}
-                            onChange={event =>
-                              onUpdateResource(resource, {type: event.target.value as TransmissionResource['type']})
-                            }
-                          >
-                            {Object.entries(resourceLabels).map(
-                              ([value, label]) => (<option key={value} value={value}>{label}</option>)
-                            )}
-                          </select>
-                          <button
-                            type="button"
-                            className="arrangement-resource-delete"
-                            onClick={() => onDeleteResource(resource)} 
-                            title="Supprimer"
-                          > 🗑️ </button>
-                        </div>
-
-                        <input
-                          type="text"
-                          className="arrangement-resource-title-input"
-                          value={resource.title}
-                          onChange={event => onUpdateResource(resource, {title: event.target.value})}
-                          placeholder="Titre"
-                        />
-
-                        <textarea
-                          className="arrangement-resource-content-input"
-                          value={resource.content}
-                          onChange={event => onUpdateResource(resource, {content: event.target.value})}
-                          placeholder={ 
-                            resource.type === 'link'
-                              ? 'https://...'
-                              : 'Contenu de la ressource...'
-                          }
-                          rows={3}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <div className="arrangement-resource-title">
-                          {resource.title}
-                        </div>
-                        {resource.type === 'link' ? (
-                          <a
-                            href={resource.content}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="arrangement-resource-link"
-                          >
-                            {resource.content}
-                          </a>
-                        ) : (
-                          <div className="arrangement-resource-content">
-                            {resource.content}
-                          </div>
-                        )}
-                      </>
-                    )}
+                    <TransmissionResourceCard resource={resource} editing={false} arrangementItemsForPart={[]} onUpdate={patch => onUpdateResource(resource, patch)} onDelete={() => onDeleteResource(resource)} />
                   </div>
-                </div>
               ))}
             </div>
           )}

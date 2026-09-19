@@ -641,16 +641,28 @@
 /* MOBILE */
 
 @media (max-width: 600px) {
-
-  .arrangement-resource-panel {
-    width: min(420px, 94vw);
-  }
-
   .arrangement-resource-panel-header {
     padding: 16px;
   }
 
   .arrangement-resource-panel-resources {
     padding: 14px 16px 25px;
+  }
+
+  .arrangement-resource-panel {
+    width: min(420px, 94vw);
+
+    top: auto;
+    bottom: 0;
+    right: 0;
+
+    width: 100%;
+    height: min(85dvh, 700px);
+
+    transform: translateY(100%);
+  }
+
+  .arrangement-resource-panel.open {
+    transform: translateY(0);
   }
 }

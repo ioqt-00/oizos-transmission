@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-19T12:01:35.327Z",
+  "exportedAt": "2026-09-19T12:59:49.390Z",
   "parts": [
     {
       "id": 13,
@@ -82,7 +82,7 @@
       "lyrics": "A chaque fois que nos regards\nSe croisent au vol je m’imagine\nNuances de gris, romans de gare\nUne histoire sensuelle et câline\nDes liens sacrés qui nous unissent\nLe secret d’un amour perdu\nChante sirène tes artifices\nLaisse-moi plonger dans tes nues\nJe veux me noyer dans ta voix\nDans le chaud parfum de tes mots\nNe vivre que d’eau fraîche et de toi\nUlysse épris de Calypso\n\nEmbrasse-moi jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi pour un jour, pour une heure\nFais de ta bouche en fleur\nMon tout dernier repas\n\nEt si l’illusion est mon arme\nLe seul chemin vers mon désir\nDéverse en mon cœur tous tes charmes\nTes sortilèges, tes élixirs\nQu’importe l’ivresse tant qu’le flacon\nDe tes lèvres sur ma bouche posée\nMe laisse boire à l’aiguillon\nDes plaisirs rares et opiacés\nCar si cet amour n’est en somme\nQu’le fruit d’mon imagination\nBlanche neige ou rouge pomme\nLaquelle est la pire des poisons\n\nEmbrasse-moi, jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi que tes lèvres m’enchainent\nEt versent dans mes veines\nL’amour et le trépas\n\nL’amour est un poison vorace\nL’état de manque est permanent\nA chaque baiser posé qui passe\nIl m’en faut toujours plus souvent\nUne drogue dure et délétère\nLe sourire froid de la strychnine\nMon corps se délite et se perd\nLorsque j’embrasse mon héroïne\nOh toi sombre héros des seringues\nDont la vie tient dans une cuillère\nSi la désintox te rend dingue\nMet de l’overdose dans ta prière\n\nEmbra(s)se-moi, mets-moi le corps en flammes\nDéchire mes os et mon âme\nLèvres ardentes et feu de joie\nEmbrase-moi, que ma vie se consume\nEn volutes d’écume\nEn un souffle de toi\n",
       "url_drive": "https://drive.google.com/drive/folders/1E4mkjsTEofBK9Oxlljm45wzLnxeGC7qz",
       "created_at": "2026-08-31 10:52:07",
-      "updated_at": "2026-09-19 11:52:21"
+      "updated_at": "2026-09-19 12:57:47"
     },
     {
       "id": 3,
@@ -1033,6 +1033,14 @@
       "title": "Embrasse-moi_SonsduLac_0724.mp3",
       "content": "uploads/Embrasse Moi/Embrasse-moi_SonsduLac_0724.mp3",
       "position": 1
+    },
+    {
+      "id": 72,
+      "song_id": 1,
+      "type": "image",
+      "title": "Embrasse-moi structure.JPG",
+      "content": "uploads/Embrasse Moi/Embrasse-moi structure.JPG",
+      "position": 2
     }
   ],
   "transmission_resources": [
@@ -1125,6 +1133,51 @@
       "title": "Cordes Contrechant  Violoncelle Embrasse Moi.m4a",
       "content": "uploads/Embrasse Moi/Cordes Contrechant  Violoncelle Embrasse Moi.m4a",
       "position": 9
+    },
+    {
+      "id": 21,
+      "song_id": 1,
+      "arrangement_item_id": 126,
+      "type": "note",
+      "title": "Notes pour la partie basse",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "position": 10
+    },
+    {
+      "id": 22,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "video",
+      "title": "Embrasse_Refrain.mp4",
+      "content": "uploads/Embrasse Moi/Embrasse_Refrain.mp4",
+      "position": 11
+    },
+    {
+      "id": 23,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "video",
+      "title": "EmbrasseMoi_A.mp4",
+      "content": "uploads/Embrasse Moi/EmbrasseMoi_A.mp4",
+      "position": 12
+    },
+    {
+      "id": 24,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "video",
+      "title": "Nappes.mp4",
+      "content": "uploads/Embrasse Moi/Nappes.mp4",
+      "position": 13
+    },
+    {
+      "id": 25,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "video",
+      "title": "RefrainHigh.mp4",
+      "content": "uploads/Embrasse Moi/RefrainHigh.mp4",
+      "position": 14
     }
   ]
 }

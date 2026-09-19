@@ -16,6 +16,7 @@ const resourceIcons: Record<
 > = {
   audio: '🎧',
   video: '🎥',
+  image: '🖼️',
   note: '📝',
   link: '🔗'
 }
@@ -26,6 +27,7 @@ const resourceLabels: Record<
 > = {
   audio: 'Audio',
   video: 'Vidéo',
+  image: 'Image',
   note: 'Note',
   link: 'Lien'
 }
@@ -78,8 +80,7 @@ export function ResourceTab({
 
         song_resources:
           prev.song_resources.map(item =>
-            item.id === edited.id
-              ? { ...item, ...patch }
+            item.id === edited.id              ? { ...item, ...patch }
               : item
           )
       }
@@ -526,6 +527,11 @@ function ResourceContent({
   if (type === 'video') {
     return (
       <video controls src={content}/>
+    )
+  }
+  if (type === 'image') {
+    return (
+      <img src={content}  style={{ width: 500, height: 600 }}/>
     )
   }
   return (

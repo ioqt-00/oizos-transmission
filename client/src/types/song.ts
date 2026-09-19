@@ -69,7 +69,7 @@ export type Song = {
 export type SongResource = {
   id: number
   song_id: number
-  type: 'audio' | 'video' | 'note' | 'link'
+  type: 'audio' | 'video' | 'image' | 'note' | 'link'
   title: string
   content: string
   position: number

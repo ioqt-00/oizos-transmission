@@ -4,10 +4,9 @@ Test mobile
 View arrangement pour mobile
 Interact with resources in sidepanel 
 Improve styling resources tab, add display arrangementId for transmissionResource
-Display resources eve,n if arrangementItem doesnt exist
+Display resources even if arrangementItem doesnt exist
 Clarifier affichage partie dans arrangement
 Réutiliser arrangementItem avec resources ? 
-Ajouter images dans resources 
 Une TR devrait pouvoir être associée à plusieurs AI sur différentes parts...
 
 Pour V0.9.1:

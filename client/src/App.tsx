@@ -230,7 +230,9 @@ function RenderSong({song,tab,setTab,onEdit,onDelete,parts}:any){
   </div>
 }
 
-function Meta({label,value}:{label:string,value:string}){return <div><span>{label}</span><strong>{value||'—'}</strong></div>}
+function Meta({label,value}:{label:string,value:string}){
+  return <div><span>{label}</span><strong>{value||'—'}</strong></div>
+}
 
 function Partition({parts, song}) {
   return (

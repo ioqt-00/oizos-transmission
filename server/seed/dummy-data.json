@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-09T12:06:31.174Z",
+  "exportedAt": "2026-09-19T12:01:35.327Z",
   "parts": [
     {
       "id": 13,
@@ -30,6 +30,11 @@
     {
       "id": 18,
       "name": "Médium",
+      "position": 5
+    },
+    {
+      "id": 30,
+      "name": "Guitare",
       "position": 5
     },
     {
@@ -74,10 +79,10 @@
       "tempo": "",
       "key_signature": "",
       "notes": "",
-      "lyrics": "\n\nA chaque fois que nos regards\nSe croisent au vol je m’imagine\nNuances de gris, romans de gare\nUne histoire sensuelle et câline\nDes liens sacrés qui nous unissent\nLe secret d’un amour perdu\nChante sirène tes artifices\nLaisse-moi plonger dans tes nues\nJe veux me noyer dans ta voix\nDans le chaud parfum de tes mots\nNe vivre que d’eau fraîche et de toi\nUlysse épris de Calypso\n\nEmbrasse-moi jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi pour un jour, pour une heure\nFais de ta bouche en fleur\nMon tout dernier repas\n\nEt si l’illusion est mon arme\nLe seul chemin vers mon désir\nDéverse en mon cœur tous tes charmes\nTes sortilèges, tes élixirs\nQu’importe l’ivresse tant qu’le flacon\nDe tes lèvres sur ma bouche posée\nMe laisse boire à l’aiguillon\nDes plaisirs rares et opiacés\nCar si cet amour n’est en somme\nQu’le fruit d’mon imagination\nBlanche neige ou rouge pomme\nLaquelle est la pire des poisons\n\nEmbrasse-moi, jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi que tes lèvres m’enchainent\nEt versent dans mes veines\nL’amour et le trépas\n\nL’amour est un poison vorace\nL’état de manque est permanent\nA chaque baiser posé qui passe\nIl m’en faut toujours plus souvent\nUne drogue dure et délétère\nLe sourire froid de la strychnine\nMon corps se délite et se perd\nLorsque j’embrasse mon héroïne\nOh toi sombre héros des seringues\nDont la vie tient dans une cuillère\nSi la désintox te rend dingue\nMet de l’overdose dans ta prière\n\nEmbra(s)se-moi, mets-moi le corps en flammes\nDéchire mes os et mon âme\nLèvres ardentes et feu de joie\nEmbrase-moi, que ma vie se consume\nEn volutes d’écume\nEn un souffle de toi\n",
+      "lyrics": "A chaque fois que nos regards\nSe croisent au vol je m’imagine\nNuances de gris, romans de gare\nUne histoire sensuelle et câline\nDes liens sacrés qui nous unissent\nLe secret d’un amour perdu\nChante sirène tes artifices\nLaisse-moi plonger dans tes nues\nJe veux me noyer dans ta voix\nDans le chaud parfum de tes mots\nNe vivre que d’eau fraîche et de toi\nUlysse épris de Calypso\n\nEmbrasse-moi jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi pour un jour, pour une heure\nFais de ta bouche en fleur\nMon tout dernier repas\n\nEt si l’illusion est mon arme\nLe seul chemin vers mon désir\nDéverse en mon cœur tous tes charmes\nTes sortilèges, tes élixirs\nQu’importe l’ivresse tant qu’le flacon\nDe tes lèvres sur ma bouche posée\nMe laisse boire à l’aiguillon\nDes plaisirs rares et opiacés\nCar si cet amour n’est en somme\nQu’le fruit d’mon imagination\nBlanche neige ou rouge pomme\nLaquelle est la pire des poisons\n\nEmbrasse-moi, jusqu’à la fin du rêve\nJusqu’au temps qui s’achève\nJette-toi dans mes bras\nEmbrasse-moi que tes lèvres m’enchainent\nEt versent dans mes veines\nL’amour et le trépas\n\nL’amour est un poison vorace\nL’état de manque est permanent\nA chaque baiser posé qui passe\nIl m’en faut toujours plus souvent\nUne drogue dure et délétère\nLe sourire froid de la strychnine\nMon corps se délite et se perd\nLorsque j’embrasse mon héroïne\nOh toi sombre héros des seringues\nDont la vie tient dans une cuillère\nSi la désintox te rend dingue\nMet de l’overdose dans ta prière\n\nEmbra(s)se-moi, mets-moi le corps en flammes\nDéchire mes os et mon âme\nLèvres ardentes et feu de joie\nEmbrase-moi, que ma vie se consume\nEn volutes d’écume\nEn un souffle de toi\n",
       "url_drive": "https://drive.google.com/drive/folders/1E4mkjsTEofBK9Oxlljm45wzLnxeGC7qz",
       "created_at": "2026-08-31 10:52:07",
-      "updated_at": "2026-09-09 12:06:08"
+      "updated_at": "2026-09-19 11:52:21"
     },
     {
       "id": 3,
@@ -881,48 +886,102 @@
   ],
   "arrangement": [
     {
-      "id": 117,
+      "id": 125,
+      "song_id": 1,
+      "part_id": 30,
+      "start_halfbeat": 0,
+      "end_halfbeat": 56,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 126,
       "song_id": 1,
       "part_id": 14,
-      "start_halfbeat": 49,
-      "end_halfbeat": 150,
-      "label": "Riff Basse ",
-      "notes": ""
-    },
-    {
-      "id": 118,
-      "song_id": 1,
-      "part_id": 15,
       "start_halfbeat": 63,
-      "end_halfbeat": 205,
-      "label": "Clar 1",
+      "end_halfbeat": 727,
+      "label": "Label",
       "notes": ""
     },
     {
-      "id": 119,
+      "id": 127,
       "song_id": 1,
-      "part_id": 13,
-      "start_halfbeat": 92,
-      "end_halfbeat": 258,
-      "label": "test2",
+      "part_id": 30,
+      "start_halfbeat": 63,
+      "end_halfbeat": 1112,
+      "label": "Label",
       "notes": ""
     },
     {
-      "id": 121,
+      "id": 128,
       "song_id": 1,
-      "part_id": 13,
-      "start_halfbeat": 259,
-      "end_halfbeat": 328,
-      "label": "test1",
+      "part_id": 19,
+      "start_halfbeat": 207,
+      "end_halfbeat": 727,
+      "label": "Label",
       "notes": ""
     },
     {
-      "id": 124,
+      "id": 129,
+      "song_id": 1,
+      "part_id": 14,
+      "start_halfbeat": 775,
+      "end_halfbeat": 1112,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 130,
+      "song_id": 1,
+      "part_id": 22,
+      "start_halfbeat": 63,
+      "end_halfbeat": 592,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 131,
+      "song_id": 1,
+      "part_id": 21,
+      "start_halfbeat": 207,
+      "end_halfbeat": 335,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 132,
+      "song_id": 1,
+      "part_id": 21,
+      "start_halfbeat": 664,
+      "end_halfbeat": 727,
+      "label": "Back solo",
+      "notes": ""
+    },
+    {
+      "id": 133,
+      "song_id": 1,
+      "part_id": 22,
+      "start_halfbeat": 727,
+      "end_halfbeat": 1111,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 134,
+      "song_id": 1,
+      "part_id": 19,
+      "start_halfbeat": 775,
+      "end_halfbeat": 1112,
+      "label": "Label",
+      "notes": ""
+    },
+    {
+      "id": 135,
       "song_id": 1,
       "part_id": 16,
-      "start_halfbeat": 36,
-      "end_halfbeat": 200,
-      "label": "Cordes 3",
+      "start_halfbeat": 64,
+      "end_halfbeat": 206,
+      "label": "Label",
       "notes": ""
     }
   ],
@@ -960,32 +1019,112 @@
       "position": 3
     },
     {
-      "id": 69,
+      "id": 70,
       "song_id": 1,
       "type": "audio",
-      "title": "Enregistrement d'un concert épique",
-      "content": "uploads/orphelin.mp3",
+      "title": "embrasse moi ok - concert Aucun Tiers lieu Azun.mp3",
+      "content": "uploads/Embrasse Moi/embrasse moi ok - concert Aucun Tiers lieu Azun.mp3",
       "position": 0
+    },
+    {
+      "id": 71,
+      "song_id": 1,
+      "type": "audio",
+      "title": "Embrasse-moi_SonsduLac_0724.mp3",
+      "content": "uploads/Embrasse Moi/Embrasse-moi_SonsduLac_0724.mp3",
+      "position": 1
     }
   ],
   "transmission_resources": [
     {
-      "id": 6,
+      "id": 10,
       "song_id": 1,
-      "arrangement_item_id": 119,
+      "arrangement_item_id": 126,
       "type": "audio",
-      "title": "Audio",
-      "content": "uploads/orphelin.mp3",
+      "title": "Bass Couplet et Refrain Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Bass Couplet et Refrain Embrasse Moi.m4a",
       "position": 0
     },
     {
-      "id": 9,
+      "id": 11,
       "song_id": 1,
-      "arrangement_item_id": 124,
-      "type": "note",
-      "title": "Notes sur le morceau",
-      "content": "",
+      "arrangement_item_id": 128,
+      "type": "audio",
+      "title": " Embrasse_moi_percu.m4a",
+      "content": "uploads/Embrasse Moi/Embrasse_moi_percu.m4a",
+      "position": 1
+    },
+    {
+      "id": 13,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflant Break Refrain - Intro Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflant Break Refrain - Intro Embrasse Moi.m4a",
+      "position": 2
+    },
+    {
+      "id": 14,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Couplet V1 Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Couplet V1 Embrasse Moi.m4a",
       "position": 3
+    },
+    {
+      "id": 15,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Couplet V2 Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Couplet V2 Embrasse Moi.m4a",
+      "position": 4
+    },
+    {
+      "id": 16,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Nappes Couplet V1 Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Nappes Couplet V1 Embrasse Moi.m4a",
+      "position": 5
+    },
+    {
+      "id": 17,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Nappes Couplet V2 Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Nappes Couplet V2 Embrasse Moi.m4a",
+      "position": 6
+    },
+    {
+      "id": 18,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Nappes Couplet V3 Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Nappes Couplet V3 Embrasse Moi.m4a",
+      "position": 7
+    },
+    {
+      "id": 19,
+      "song_id": 1,
+      "arrangement_item_id": 131,
+      "type": "audio",
+      "title": "Soufflants Reponse Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Soufflants Reponse Embrasse Moi.m4a",
+      "position": 8
+    },
+    {
+      "id": 20,
+      "song_id": 1,
+      "arrangement_item_id": 135,
+      "type": "audio",
+      "title": "Cordes Contrechant  Violoncelle Embrasse Moi.m4a",
+      "content": "uploads/Embrasse Moi/Cordes Contrechant  Violoncelle Embrasse Moi.m4a",
+      "position": 9
     }
   ]
 }

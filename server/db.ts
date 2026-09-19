@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS transmission_resources (
   );
 `)
 
-const defaultParts = ['Accordéon', 'Basse', 'Clarinette', 'Cordes Frottées', 'Flûte', 'Médium', 'Percus', 'Saxophone Alto', 'Trompette', 'Chant', 'Chant 2', 'Chant 3']
+const defaultParts = ['Accordéon', 'Basse', 'Clarinette', 'Cordes Frottées', 'Flûte', 'Guitare', 'Médium', 'Percus', 'Saxophone Alto', 'Trompette', 'Chant', 'Chant 2', 'Chant 3']
 const ins=db.prepare('INSERT OR IGNORE INTO parts(name,position) VALUES(?,?)');
 defaultParts.forEach((x,i)=>ins.run(x,i))
 
